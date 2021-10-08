@@ -612,6 +612,7 @@ void CTaskCalendarCtrl::DrawHeader(CDC* pDC)
 		CRect rText(rCol);
 		rText.DeflateRect(0, (m_nHeaderHeight - sizeDOW.cy) / 2, 0, 0);
 		
+		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(csTitle, rText, DT_CENTER|DT_TOP);
 		
 		// next column
