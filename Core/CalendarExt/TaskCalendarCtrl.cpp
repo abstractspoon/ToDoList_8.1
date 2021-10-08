@@ -687,7 +687,7 @@ void CTaskCalendarCtrl::DrawCellBkgnd(CDC* pDC, const CCalendarCell* pCell, cons
 		GraphicsMisc::DrawRect(pDC, rCell, m_crWeekend, CLR_NONE, 0, GMDR_NONE, 128);
 	}
 
-	if (bSelected)
+	if (bSelected && !m_bSavingToImage)
 	{
 		GraphicsMisc::DrawRect(pDC, rCell, m_crTheme, CLR_NONE, 0, GMDR_NONE, (BYTE)(bToday ? 48 : 128));
 	}
