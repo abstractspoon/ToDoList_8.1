@@ -876,17 +876,20 @@ void CTDLFindTaskExpressionListCtrl::PrepareControl(CWnd& ctrl, int nRow, int nC
 		{
 			m_cbListValues.ResetContent();
 
-			TDCCUSTOMATTRIBUTEDEFINITION attribDef;
+			TDC_ATTRIBUTE nAttribID = rule.GetAttribute();
 
-			if (m_aAttribDefs.GetAttributeDef(rule.GetAttribute(), attribDef))
+			if (TDCCUSTOMATTRIBUTEDEFINITION::IsCustomAttribute(nAttribID))
 			{
+				TDCCUSTOMATTRIBUTEDEFINITION attribDef;
+				VERIFY (m_aAttribDefs.GetAttributeDef(nAttribID, attribDef));
+
 				if (attribDef.IsList())
 				{
 					int nItem = attribDef.aDefaultListData.GetSize();
 
 					while (nItem--)
 						m_cbListValues.AddString(attribDef.aDefaultListData[nItem]);
-					
+
 					nItem = attribDef.aAutoListData.GetSize();
 
 					while (nItem--)
@@ -895,7 +898,7 @@ void CTDLFindTaskExpressionListCtrl::PrepareControl(CWnd& ctrl, int nRow, int nC
 			}
 			else
 			{
-				switch (rule.GetAttribute())
+				switch (nAttribID)
 				{
 				case TDCA_CATEGORY: CDialogHelper::SetComboBoxItems(m_cbListValues, m_tldListContents.aCategory); break;
 				case TDCA_ALLOCTO:	CDialogHelper::SetComboBoxItems(m_cbListValues, m_tldListContents.aAllocTo); break;
