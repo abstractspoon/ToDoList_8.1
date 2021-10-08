@@ -3835,88 +3835,10 @@ TDC_SET CToDoCtrlData::CopyTaskAttributeValues(DWORD dwTaskID, TDC_ATTRIBUTE nFr
 
 BOOL CToDoCtrlData::GetTaskAttributeValues(DWORD dwTaskID, TDC_ATTRIBUTE nAttrib, TDCCADATA& data) const
 {
-	data.Clear();
+	const TODOITEM* pTDI = NULL;
+	GET_TDI(dwTaskID, pTDI, FALSE);
 
-	switch (nAttrib)
-	{
-	case TDCA_VERSION:		data.Set(GetTaskVersion(dwTaskID));			break;
-	case TDCA_ALLOCBY:		data.Set(GetTaskAllocBy(dwTaskID));			break;	
-	case TDCA_CREATEDBY:	data.Set(GetTaskCreatedBy(dwTaskID));		break;
-	case TDCA_EXTERNALID:	data.Set(GetTaskExtID(dwTaskID));			break;	
-	case TDCA_STATUS:		data.Set(GetTaskStatus(dwTaskID));			break;	
-	case TDCA_TASKNAME:		data.Set(GetTaskTitle(dwTaskID));			break;
-	case TDCA_COMMENTS:		data.Set(GetTaskComments(dwTaskID));		break;
-	case TDCA_LASTMODBY:	data.Set(GetTaskLastModifiedBy(dwTaskID));	break;
-
-	case TDCA_COLOR:		data.Set((int)GetTaskColor(dwTaskID));		break;	
-	case TDCA_PRIORITY:		data.Set(GetTaskPriority(dwTaskID));		break;	
-	case TDCA_RISK:			data.Set(GetTaskRisk(dwTaskID));			break;	
-	case TDCA_PERCENT:		data.Set(GetTaskPercent(dwTaskID, FALSE));	break;	
-	case TDCA_FLAG:			data.Set(IsTaskFlagged(dwTaskID));			break;	
-	case TDCA_ICON:			data.Set(GetTaskIcon(dwTaskID));			break;	
-	case TDCA_LOCK:			data.Set(IsTaskLocked(dwTaskID));			break;	
-
-	case TDCA_FILELINK:	
-	case TDCA_ALLOCTO:			
-	case TDCA_CATEGORY:			
-	case TDCA_TAGS:	
-		{
-			CStringArray aValues;
-			GetTaskArray(dwTaskID, nAttrib, aValues);
-
-			data.Set(aValues);
-		}
-		break;
-
-	case TDCA_CREATIONDATE:		
-	case TDCA_DONEDATE:			
-	case TDCA_DUEDATE:			
-	case TDCA_LASTMODDATE:			
-	case TDCA_STARTDATE:		
-	case TDCA_DONETIME:			
-	case TDCA_DUETIME:			
-	case TDCA_STARTTIME:
-		{
-			TDC_DATE nDate = TDC::MapAttributeToDate(nAttrib);
-			COleDateTime date = GetTaskDate(dwTaskID, nDate);
-
-			data.Set(date);
-		}
-		break;
-
-	case TDCA_TIMEESTIMATE:			
-		{
-			TDCTIMEPERIOD time;
-			GetTaskTimeEstimate(dwTaskID, time);
-
-			data.Set(time);
-		}
-		break;
-
-	case TDCA_TIMESPENT:	
-		{
-			TDCTIMEPERIOD time;
-			GetTaskTimeSpent(dwTaskID, time);
-
-			data.Set(time);
-		}
-		break;
-
-	case TDCA_COST:	
-		{
-			TDCCOST cost;
-			GetTaskCost(dwTaskID, cost);
-
-			data.Set(cost);
-		}
-		break;
-
-	case TDCA_DEPENDENCY:
-		ASSERT(0);
-		break;
-	}
-
-	return !data.IsEmpty();
+	return pTDI->GetAttributeValues(nAttrib, data);
 }
 
 TDC_SET CToDoCtrlData::CopyTaskAttributeValues(DWORD dwTaskID, const CString& sFromCustomAttribID, TDC_ATTRIBUTE nToAttrib)
