@@ -455,7 +455,7 @@ int CFilteredToDoCtrl::FindTasks(const SEARCHPARAMS& params, CResultArray& aResu
 		return CTabbedToDoCtrl::FindTasks(params, aResults);
 	
 	// else all tasks
-	return m_matcher.FindTasks(params, aResults, HasDueTodayColor());
+	return m_matcher.FindTasks(params, HasDueTodayColor(), aResults);
 }
 
 BOOL CFilteredToDoCtrl::HasAdvancedFilter() const 
@@ -648,7 +648,7 @@ BOOL CFilteredToDoCtrl::WantAddTaskToTree(const TODOITEM* pTDI, const TODOSTRUCT
 		}
 		else // rest of attributes
 		{
-			bWantTask = m_matcher.TaskMatches(pTDI, pTDS, *pFilter, result, HasDueTodayColor());
+			bWantTask = m_matcher.TaskMatches(pTDI, pTDS, *pFilter, HasDueTodayColor(), result);
 		}
 
 		if (bWantTask && pTDS->HasSubTasks())
@@ -931,7 +931,7 @@ BOOL CFilteredToDoCtrl::ModNeedsRefilter(TDC_ATTRIBUTE nAttrib, const CDWordArra
 
 		m_filter.BuildFilterQuery(params, m_aCustomAttribDefs);
 
-		BOOL bMatchesFilter = m_matcher.TaskMatches(dwModTaskID, params, result, FALSE);
+		BOOL bMatchesFilter = m_matcher.TaskMatches(dwModTaskID, params, FALSE, result);
 		BOOL bTreeHasItem = (m_taskTree.GetItem(dwModTaskID) != NULL);
 
 		bNeedRefilter = ((bMatchesFilter && !bTreeHasItem) || (!bMatchesFilter && bTreeHasItem));
@@ -1197,7 +1197,7 @@ BOOL CFilteredToDoCtrl::FindNewNowFilterTasks(const TODOSTRUCTURE* pTDS, const S
 			SEARCHRESULT result;
 
 			// This will handle custom and 'normal' filters
-			if (m_matcher.TaskMatches(dwTaskID, params, result, FALSE))
+			if (m_matcher.TaskMatches(dwTaskID, params, FALSE, result))
 				return TRUE;
 		}
 	}

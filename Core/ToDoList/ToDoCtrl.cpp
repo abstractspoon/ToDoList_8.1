@@ -6509,7 +6509,7 @@ BOOL CToDoCtrl::RemoveArchivedTask(const CTaskFile& tasks, HTASKITEM hTask, TDC_
 			SEARCHPARAMS params;
 			params.aRules.Add(SEARCHPARAM(TDCA_FLAG, FOP_SET));
 
-			bRemove = !m_matcher.FindTasks(pTDI, pTDS, params, aResults, FALSE);
+			bRemove = !m_matcher.FindTasks(pTDI, pTDS, params, FALSE, aResults);
 		}
 		else
 			bRemove = TRUE;
@@ -9554,7 +9554,7 @@ BOOL CToDoCtrl::MergeTaskWithTree(const CTaskFile& tasks, HTASKITEM hTask, DWORD
 		CDWordArray aTaskIDs;
 
 		// Task name must be unique else treat it as a new task
-		if (m_matcher.FindTasks(TDCA_TASKNAME, FOP_EQUALS, tasks.GetTaskTitle(hTask), aTaskIDs, FALSE) == 1)
+		if (m_matcher.FindTasks(TDCA_TASKNAME, FOP_EQUALS, tasks.GetTaskTitle(hTask), FALSE, aTaskIDs) == 1)
 			dwTaskID = aTaskIDs[0];
 	}
 
