@@ -723,6 +723,11 @@ BOOL CFilteredToDoCtrl::WantAddTaskToTree(const TODOITEM* pTDI, const TODOSTRUCT
 					// so we only want these tasks if they have an attribute value
 					bWantTask = !sWhatMatched.IsEmpty();
 					break;
+
+				default:
+					ASSERT(0);
+					bWantTask = TRUE;
+					break;
 				}
 			}
 		}
