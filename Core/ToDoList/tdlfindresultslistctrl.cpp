@@ -101,7 +101,6 @@ BOOL CTDLFindResultsListCtrl::SetColumnWidths(const CIntArray& aWidths)
 
 	// else
 	return FALSE;
-
 }
 
 int CTDLFindResultsListCtrl::GetResultCount() const
