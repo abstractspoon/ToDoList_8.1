@@ -1987,6 +1987,7 @@ TDC_FILE CToDoListWnd::SaveTaskList(int nTDC, LPCTSTR szFilePath, DWORD dwFlags)
 	m_mgrToDoCtrls.RefreshFileLastModified(nTDC);
 	m_mgrToDoCtrls.RefreshReadOnlyStatus(nTDC);
 	m_mgrToDoCtrls.RefreshPathType(nTDC);
+	m_mgrToDoCtrls.SetLoaded(nTDC); // In case we were previously a 'new' tasklist
 
 	CString sFilePath = tdc.GetFilePath();
 
