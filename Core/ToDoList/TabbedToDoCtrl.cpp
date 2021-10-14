@@ -1615,7 +1615,7 @@ BOOL CTabbedToDoCtrl::SplitSelectedTask(int nNumSubtasks)
 	return TRUE;
 }
 
-BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& aModifiedTaskIDs, CTDCAttributeMap& mapModifiedAttrib)
+BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& aModTaskIDs, CTDCAttributeMap& mapModAttribs)
 {
 	DWORD dwTaskID = mod.dwSelectedTaskID;
 
@@ -1685,12 +1685,12 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 					if (bwasDone && !bIsDone)
 					{
 						if (SET_CHANGE == m_data.SetTaskDone(dwTaskID, CDateHelper::NullDate(), FALSE, FALSE))
-							mapModifiedAttrib.Add(TDCA_DONEDATE);
+							mapModAttribs.Add(TDCA_DONEDATE);
 					}
 					else if (!bwasDone && bIsDone)
 					{
 						if (SET_CHANGE == m_data.SetTaskDone(dwTaskID, COleDateTime::GetCurrentTime(), FALSE, FALSE))
-							mapModifiedAttrib.Add(TDCA_DONEDATE);
+							mapModAttribs.Add(TDCA_DONEDATE);
 					}
 				}
 			}
@@ -1801,12 +1801,12 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 					if (m_data.IsTaskDone(dwTaskID))
 					{
 						if (SET_CHANGE == m_data.SetTaskStatus(dwTaskID, m_sCompletionStatus))
-							mapModifiedAttrib.Add(TDCA_STATUS);
+							mapModAttribs.Add(TDCA_STATUS);
 					}
 					else
 					{
 						if (SET_CHANGE == m_data.SetTaskStatus(dwTaskID, _T("")))
-							mapModifiedAttrib.Add(TDCA_STATUS);
+							mapModAttribs.Add(TDCA_STATUS);
 					}
 				}
 			}
@@ -1840,9 +1840,9 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 			if (bChange)
 			{
 				if (HasStyle(TDCS_AUTOADJUSTDEPENDENCYDATES) && SelectedTasksHaveDependents())
-					mapModifiedAttrib.Add(TDCA_DEPENDENCY);
+					mapModAttribs.Add(TDCA_DEPENDENCY);
 				else
-					mapModifiedAttrib.Add(TDCA_OFFSETTASK);
+					mapModAttribs.Add(TDCA_OFFSETTASK);
 			}
 		}
 		break;
@@ -1940,7 +1940,7 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 			if (bChange)
 			{
 				if (HasStyle(TDCS_AUTOADJUSTDEPENDENCYDATES) && SelectedTasksHaveDependents())
-					mapModifiedAttrib.Add(TDCA_DEPENDENCY);
+					mapModAttribs.Add(TDCA_DEPENDENCY);
 			}
 		}
 		break;
@@ -1988,11 +1988,11 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 
 	if (bChange && dwTaskID)
 	{
-		Misc::AddUniqueItemT(dwTaskID, aModifiedTaskIDs);
+		Misc::AddUniqueItemT(dwTaskID, aModTaskIDs);
 
-		// Note: We only return save off attribute if (dwTaskID != 0) because
-		// the 'SetSelectedTask*'  will already have handled it
-		mapModifiedAttrib.Add(mod.nAttrib);
+		// Note: We only return save off attribute if (dwTaskID != 0)
+		// because 'SetSelectedTask*' will already have handled it
+		mapModAttribs.Add(mod.nAttrib);
 	}
 
 	return bChange;
@@ -2049,7 +2049,7 @@ LRESULT CTabbedToDoCtrl::OnUIExtModifySelectedTask(WPARAM wParam, LPARAM lParam)
 
 	// Keep track of explicitly modified tasks and attributes
 	CDWordArray aModTaskIDs;
-	CTDCAttributeMap mapModifedAttrib;
+	CTDCAttributeMap mapModAttribs;
 	BOOL bChange = FALSE;
 
 	try
@@ -2063,7 +2063,7 @@ LRESULT CTabbedToDoCtrl::OnUIExtModifySelectedTask(WPARAM wParam, LPARAM lParam)
 		{
 			const IUITASKMOD& mod = pMods[nMod];
 
-			if (ProcessUIExtensionMod(mod, aModTaskIDs, mapModifedAttrib))
+			if (ProcessUIExtensionMod(mod, aModTaskIDs, mapModAttribs))
 			{
 				bChange = TRUE;
 			}
@@ -2098,7 +2098,7 @@ LRESULT CTabbedToDoCtrl::OnUIExtModifySelectedTask(WPARAM wParam, LPARAM lParam)
 		// since we prevented changes being propagated back to the active view
 		// we may need to update more than the selected task as a consequence
 		// of dependency changes, task moves or inherited attributes
-		if (mapModifedAttrib.Has(TDCA_DEPENDENCY))
+		if (mapModAttribs.Has(TDCA_DEPENDENCY))
 		{
 			VIEWDATA* pVData = NULL;
 			IUIExtensionWindow* pExtWnd = NULL;
@@ -2124,14 +2124,14 @@ LRESULT CTabbedToDoCtrl::OnUIExtModifySelectedTask(WPARAM wParam, LPARAM lParam)
 			// we need to send a modification notification
 			if (aModTaskIDs.GetSize())
 			{
-				SetModified(mapModifedAttrib, aModTaskIDs, TRUE);
+				SetModified(mapModAttribs, aModTaskIDs, TRUE);
 				UpdateControls(FALSE);
 			}
-			else 
+			else if (!mapModAttribs.IsEmpty())
 			{
 				// This should only update attributes OTHER than
 				// the attributes directly referenced in IUITASKMOD 
-				UpdateExtensionViewsSelection(mapModifedAttrib);
+				UpdateExtensionViewsSelection(mapModAttribs);
 			}
 		}
 	}
