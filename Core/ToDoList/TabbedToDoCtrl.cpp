@@ -60,18 +60,6 @@ const UINT DEFTEXTFLAGS   = (DT_END_ELLIPSIS | DT_VCENTER | DT_SINGLELINE | DT_N
 
 //////////////////////////////////////////////////////////////////////
 
-enum // ProcessUIExtensionMod
-{
-	UIEXTMOD_SUCCESS		= 0x01,
-	UIEXTMOD_DEPENDCHANGE	= 0x02,
-	UIEXTMOD_OFFSETDATES	= 0x04,
-	UIEXTMOD_INHERITATTRIB	= 0x08,
-	UIEXTMOD_DONEBYSTATUS	= 0x10,
-	UIEXTMOD_DONECHANGE		= 0x20,
-};
-
-//////////////////////////////////////////////////////////////////////
-
 UINT CTabbedToDoCtrl::WM_TDC_RESTORELASTTASKVIEW = (WM_TDC_RECREATERECURRINGTASK + 1);
 
 //////////////////////////////////////////////////////////////////////
@@ -1627,7 +1615,7 @@ BOOL CTabbedToDoCtrl::SplitSelectedTask(int nNumSubtasks)
 	return TRUE;
 }
 
-DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
+BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& aModifiedTaskIDs, CTDCAttributeMap& mapModifiedAttrib)
 {
 	DWORD dwTaskID = mod.dwSelectedTaskID;
 
@@ -1637,19 +1625,13 @@ DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
 		return 0;
 	}
 
-	if (dwTaskID)
-	{
-		if (GetSelectedCount() == 1)
-		{
-			ASSERT(GetSelectedTaskID() == dwTaskID);
-			dwTaskID = 0; // same as 'selected'
-		}
-	}
-	
 	CStringArray aValues;
 	DWORD dwResults = 0; 
 	BOOL bChange = FALSE;
 	
+	// prevent the active view's change being propagated back to itself
+	m_nExtModifyingAttrib = mod.nAttrib;
+
 	switch (mod.nAttrib)
 	{
 	case TDCA_TASKNAME:		
@@ -1694,7 +1676,7 @@ DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
 			{
 				bChange = (SET_CHANGE == m_data.SetTaskStatus(dwTaskID, mod.szValue));
 
-				if (!m_sCompletionStatus.IsEmpty() && HasStyle(TDCS_SYNCCOMPLETIONTOSTATUS))
+				if (bChange && !m_sCompletionStatus.IsEmpty() && HasStyle(TDCS_SYNCCOMPLETIONTOSTATUS))
 				{
 					// Handle synchronizing status and completion 
 					BOOL bwasDone = m_data.IsTaskDone(dwTaskID);
@@ -1702,22 +1684,13 @@ DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
 
 					if (bwasDone && !bIsDone)
 					{
-						m_data.SetTaskDone(dwTaskID, CDateHelper::NullDate(), FALSE, FALSE);
-						dwResults |= UIEXTMOD_DONECHANGE;
+						if (SET_CHANGE == m_data.SetTaskDone(dwTaskID, CDateHelper::NullDate(), FALSE, FALSE))
+							mapModifiedAttrib.Add(TDCA_DONEDATE);
 					}
 					else if (!bwasDone && bIsDone)
 					{
-						if (!m_data.TaskHasSubtasks(dwTaskID))
-						{
-							m_data.SetTaskDone(dwTaskID, COleDateTime::GetCurrentTime(), FALSE, FALSE);
-							dwResults |= UIEXTMOD_DONECHANGE;
-						}
-						else
-						{
-							// we handle this afterwards because we need 
-							// and we don't want to do it multiple times
-							dwResults |= UIEXTMOD_DONEBYSTATUS;
-						}
+						if (SET_CHANGE == m_data.SetTaskDone(dwTaskID, COleDateTime::GetCurrentTime(), FALSE, FALSE))
+							mapModifiedAttrib.Add(TDCA_DONEDATE);
 					}
 				}
 			}
@@ -1820,9 +1793,27 @@ DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
 			COleDateTime date(CDateHelper::GetDate(mod.tValue));
 
 			if (dwTaskID)
+			{
 				bChange = (SET_CHANGE == m_data.SetTaskDate(dwTaskID, TDCD_DONE, date));
+
+				if (bChange && !m_sCompletionStatus.IsEmpty() && HasStyle(TDCS_SYNCCOMPLETIONTOSTATUS))
+				{
+					if (m_data.IsTaskDone(dwTaskID))
+					{
+						if (SET_CHANGE == m_data.SetTaskStatus(dwTaskID, m_sCompletionStatus))
+							mapModifiedAttrib.Add(TDCA_STATUS);
+					}
+					else
+					{
+						if (SET_CHANGE == m_data.SetTaskStatus(dwTaskID, _T("")))
+							mapModifiedAttrib.Add(TDCA_STATUS);
+					}
+				}
+			}
 			else
+			{
 				bChange = SetSelectedTaskDate(TDCD_DONE, date);
+			}
 		}
 		break;
 
@@ -1849,9 +1840,9 @@ DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
 			if (bChange)
 			{
 				if (HasStyle(TDCS_AUTOADJUSTDEPENDENCYDATES) && SelectedTasksHaveDependents())
-					dwResults |= UIEXTMOD_DEPENDCHANGE;
+					mapModifiedAttrib.Add(TDCA_DEPENDENCY);
 				else
-					dwResults |= UIEXTMOD_OFFSETDATES;
+					mapModifiedAttrib.Add(TDCA_OFFSETTASK);
 			}
 		}
 		break;
@@ -1936,9 +1927,6 @@ DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
 				bChange = (SET_CHANGE == m_data.SetTaskDependencies(dwTaskID, aDepends));
 			else
 				bChange = SetSelectedTaskDependencies(aDepends);
-
-			if (bChange)
-				dwResults |= UIEXTMOD_DEPENDCHANGE;
 		}
 		break;
 		
@@ -1952,9 +1940,7 @@ DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
 			if (bChange)
 			{
 				if (HasStyle(TDCS_AUTOADJUSTDEPENDENCYDATES) && SelectedTasksHaveDependents())
-					dwResults |= UIEXTMOD_DEPENDCHANGE;
-				else
-					dwResults |= UIEXTMOD_OFFSETDATES;
+					mapModifiedAttrib.Add(TDCA_DEPENDENCY);
 			}
 		}
 		break;
@@ -1998,28 +1984,18 @@ DWORD CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod)
 		break;
 	}
 
-	if (bChange)
+	m_nExtModifyingAttrib = TDCA_NONE;
+
+	if (bChange && dwTaskID)
 	{
-		if (m_data.WantUpdateInheritedAttibute(mod.nAttrib))
-			dwResults |= UIEXTMOD_INHERITATTRIB;
+		Misc::AddUniqueItemT(dwTaskID, aModifiedTaskIDs);
 
-		dwResults |= UIEXTMOD_SUCCESS;
-
-		// If processing an individual task we need to call SetModified manually
-		if (dwTaskID)
-		{
-			CDWordArray aTaskIDs;
-			aTaskIDs.Add(dwTaskID);
-
-			SetModified(mod.nAttrib, aTaskIDs, FALSE);
-		}
-	}
-	else
-	{
-		ASSERT(dwResults == 0);
+		// Note: We only return save off attribute if (dwTaskID != 0) because
+		// the 'SetSelectedTask*'  will already have handled it
+		mapModifiedAttrib.Add(mod.nAttrib);
 	}
 
-	return dwResults;
+	return bChange;
 }
 
 BOOL CTabbedToDoCtrl::ExtensionMoveTaskStartAndDueDates(DWORD dwTaskID, const COleDateTime& dtNewStart)
@@ -2071,8 +2047,11 @@ LRESULT CTabbedToDoCtrl::OnUIExtModifySelectedTask(WPARAM wParam, LPARAM lParam)
 	// Aggregate all mods as a single edit
 	IMPLEMENT_DATA_UNDO_EDIT(m_data);
 
-	DWORD dwResults = UIEXTMOD_SUCCESS;
-	
+	// Keep track of explicitly modified tasks and attributes
+	CDWordArray aModTaskIDs;
+	CTDCAttributeMap mapModifedAttrib;
+	BOOL bChange = FALSE;
+
 	try
 	{
 		const IUITASKMOD* pMods = (const IUITASKMOD*)lParam;
@@ -2080,18 +2059,13 @@ LRESULT CTabbedToDoCtrl::OnUIExtModifySelectedTask(WPARAM wParam, LPARAM lParam)
 
 		ASSERT(nNumMod > 0);
 
-		for (int nMod = 0; ((nMod < nNumMod) && (dwResults & UIEXTMOD_SUCCESS)); nMod++)
+		for (int nMod = 0; nMod < nNumMod; nMod++)
 		{
 			const IUITASKMOD& mod = pMods[nMod];
 
-			// prevent the active view's change being propagated back to itself
-			m_nExtModifyingAttrib = mod.nAttrib;
-
-			DWORD dwModResults = ProcessUIExtensionMod(mod);
-
-			if (dwModResults & UIEXTMOD_SUCCESS)
+			if (ProcessUIExtensionMod(mod, aModTaskIDs, mapModifedAttrib))
 			{
-				dwResults |= dwModResults;
+				bChange = TRUE;
 			}
 			else
 			{
@@ -2110,24 +2084,21 @@ LRESULT CTabbedToDoCtrl::OnUIExtModifySelectedTask(WPARAM wParam, LPARAM lParam)
 					break;
 				}
 #endif
-				dwResults = 0;
 			}
-
-			m_nExtModifyingAttrib = TDCA_NONE;
 		}
 	}
 	catch (...)
 	{
 		ASSERT(0);
-		dwResults = 0;
+		bChange = FALSE;
 	}
 
-	if (dwResults & UIEXTMOD_SUCCESS)
+	if (bChange)
 	{
 		// since we prevented changes being propagated back to the active view
 		// we may need to update more than the selected task as a consequence
 		// of dependency changes, task moves or inherited attributes
-		if (dwResults & UIEXTMOD_DEPENDCHANGE)
+		if (mapModifedAttrib.Has(TDCA_DEPENDENCY))
 		{
 			VIEWDATA* pVData = NULL;
 			IUIExtensionWindow* pExtWnd = NULL;
@@ -2149,31 +2120,23 @@ LRESULT CTabbedToDoCtrl::OnUIExtModifySelectedTask(WPARAM wParam, LPARAM lParam)
 		}
 		else
 		{
-			CTDCAttributeMap mapChangedAttrib;
-
-			if (dwResults & UIEXTMOD_INHERITATTRIB)
-				mapChangedAttrib.Add(TDCA_ALL);
-
-			if (dwResults & UIEXTMOD_OFFSETDATES)
-				mapChangedAttrib.Add(TDCA_OFFSETTASK);
-
-			if (dwResults & UIEXTMOD_DONEBYSTATUS)
+			// In the case where specified tasks were edited, 
+			// we need to send a modification notification
+			if (aModTaskIDs.GetSize())
 			{
-				// TODO
-				ASSERT(0);
-				mapChangedAttrib.Add(TDCA_DONEDATE);
+				SetModified(mapModifedAttrib, aModTaskIDs, TRUE);
+				UpdateControls(FALSE);
 			}
-			else if (dwResults & UIEXTMOD_DONECHANGE)
+			else 
 			{
-				mapChangedAttrib.Add(TDCA_DONEDATE);
+				// This should only update attributes OTHER than
+				// the attributes directly referenced in IUITASKMOD 
+				UpdateExtensionViewsSelection(mapModifedAttrib);
 			}
-
-			if (!mapChangedAttrib.IsEmpty())
-				UpdateExtensionViewsSelection(mapChangedAttrib);
 		}
 	}
 	
-	return (dwResults & UIEXTMOD_SUCCESS);
+	return bChange;
 }
 
 LRESULT CTabbedToDoCtrl::OnUIExtMoveSelectedTask(WPARAM /*wParam*/, LPARAM lParam)
