@@ -495,7 +495,15 @@ BOOL CGdiPlus::SaveBitmapToFile(gdix_Bitmap* bitmap, const WCHAR* filename)
 
 	GETPROCADDRESS(PFNSAVEIMAGETOFILE, "GdipSaveImageToFile");
 	
-	return (pFN((gdix_Image*)bitmap, filename, &clsidEncoder, NULL) == gdix_Ok);
+	gdix_Status nResult = pFN((gdix_Image*)bitmap, filename, &clsidEncoder, NULL);
+
+	if (nResult != 0)
+	{
+		// Try writing to IStream
+		// TODO
+	}
+
+	return (nResult == gdix_Ok);
 }
 
 BOOL CGdiPlus::DeleteBitmap(gdix_Bitmap* bitmap)
