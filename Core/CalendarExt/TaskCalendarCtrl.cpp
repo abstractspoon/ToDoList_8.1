@@ -868,6 +868,14 @@ void CTaskCalendarCtrl::DrawCellContent(CDC* pDC, const CCalendarCell* pCell, co
 						rTask.left = (rIcon.left + nReqWidth);
 					}
 				}
+				else
+				{
+					TASKCALITEM* pTCIReal = GetTaskCalItem(dwRealTaskID);
+					ASSERT(pTCIReal);
+
+					if (pTCIReal)
+						pTCIReal->DisableIcon();
+				}
 			}
 		}
 

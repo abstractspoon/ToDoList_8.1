@@ -37,8 +37,10 @@ public:
 	BOOL IsValid() const;
 	BOOL IsDone(BOOL bIncGoodAs) const;
 	BOOL IsParent() const;
-	BOOL HasIcon(BOOL bShowParentsAsFolder) const;
 	
+	BOOL HasIcon(BOOL bShowParentsAsFolder) const;
+	void DisableIcon() { bHasIcon = FALSE; }
+
 	BOOL IsStartDateSet() const;
 	void SetStartDate(const COleDateTime& date);
 
