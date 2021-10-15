@@ -1673,31 +1673,9 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 	case TDCA_STATUS:		
 		{
 			if (dwTaskID)
-			{
 				bChange = (SET_CHANGE == m_data.SetTaskStatus(dwTaskID, mod.szValue));
-
-				if (bChange && !m_sCompletionStatus.IsEmpty() && HasStyle(TDCS_SYNCCOMPLETIONTOSTATUS))
-				{
-					// Handle synchronizing status and completion 
-					BOOL bwasDone = m_data.IsTaskDone(dwTaskID);
-					BOOL bIsDone = (m_sCompletionStatus == mod.szValue);
-
-					if (bwasDone && !bIsDone)
-					{
-						if (SET_CHANGE == m_data.SetTaskDone(dwTaskID, CDateHelper::NullDate(), FALSE, FALSE))
-							mapModAttribs.Add(TDCA_DONEDATE);
-					}
-					else if (!bwasDone && bIsDone)
-					{
-						if (SET_CHANGE == m_data.SetTaskDone(dwTaskID, COleDateTime::GetCurrentTime(), FALSE, FALSE))
-							mapModAttribs.Add(TDCA_DONEDATE);
-					}
-				}
-			}
 			else
-			{
 				bChange = SetSelectedTaskStatus(mod.szValue);
-			}
 		}
 		break;
 
@@ -1793,27 +1771,9 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 			COleDateTime date(CDateHelper::GetDate(mod.tValue));
 
 			if (dwTaskID)
-			{
 				bChange = (SET_CHANGE == m_data.SetTaskDate(dwTaskID, TDCD_DONE, date));
-
-				if (bChange && !m_sCompletionStatus.IsEmpty() && HasStyle(TDCS_SYNCCOMPLETIONTOSTATUS))
-				{
-					if (m_data.IsTaskDone(dwTaskID))
-					{
-						if (SET_CHANGE == m_data.SetTaskStatus(dwTaskID, m_sCompletionStatus))
-							mapModAttribs.Add(TDCA_STATUS);
-					}
-					else
-					{
-						if (SET_CHANGE == m_data.SetTaskStatus(dwTaskID, _T("")))
-							mapModAttribs.Add(TDCA_STATUS);
-					}
-				}
-			}
 			else
-			{
 				bChange = SetSelectedTaskDate(TDCD_DONE, date);
-			}
 		}
 		break;
 
@@ -1836,14 +1796,6 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 				bChange = (SET_CHANGE == m_data.SetTaskDate(dwTaskID, TDCD_DUE, date));
 			else
 				bChange = SetSelectedTaskDate(TDCD_DUE, date);
-
-			if (bChange)
-			{
-				if (HasStyle(TDCS_AUTOADJUSTDEPENDENCYDATES) && SelectedTasksHaveDependents())
-					mapModAttribs.Add(TDCA_DEPENDENCY);
-				else
-					mapModAttribs.Add(TDCA_OFFSETTASK);
-			}
 		}
 		break;
 		
@@ -1990,9 +1942,9 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 	{
 		Misc::AddUniqueItemT(dwTaskID, aModTaskIDs);
 
-		// Note: We only return save off attribute if (dwTaskID != 0)
+		// Note: We only save off the attribute if (dwTaskID != 0)
 		// because 'SetSelectedTask*' will already have handled it
-		mapModAttribs.Add(mod.nAttrib);
+		GetAttributesAffectedByMod(mod.nAttrib, mapModAttribs);
 	}
 
 	return bChange;
