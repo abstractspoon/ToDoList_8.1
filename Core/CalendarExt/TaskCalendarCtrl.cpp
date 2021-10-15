@@ -1645,10 +1645,7 @@ double CTaskCalendarCtrl::CalcDateDragTolerance() const
 BOOL CTaskCalendarCtrl::EnsureSelectionVisible()
 {
 	if (!HasTask(m_dwSelectedTaskID, TRUE)) // exclude hidden tasks
-	{
-		ASSERT(0);
 		return FALSE;
-	}
 
 	// Does the selected cell already have this task?
 	int nRow, nCol;
@@ -2906,6 +2903,9 @@ BOOL CTaskCalendarCtrl::SaveToImage(CBitmap& bmImage)
 		CRect rData(rClient), rCell;
 		GetGridCellRect(0, 0, rCell);
 
+		// Cache current date for later restoration
+		COleDateTime dtPrevStart(GetMinDate());
+
 		Goto(m_dtMin);
 		COleDateTime dtStart(CDateHelper::GetStartOfWeek(GetMinDate()));
 
@@ -2961,6 +2961,9 @@ BOOL CTaskCalendarCtrl::SaveToImage(CBitmap& bmImage)
 			}
 			while (dtStart < m_dtMax);
 		}
+
+		// Restore previous date
+		Goto(dtPrevStart);
 	}
 
 	return (bmImage.GetSafeHandle() != NULL);
