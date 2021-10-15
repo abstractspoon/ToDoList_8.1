@@ -6457,6 +6457,11 @@ BOOL CToDoListWnd::CreateTempPrintFile(const CTDLPrintDialog& dlg, const CString
 
 				return FileMisc::SaveFile(sFilePath, sHtmlOutput, SFEF_UTF8WITHOUTBOM);
 			}
+			else
+			{
+				CMessageBox::AfxShow(IDS_SAVETOIMAGEERROR);
+				return FALSE;
+			}
 		}
 		break;
 
@@ -13171,8 +13176,7 @@ void CToDoListWnd::OnViewSaveToImage()
 	}
 	else
 	{
-		// Error handling
-		// TODO
+		CMessageBox::AfxShow(IDS_SAVETOIMAGEERROR);
 	}
 }
 

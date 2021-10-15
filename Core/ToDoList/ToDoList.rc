@@ -4592,8 +4592,14 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    ID_SB_SELTASKTITLE      "Title"
     IDS_ATTRIBNOTSET        "not set"
     IDS_ATTRIBSET           "set"
+    IDS_SAVETOIMAGEERROR    "The requested image could not be saved.\n\nTry using the filter options to reduce the visible task date range."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_CMDLINE_TASKCUSTOMATTRIB 
                             "-ca <attribute id> <attribute value>\tSets the value for the specified custom attribute ID for the currently selected task"
     IDS_CMDLINE_TASKCOPYATTRIB 
@@ -5782,11 +5788,6 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_EDIT_INSERTDATE      "\nInsert Date"
-END
-
-STRINGTABLE DISCARDABLE 
-BEGIN
-    ID_SB_SELTASKTITLE      "Title"
 END
 
 #endif    // English (Australia) resources

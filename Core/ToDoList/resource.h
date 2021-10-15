@@ -2415,6 +2415,7 @@
 #define ID_SB_SELTASKTITLE              51600
 #define IDS_ATTRIBNOTSET                51606
 #define IDS_ATTRIBSET                   51607
+#define IDS_SAVETOIMAGEERROR            51608
 
 // Next default values for new objects
 // 
