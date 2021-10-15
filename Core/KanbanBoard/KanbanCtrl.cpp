@@ -3594,8 +3594,7 @@ LRESULT CKanbanCtrl::OnColumnEditTaskDone(WPARAM /*wp*/, LPARAM lp)
 		return lr;
 	}
 
-	// else
-	ASSERT(0);
+	// Don't assert because this can legitimately fail/be cancelled
 	return 0L;
 }
 
