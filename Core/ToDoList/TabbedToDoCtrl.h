@@ -73,7 +73,7 @@ public:
 						BOOL bEditText = TRUE, DWORD dwDependency = 0);
 
 	int GetSelectedTasks(CTaskFile& tasks, const TDCGETTASKS& filter = TDCGT_ALL) const;
-	int GetSelectedCount() const;
+	int GetSelectedTaskCount() const;
 	int FindTasks(const SEARCHPARAMS& params, CResultArray& aResults) const;
 	BOOL SelectTask(CString sPart, TDC_SELECTTASK nSelect); 
 	BOOL SelectTask(DWORD dwTaskID, BOOL bTrue = FALSE);
