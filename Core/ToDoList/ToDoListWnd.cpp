@@ -5613,8 +5613,8 @@ BOOL CToDoListWnd::ProcessStartupOptions(const CTDCStartupOptions& startup, BOOL
 		}
 		else // use last state of transform dialog to determine what tasks to output
 		{
-			CTDLTransformDialog dialog(_T(""),
-									   tdc.GetTaskView(),
+			CTDLTransformDialog dialog(_T(""), 
+										(tdc.GetTaskView() != FTCV_TASKLIST),
 									   _T(""),
 									   tdc.GetCustomAttributeDefs());
 
@@ -6369,13 +6369,13 @@ void CToDoListWnd::DoPrint(BOOL bPreview)
 	CString sTitle = m_mgrToDoCtrls.GetFriendlyProjectName(nSelTDC);
 
 	// export to html and then print in IE
-	CTDLPrintDialog dialog(sTitle, 
-							bPreview, 
-							m_mgrImportExport,
-							tdc.GetTaskView(), 
-							tdc.GetStylesheetPath(),
-							tdc.GetCustomAttributeDefs(),
-							tdc.CanSaveTaskViewToImage());
+	CTDLPrintDialog dialog(sTitle,
+						   bPreview,
+						   m_mgrImportExport,
+						   (tdc.GetTaskView() != FTCV_TASKLIST),
+						   tdc.GetStylesheetPath(),
+						   tdc.GetCustomAttributeDefs(),
+						   tdc.CanSaveTaskViewToImage());
 	
 	if (dialog.DoModal() != IDOK)
 		return;
@@ -9899,17 +9899,17 @@ void CToDoListWnd::OnExport()
 	ASSERT (nTDCCount >= 1);
 
 	const CPreferencesDlg& userPrefs = Prefs();
-	CFilteredToDoCtrl& tdcSel = GetToDoCtrl();
+	CFilteredToDoCtrl& tdc = GetToDoCtrl();
 	const CString sTasklistPath = m_mgrToDoCtrls.GetFilePath(nSelTDC, FALSE);
 
 	CTDLExportDlg dialog(m_mgrToDoCtrls.GetFriendlyProjectName(nSelTDC),
-						m_mgrImportExport, 
-						(nTDCCount == 1), 
-						tdcSel.GetTaskView(),
-						userPrefs.GetExportVisibleColsOnly(), 
-						sTasklistPath, 
-						userPrefs.GetSaveExportFolderPath(), 
-						tdcSel.GetCustomAttributeDefs());
+						 m_mgrImportExport,
+						 (nTDCCount == 1),
+						 (tdc.GetTaskView() != FTCV_TASKLIST),
+						 userPrefs.GetExportVisibleColsOnly(),
+						 sTasklistPath,
+						 userPrefs.GetSaveExportFolderPath(),
+						 tdc.GetCustomAttributeDefs());
 	
 	// keep showing the dialog until the user selects a non-existing 
 	// filename OR they confirm that they want to overwrite the file(s)
@@ -9948,7 +9948,7 @@ void CToDoListWnd::OnExport()
 	// The only OR active tasklist -----------------------------------------------------
 	if ((nTDCCount == 1) || !dialog.GetExportAllTasklists())
 	{
-		tdcSel.SaveAllTaskViewPreferences();
+		tdc.SaveAllTaskViewPreferences();
 
 		// set the html image folder to be the output path with an different extension
 		CString sImgFolder;
@@ -9963,7 +9963,7 @@ void CToDoListWnd::OnExport()
 		
 		// Note: don't need to verify password if encrypted tasklist is active
 		CTaskFile tasks;
-		GetTasks(tdcSel, bHtmlComments, FALSE, dialog.GetTaskSelection(), tasks, sImgFolder);
+		GetTasks(tdc, bHtmlComments, FALSE, dialog.GetTaskSelection(), tasks, sImgFolder);
 
 		// add report details
 		tasks.SetReportDetails(dialog.GetExportTitle(), dialog.GetExportDate());
@@ -10256,7 +10256,7 @@ void CToDoListWnd::OnToolsTransformactivetasklist()
 	CString sTitle = m_mgrToDoCtrls.GetFriendlyProjectName(nSelTDC);
 
 	CTDLTransformDialog dialog(sTitle, 
-								tdc.GetTaskView(), 
+								(tdc.GetTaskView() != FTCV_TASKLIST),
 								tdc.GetStylesheetPath(),
 								tdc.GetCustomAttributeDefs());
 	
@@ -12494,7 +12494,10 @@ void CToDoListWnd::OnUpdateCloseallbutthis(CCmdUI* pCmdUI)
 void CToDoListWnd::DoSendTasks(BOOL bSelected)
 {
 	CFilteredToDoCtrl& tdc = GetToDoCtrl();
-	CTDLSendTasksDlg dialog(m_mgrImportExport, bSelected, tdc.GetTaskView(), tdc.GetCustomAttributeDefs());
+	CTDLSendTasksDlg dialog(m_mgrImportExport, 
+							bSelected, 
+							(tdc.GetTaskView() != FTCV_TASKLIST), 
+							tdc.GetCustomAttributeDefs());
 
 	if (dialog.DoModal() == IDOK)
 	{
