@@ -1504,10 +1504,10 @@ DWORD CTaskCalendarCtrl::HitTestTask(const CPoint& ptClient, TCC_HITTEST& nHit, 
 	// handle clicking above tasks
 	CRect rCell;
 	GetGridCellRect(nRow, nCol, rCell, TRUE);
-	
+
 	if (ptClient.y < rCell.top)
 		return 0;
-	
+
 	// exclude visible scrollbar
 	if (IsCellScrollBarActive() && IsGridCellSelected(pCell))
 	{
@@ -1525,13 +1525,13 @@ DWORD CTaskCalendarCtrl::HitTestTask(const CPoint& ptClient, TCC_HITTEST& nHit, 
 		if (rOverflow.PtInRect(ptClient))
 			return 0;
 	}
-	
+
 	const CTaskCalItemArray* pTasks = static_cast<CTaskCalItemArray*>(pCell->pUserData);
 	ASSERT(pTasks);
-	
+
 	if (!pTasks || !pTasks->GetSize())
 		return 0;
-	
+
 	// Find the task beneath the mouse
 	for (int nTask = 0; nTask < pTasks->GetSize(); nTask++)
 	{
@@ -1539,7 +1539,7 @@ DWORD CTaskCalendarCtrl::HitTestTask(const CPoint& ptClient, TCC_HITTEST& nHit, 
 
 		if (!CalcTaskCellRect(nTask, pCell, rCell, rTask))
 			continue;
-		
+
 		if (rTask.PtInRect(ptClient))
 		{
 			// now check for closeness to ends
