@@ -12956,6 +12956,8 @@ void CToDoListWnd::OnTasklistCustomColumns()
 
 		if (dialog.DoModal() == IDOK)
 		{
+			BOOL bAnyHasInheritance = tdc.GetCustomAttributeDefs().AnyHasFeature(TDCCAF_INHERITPARENTCHANGES);
+
 			// Ignore modification callback if it came from us
 			CAutoFlag af(m_bSettingAttribDefs, TRUE);
 
@@ -12966,6 +12968,22 @@ void CToDoListWnd::OnTasklistCustomColumns()
 			{
 				RefreshFilterBarControls(TDCA_ALL);
 				UpdateFindDialogActiveTasklist();
+
+				// Auto-enable attribute inheritance first time only
+				if (!bAnyHasInheritance && aAttrib.AnyHasFeature(TDCCAF_INHERITPARENTCHANGES))
+				{
+					if (m_pPrefs->EnableCustomAttributeInheritance())
+					{
+						// update inherited attributes
+						CTDCAttributeMap mapParentAttrib;
+						BOOL bUpdateAttrib;
+
+						Prefs().GetInheritParentAttributes(mapParentAttrib, bUpdateAttrib);
+						tdc.SetInheritedParentAttributes(mapParentAttrib, bUpdateAttrib);
+
+						m_mgrToDoCtrls.SetAllNeedPreferenceUpdate(TRUE, GetSelToDoCtrl());
+					}
+				}
 			}
 		}
 	}
