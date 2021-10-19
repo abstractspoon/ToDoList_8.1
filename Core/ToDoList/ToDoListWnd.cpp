@@ -6375,7 +6375,7 @@ void CToDoListWnd::DoPrint(BOOL bPreview)
 						   (tdc.GetTaskView() != FTCV_TASKLIST),
 						   tdc.GetStylesheetPath(),
 						   tdc.GetCustomAttributeDefs(),
-						   tdc.CanSaveTaskViewToImage());
+						   (tdc.CanSaveTaskViewToImage() ? tdc.GetTaskViewName() : _T("")));
 	
 	if (dialog.DoModal() != IDOK)
 		return;
