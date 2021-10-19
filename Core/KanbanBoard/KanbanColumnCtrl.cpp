@@ -2225,10 +2225,19 @@ CSize CKanbanColumnCtrl::CalcRequiredSizeForImage() const
 			{
 				TDC_ATTRIBUTE nAttrib = m_aDisplayAttrib[nDisp];
 
-				if (nAttrib != TDCA_FLAG)
+				switch (nAttrib)
 				{
-					CString sAttrib = FormatAttribute(nAttrib, pKI->GetAttributeDisplayValue(nAttrib), KBCAL_LONG);
-					nItemWidth = max(nItemWidth, ((int)(sAttrib.GetLength() * fAveCharWidth) + ATTRIB_INDENT));
+				case TDCA_FLAG:
+				case TDCA_PARENT:
+				case TDCA_FILELINK:
+					break;
+
+				default:
+					{
+						CString sAttrib = FormatAttribute(nAttrib, pKI->GetAttributeDisplayValue(nAttrib), KBCAL_LONG);
+						nItemWidth = max(nItemWidth, ((int)(sAttrib.GetLength() * fAveCharWidth) + ATTRIB_INDENT));
+					}
+					break;
 				}
 			}
 
