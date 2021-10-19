@@ -2877,7 +2877,8 @@ BEGIN
         MENUITEM "Save Tasklist &As...",        ID_SAVEAS
         MENUITEM "Save A&ll",                   ID_SAVEALL
         MENUITEM SEPARATOR
-        MENUITEM "Save Task View to &Image...", ID_VIEW_SAVETOIMAGE
+        MENUITEM "Save &Screenshot of Active Task View...", 
+                                                ID_VIEW_SAVETOIMAGE
         MENUITEM SEPARATOR
         POPUP "Open &From"
         BEGIN
@@ -5681,6 +5682,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    ID_VIEW_SAVETOIMAGE     "Save &Screenshot of Active Task View (%s)..."
     ID_UDTPREFS_COPY        "\nDuplicate Tool"
     ID_UDTPREFS_DELETE      "\nDelete Tool"
 END

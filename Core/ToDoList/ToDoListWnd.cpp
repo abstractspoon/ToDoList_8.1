@@ -13203,7 +13203,21 @@ void CToDoListWnd::OnViewSaveToImage()
 
 void CToDoListWnd::OnUpdateViewSaveToImage(CCmdUI* pCmdUI) 
 {
-	pCmdUI->Enable(GetToDoCtrl().CanSaveTaskViewToImage());
+	const CFilteredToDoCtrl& tdc = GetToDoCtrl();
+	CEnString sMenuItem(ID_VIEW_SAVETOIMAGE);
+
+	if (tdc.CanSaveTaskViewToImage())
+	{
+		pCmdUI->Enable(TRUE);
+		sMenuItem.Replace(_T("%s"), tdc.GetTaskViewName());
+	}
+	else
+	{
+		pCmdUI->Enable(FALSE);
+		sMenuItem.Replace(_T("(%s)"), _T(""));
+	}
+
+	pCmdUI->SetText(sMenuItem);
 }
 
 void CToDoListWnd::OnToolsCopyTasklistPath()

@@ -317,7 +317,7 @@ BOOL CTDLPrintStylePage::OnInitDialog()
 	if (m_sExportToImageView.IsEmpty())
 		sCtrlText.Replace(_T("(%s)"), _T(""));
 	else
-		sCtrlText.Format(sCtrlText, m_sExportToImageView);
+		sCtrlText.Replace(_T("%s"), m_sExportToImageView);
 
 	SetDlgItemText(IDC_STYLE_TASKVIEW, sCtrlText);
 
