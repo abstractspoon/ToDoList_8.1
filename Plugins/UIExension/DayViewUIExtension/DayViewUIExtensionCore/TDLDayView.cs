@@ -12,21 +12,22 @@ namespace DayViewUIExtension
 
 	public class TDLDayView : Calendar.DayView, ILabelTipHandler
     {
-        private UInt32 m_SelectedTaskID = 0;
-		private UInt32 m_VisibleSelectedTaskID = 0;
-		private UInt32 m_MaxTaskID = 0;
+        private uint m_SelectedTaskID = 0;
+		private uint m_VisibleSelectedTaskID = 0;
+		private uint m_MaxTaskID = 0;
 
 		private int m_UserMinSlotHeight = -1;
 
-        private Boolean m_HideParentTasks = true;
-		private Boolean m_DisplayTasksContinuous = true;
-		private Boolean m_HideTasksWithoutTimes = true;
-        private Boolean m_HideTasksSpanningWeekends = false;
-        private Boolean m_HideTasksSpanningDays = false;
-		private Boolean m_ShowFutureOcurrences = true;
+        private bool m_HideParentTasks = true;
+		private bool m_DisplayTasksContinuous = true;
+		private bool m_HideTasksWithoutTimes = true;
+        private bool m_HideTasksSpanningWeekends = false;
+        private bool m_HideTasksSpanningDays = false;
+		private bool m_ShowFutureOcurrences = true;
+		private bool m_IsSavingToImage = false;
 
-		private Dictionary<UInt32, CalendarItem> m_Items;
-        private Dictionary<UInt32, CalendarFutureItem> m_FutureItems;
+		private Dictionary<uint, CalendarItem> m_Items;
+        private Dictionary<uint, CalendarFutureItem> m_FutureItems;
 
         private TDLRenderer m_Renderer;
 		private LabelTip m_LabelTip;
@@ -47,11 +48,11 @@ namespace DayViewUIExtension
                     Invalidate();
                 }
             }
-        }
+        }	
 
 		// ----------------------------------------------------------------
 
-		public Boolean ReadOnly { get; set; }
+		public bool ReadOnly { get; set; }
 
         public TDLDayView(UIExtension.TaskIcon taskIcons, UIExtension.TaskRecurrences taskRecurrences, int minSlotHeight)
         {
@@ -62,7 +63,7 @@ namespace DayViewUIExtension
 			dayGripWidth = 1; // to match app styling
 
             m_Renderer = new TDLRenderer(Handle, taskIcons);
-			m_Items = new System.Collections.Generic.Dictionary<UInt32, CalendarItem>();
+			m_Items = new System.Collections.Generic.Dictionary<uint, CalendarItem>();
 			m_UserMinSlotHeight = minSlotHeight;
             m_LabelTip = new LabelTip(this);
 			m_TaskRecurrences = taskRecurrences;
@@ -83,7 +84,7 @@ namespace DayViewUIExtension
             return this;
         }
 
-        public UInt32 ToolHitTest(Point ptScreen, ref String tipText, ref Rectangle toolRect, ref bool multiLine)
+        public uint ToolHitTest(Point ptScreen, ref String tipText, ref Rectangle toolRect, ref bool multiLine)
         {
 			if (IsResizingAppointment())
 				return 0;
@@ -188,7 +189,7 @@ namespace DayViewUIExtension
 			get { return m_LabelTip.Active; }
 		}
 
-        public bool IsTaskDisplayable(UInt32 dwTaskID)
+        public bool IsTaskDisplayable(uint dwTaskID)
         {
             if (dwTaskID == 0)
                 return false;
@@ -207,7 +208,7 @@ namespace DayViewUIExtension
 			return false;
         }
 
-        public Boolean HideParentTasks
+        public bool HideParentTasks
         {
             get { return m_HideParentTasks; }
             set
@@ -220,7 +221,7 @@ namespace DayViewUIExtension
             }
         }
 
-		public Boolean ShowFutureOccurrences
+		public bool ShowFutureOccurrences
 		{
 			get { return m_ShowFutureOcurrences; }
 			set
@@ -233,12 +234,12 @@ namespace DayViewUIExtension
 			}
 		}
 
-		public Boolean AutoCalculateDependencyDates
+		public bool AutoCalculateDependencyDates
 		{
 			get; set;
 		}
 
-		public Boolean DisplayTasksContinuous
+		public bool DisplayTasksContinuous
 		{
 			get { return m_DisplayTasksContinuous; }
 			set
@@ -251,7 +252,7 @@ namespace DayViewUIExtension
 			}
 		}
 
-		public Boolean HideTasksWithoutTimes
+		public bool HideTasksWithoutTimes
         {
             get { return m_HideTasksWithoutTimes; }
             set
@@ -264,7 +265,7 @@ namespace DayViewUIExtension
             }
         }
 
-        public Boolean HideTasksSpanningWeekends
+        public bool HideTasksSpanningWeekends
         {
             get { return m_HideTasksSpanningWeekends; }
             set
@@ -277,7 +278,7 @@ namespace DayViewUIExtension
             }
         }
 
-        public Boolean HideTasksSpanningDays
+        public bool HideTasksSpanningDays
         {
             get { return m_HideTasksSpanningDays; }
             set
@@ -290,7 +291,7 @@ namespace DayViewUIExtension
             }
         }
 
-        public UInt32 GetSelectedTaskID()
+        public uint GetSelectedTaskID()
         {
             if (!IsTaskDisplayable(m_SelectedTaskID))
                 return 0;
@@ -309,7 +310,7 @@ namespace DayViewUIExtension
 		{
 			from = to = Calendar.Appointment.NullDate;
 
-			UInt32 selTaskID = GetSelectedTaskID();
+			uint selTaskID = GetSelectedTaskID();
 
 			if (selTaskID == 0)
 				return false;
@@ -328,7 +329,7 @@ namespace DayViewUIExtension
 			return true;
 		}
 
-        public bool GetTask(UIExtension.GetTask getTask, ref UInt32 taskID)
+        public bool GetTask(UIExtension.GetTask getTask, ref uint taskID)
         {
             switch (getTask)
             {
@@ -397,8 +398,8 @@ namespace DayViewUIExtension
         {
 			// Our base class clears the selected appointment whenever
 			// the week changes so we can't always rely on 'SelectedAppointmentId'
-            UInt32 prevSelTaskID = m_VisibleSelectedTaskID;
-            UInt32 selTaskID = GetSelectedTaskID();
+            uint prevSelTaskID = m_VisibleSelectedTaskID;
+            uint selTaskID = GetSelectedTaskID();
 
 			m_VisibleSelectedTaskID = selTaskID;
 			
@@ -445,7 +446,7 @@ namespace DayViewUIExtension
 			return SelectedAppointment;
 		}
 
-		public bool SelectTask(UInt32 dwTaskID)
+		public bool SelectTask(uint dwTaskID)
 		{
             m_SelectedTaskID = dwTaskID;
             FixupSelection(true, false);
@@ -494,7 +495,7 @@ namespace DayViewUIExtension
 			return UIExtension.HitResult.Nowhere;
 		}
 
-		public UInt32 HitTestTask(Int32 xScreen, Int32 yScreen)
+		public uint HitTestTask(Int32 xScreen, Int32 yScreen)
 		{
 			System.Drawing.Point pt = PointToClient(new System.Drawing.Point(xScreen, yScreen));
 			Calendar.Appointment appointment = GetAppointmentAt(pt.X, pt.Y);
@@ -684,7 +685,7 @@ namespace DayViewUIExtension
 				return false;
 
 			CalendarItem item;
-			UInt32 taskID = task.GetID();
+			uint taskID = task.GetID();
 
 			m_MaxTaskID = Math.Max(m_MaxTaskID, taskID); // needed for future occurrences
 
@@ -709,7 +710,7 @@ namespace DayViewUIExtension
 			return true;
 		}
 
-		public Boolean StrikeThruDoneTasks
+		public bool StrikeThruDoneTasks
 		{
 			get { return m_Renderer.StrikeThruDoneTasks; }
 			set
@@ -722,7 +723,7 @@ namespace DayViewUIExtension
 			}
 		}
 
-        public Boolean TaskColorIsBackground
+        public bool TaskColorIsBackground
         {
             get { return m_Renderer.TaskColorIsBackground; }
             set
@@ -735,7 +736,7 @@ namespace DayViewUIExtension
             }
         }
 
-		public Boolean ShowParentsAsFolder
+		public bool ShowParentsAsFolder
 		{
 			get { return m_Renderer.ShowParentsAsFolder; }
 			set
@@ -1000,9 +1001,9 @@ namespace DayViewUIExtension
 			m_FutureItems = new Dictionary<uint, CalendarFutureItem>();
 
 			var appts = new List<Calendar.Appointment>();
-			UInt32 nextFutureId = (((m_MaxTaskID / 1000) + 1) * 1000);
+			uint nextFutureId = (((m_MaxTaskID / 1000) + 1) * 1000);
 
-			foreach (System.Collections.Generic.KeyValuePair<UInt32, CalendarItem> pair in m_Items)
+			foreach (System.Collections.Generic.KeyValuePair<uint, CalendarItem> pair in m_Items)
 			{
 				CalendarItem item = pair.Value;
 
