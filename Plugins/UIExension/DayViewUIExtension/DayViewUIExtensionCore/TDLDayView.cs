@@ -24,7 +24,6 @@ namespace DayViewUIExtension
         private bool m_HideTasksSpanningWeekends = false;
         private bool m_HideTasksSpanningDays = false;
 		private bool m_ShowFutureOcurrences = true;
-		private bool m_IsSavingToImage = false;
 
 		private Dictionary<uint, CalendarItem> m_Items;
         private Dictionary<uint, CalendarFutureItem> m_FutureItems;
