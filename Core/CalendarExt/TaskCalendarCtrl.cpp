@@ -2915,7 +2915,7 @@ BOOL CTaskCalendarCtrl::SaveToImage(CBitmap& bmImage)
 	GetGridCellRect(0, 0, rCell);
 
 	int nReqCellHeight = (m_nHeaderHeight + (m_nMaxDayTaskCount * m_nTaskHeight));
-	int nReqCellWidth = (CDateHelper::GetMaxDayOfWeekNameExtent(&dc).cx + GraphicsMisc::ScaleByDPIFactor(10 + 10));
+	int nReqCellWidth = (CDateHelper::GetMaxDayOfWeekNameWidth(&dc) + GraphicsMisc::ScaleByDPIFactor(10 + 10));
 
 	dc.SelectObject(pOldFont);
 	
