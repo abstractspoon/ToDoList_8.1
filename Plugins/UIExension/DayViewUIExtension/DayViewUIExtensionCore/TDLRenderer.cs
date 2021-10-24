@@ -71,6 +71,31 @@ namespace DayViewUIExtension
             }
         }
 
+		private void UpdateDOWStyle(Graphics g)
+		{
+			DOWStyle = DOWNameStyle.Long;
+
+			// Subtract the width of the widest numerical component
+			int colWidth = m_ColWidth;
+
+			using (Font font = new Font(m_BaseFont, FontStyle.Bold))
+			{
+				colWidth -= (int)g.MeasureString("31", font).Width;
+			}
+
+			// Calculate the longest long and short day-of-week names
+			int maxLong = DateUtil.GetMaxDayOfWeekNameWidth(g, m_BaseFont, false);
+			int maxShort = DateUtil.GetMaxDayOfWeekNameWidth(g, m_BaseFont, true);
+
+			if (maxLong > colWidth)
+			{
+				if (maxShort > colWidth)
+					DOWStyle = DOWNameStyle.None;
+				else
+					DOWStyle = DOWNameStyle.Short;
+			}
+		}
+
 		public override void SetColumnWidth(Graphics g, int colWidth)
 		{
 			if (m_ColWidth == colWidth)
@@ -79,40 +104,7 @@ namespace DayViewUIExtension
 			m_ColWidth = colWidth;
 
 			// Update the visibility of the day of week component
-			DOWStyle = DOWNameStyle.Long;
-
-			// Subtract the width of the widest numerical component
-			using (Font font = new Font("Tahoma", 9, FontStyle.Bold))
-			{
-				colWidth -= TextRenderer.MeasureText(g, "31", font).Width;
-			}
-
-			// Calculate the longest long and short day-of-week names
-			using (Font font = new Font("Tahoma", 8, FontStyle.Regular))
-			{
-				int maxLong = 0, maxShort = 0;
-
-				for (int dow = 0; dow < 6; dow++)
-				{
-					string dayName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName((DayOfWeek)dow);
-					int nameWidth = TextRenderer.MeasureText(g, dayName, font).Width;
-
-					maxLong = Math.Max(maxLong, nameWidth);
-
-					dayName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName((DayOfWeek)dow);
-					nameWidth = TextRenderer.MeasureText(g, dayName, font).Width;
-
-					maxShort = Math.Max(maxShort, nameWidth);
-				}
-
-				if (maxLong > colWidth)
-				{
-					if (maxShort > colWidth)
-						DOWStyle = DOWNameStyle.None;
-					else
-						DOWStyle = DOWNameStyle.Short;
-				}
-			}
+			UpdateDOWStyle(g);
 		}
 
 		public void SetFont(String fontName, int fontSize)
@@ -121,9 +113,15 @@ namespace DayViewUIExtension
                 return;
 
             m_BaseFont = new Font(fontName, fontSize, FontStyle.Regular);
-        }
-        
-        public int GetFontHeight()
+ 
+			// Update the visibility of the day of week component
+			using (Graphics g = Graphics.FromHwnd(m_hWnd))
+			{
+				UpdateDOWStyle(g);
+			}
+		}
+
+		public int GetFontHeight()
         {
             return BaseFont.Height;
         }
@@ -310,19 +308,22 @@ namespace DayViewUIExtension
 			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
 			// Day of month
-			TextFormatFlags flags = TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine;
+			var fmt = new StringFormat();
 
-			using (Font font = new Font("Tahoma", 9, FontStyle.Bold))
+			fmt.LineAlignment = StringAlignment.Center;
+			fmt.Alignment = StringAlignment.Near;
+
+			using (Font font = new Font(m_BaseFont, FontStyle.Bold))
 			{
 				if (DOWStyle == DOWNameStyle.None)
-					flags |= TextFormatFlags.HorizontalCenter;
+					fmt.Alignment = StringAlignment.Center;
 
 				string dayNum = date.ToString(" d");
-				TextRenderer.DrawText(g, dayNum, font, rect, SystemColors.WindowText, flags);
+				g.DrawString(dayNum, font, SystemBrushes.WindowText, rect, fmt);
 
 				if (DOWStyle == DOWNameStyle.Long)
 				{
-					int strWidth = TextRenderer.MeasureText(g, dayNum, font).Width;
+					int strWidth = (int)g.MeasureString(dayNum, font).Width;
 
 					rect.Width -= strWidth;
 					rect.X += strWidth;
@@ -333,21 +334,18 @@ namespace DayViewUIExtension
 			if (DOWStyle != DOWNameStyle.None)
 			{
 				if (DOWStyle == DOWNameStyle.Long)
-					flags |= TextFormatFlags.HorizontalCenter;
+					fmt.Alignment = StringAlignment.Center;
 				else
-					flags |= TextFormatFlags.Right;
+					fmt.Alignment = StringAlignment.Far;
 
-				using (Font font = new Font("Tahoma", 8, FontStyle.Regular))
-				{
-					string dayName;
+				string dayName;
 
-					if (DOWStyle == DOWNameStyle.Long)
-						dayName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(date.DayOfWeek);
-					else
-						dayName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(date.DayOfWeek);
+				if (DOWStyle == DOWNameStyle.Long)
+					dayName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(date.DayOfWeek);
+				else
+					dayName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(date.DayOfWeek);
 
-					TextRenderer.DrawText(g, dayName, font, rect, SystemColors.WindowText, flags);
-				}
+				g.DrawString(dayName, m_BaseFont, SystemBrushes.WindowText, rect, fmt);
 			}
 		}
 

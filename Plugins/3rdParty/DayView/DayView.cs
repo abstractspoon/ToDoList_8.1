@@ -53,7 +53,7 @@ namespace Calendar
 
         protected int minHourLabelWidth = 50;
         protected int hourLabelIndent = 2;
-        protected int dayHeadersHeight = 19;
+        protected int minDayHeaderHeight = 19;
         protected int appointmentGripWidth = 5;
         protected int dayGripWidth = 5;
         protected int allDayEventsHeaderHeight = 0;
@@ -99,7 +99,7 @@ namespace Calendar
             hscroll.Visible = true;
             hscroll.Location = new System.Drawing.Point(0, 0);
             hscroll.Width = HourLabelWidth;
-            hscroll.Height = dayHeadersHeight;
+            hscroll.Height = minDayHeaderHeight;
             hscroll.Scroll += new ScrollEventHandler(OnHScroll);
             hscroll.Minimum = -1000; // ~-20 years
             hscroll.Maximum = 1000;  // ~20 years
@@ -286,6 +286,18 @@ namespace Calendar
                 Invalidate();
             }
         }
+
+		private int DayHeaderHeight
+		{
+			get
+			{
+				if ((renderer != null) && (renderer.BaseFont != null))
+					return Math.Max(minDayHeaderHeight, (renderer.BaseFont.Height + 2 + 2));
+
+				// else
+				return minDayHeaderHeight;
+			}
+		}
 
         private int daysToShow = 7;
 
@@ -777,7 +789,7 @@ namespace Calendar
         {
             get
             {
-                return dayHeadersHeight + allDayEventsHeaderHeight;
+                return DayHeaderHeight + allDayEventsHeaderHeight;
             }
         }
 
@@ -894,7 +906,7 @@ namespace Calendar
         protected override void OnMouseDown(MouseEventArgs e)
         {
 			// Ignore all clicks on the day header
-			if (e.Y > dayHeadersHeight)
+			if (e.Y > DayHeaderHeight)
 			{
 				if (e.Button == MouseButtons.Left)
 				{
@@ -916,7 +928,7 @@ namespace Calendar
 
 					if (appointment == null)
 					{
-						if (e.Y < HeaderHeight && e.Y > dayHeadersHeight)
+						if (e.Y < HeaderHeight && e.Y > DayHeaderHeight)
 						{
 							newTool = drawTool;
 							selection = SelectionType.None;
@@ -1233,8 +1245,8 @@ namespace Calendar
         {
             Rectangle fulldayrect;
             fulldayrect = this.ClientRectangle;
-            fulldayrect.Height = this.HeaderHeight - dayHeadersHeight;
-            fulldayrect.Y += dayHeadersHeight;
+            fulldayrect.Height = this.HeaderHeight - DayHeaderHeight;
+            fulldayrect.Y += DayHeaderHeight;
             fulldayrect.Width -= (HourLabelWidth + hourLabelIndent + this.vscroll.Width);
             fulldayrect.X += HourLabelWidth + hourLabelIndent;
 
@@ -1388,7 +1400,7 @@ namespace Calendar
             Rectangle headerRectangle = rectangle;
             headerRectangle.X += HourLabelWidth + hourLabelIndent;
             headerRectangle.Width -= (HourLabelWidth + hourLabelIndent);
-            headerRectangle.Height = dayHeadersHeight;
+            headerRectangle.Height = DayHeaderHeight;
 
             if (e.ClipRectangle.IntersectsWith(headerRectangle))
                 DrawDayHeaders(e, headerRectangle);
@@ -1878,7 +1890,7 @@ namespace Calendar
                 return;
 
             int dayWidth = rect.Width / daysToShow;
-            int y = dayHeadersHeight;
+            int y = DayHeaderHeight;
             longAppointmentViews.Clear();
 
             allDayEventsHeaderHeight = ((numLayers * (longAppointmentHeight + longAppointmentSpacing)) + longAppointmentSpacing);
@@ -1943,7 +1955,7 @@ namespace Calendar
 		protected void AdjustHScrollbar()
 		{
 			hscroll.Width = (HourLabelWidth + hourLabelIndent);
-			hscroll.Height = dayHeadersHeight;
+			hscroll.Height = minDayHeaderHeight;
 		}
 
 		internal class AppointmentView

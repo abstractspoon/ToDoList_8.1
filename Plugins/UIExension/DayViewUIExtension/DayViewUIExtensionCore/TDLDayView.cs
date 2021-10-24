@@ -57,7 +57,7 @@ namespace DayViewUIExtension
         {
             minHourLabelWidth = DPIScaling.Scale(minHourLabelWidth);
             hourLabelIndent = DPIScaling.Scale(hourLabelIndent);
-            dayHeadersHeight = DPIScaling.Scale(dayHeadersHeight);
+            minDayHeaderHeight = DPIScaling.Scale(minDayHeaderHeight);
             longAppointmentSpacing = DPIScaling.Scale(longAppointmentSpacing);
 			dayGripWidth = 1; // to match app styling
 
@@ -1259,5 +1259,6 @@ namespace DayViewUIExtension
 					SlotHeight = minSlotHeight;
 			}
 		}
+
 	}
 }
