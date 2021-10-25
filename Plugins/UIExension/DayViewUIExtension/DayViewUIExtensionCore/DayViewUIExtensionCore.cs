@@ -873,6 +873,16 @@ namespace DayViewUIExtension
             }
         }
 
+		public Bitmap SaveToImage()
+		{
+			return m_DayView.SaveToImage();
+		}
+
+		public Boolean CanSaveToImage()
+		{
+			return m_DayView.CanSaveToImage();
+		}
+
 	}
 
 

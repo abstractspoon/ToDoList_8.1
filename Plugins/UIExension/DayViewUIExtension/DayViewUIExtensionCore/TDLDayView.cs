@@ -914,8 +914,11 @@ namespace DayViewUIExtension
 			return base.EnsureVisible(appt, partialOK);
 		}
 
-		bool WantDrawAppointmentSelected(Calendar.Appointment appointment)
+		protected override bool WantDrawAppointmentSelected(Calendar.Appointment appointment)
 		{
+			if (base.SavingToImage)
+				return false;
+
 			// When a real or future task item is selected we want
 			// all the other related tasks to also appear selected
 			if (m_SelectedTaskID == appointment.Id)
