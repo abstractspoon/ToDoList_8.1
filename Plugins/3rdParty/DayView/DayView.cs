@@ -173,7 +173,7 @@ namespace Calendar
 			{
 				// We use the hour label width to absorb any
 				// leftover from dividing up the width into days
-				int daysWidth = (Width - vscroll.Width - minHourLabelWidth - hourLabelIndent);
+				int daysWidth = (ClientRectangle.Width - vscroll.Width - minHourLabelWidth - hourLabelIndent);
 				int leftover = (daysWidth % DaysShowing);
 
 				return (minHourLabelWidth + leftover);
@@ -1318,7 +1318,7 @@ namespace Calendar
         public virtual DateTime GetDateAt(int x, bool longAppt)
         {
             DateTime date = startDate.Date;
-            int dayWidth = (this.Width - (vscroll.Width + HourLabelWidth + hourLabelIndent)) / daysToShow;
+            int dayWidth = (ClientRectangle.Width - (vscroll.Width + HourLabelWidth + hourLabelIndent)) / daysToShow;
 
 			if (longAppt)
 			{
@@ -1395,7 +1395,7 @@ namespace Calendar
 			e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
             // Calculate visible rectangle
-            Rectangle rectangle = new Rectangle(0, 0, this.Width - vscroll.Width, this.Height);
+            Rectangle rectangle = new Rectangle(0, 0, ClientRectangle.Width - vscroll.Width, ClientRectangle.Height);
 
             Rectangle headerRectangle = rectangle;
             headerRectangle.X += HourLabelWidth + hourLabelIndent;
@@ -1918,7 +1918,7 @@ namespace Calendar
                 int endPos = (rect.X + (int)(endDay * dayWidth));
 
                 if ((endPos >= rect.Right) || (appointment.EndDate >= endOfLastDay))
-                    endPos = (rect.Right - 1);
+                    endPos = (rect.Right - 2);
 
                 appointmenRect.X = startPos;
                 appointmenRect.Width = (endPos - startPos);
