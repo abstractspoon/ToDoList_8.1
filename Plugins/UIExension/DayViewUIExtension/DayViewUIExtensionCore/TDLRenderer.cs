@@ -83,6 +83,9 @@ namespace DayViewUIExtension
 				colWidth -= (int)g.MeasureString("31", font).Width;
 			}
 
+			// padding
+			colWidth -= DPIScaling.Scale(10); // matches Calendar view
+
 			// Calculate the longest long and short day-of-week names
 			int maxLong = DateUtil.GetMaxDayOfWeekNameWidth(g, m_BaseFont, false);
 			int maxShort = DateUtil.GetMaxDayOfWeekNameWidth(g, m_BaseFont, true);
@@ -95,6 +98,8 @@ namespace DayViewUIExtension
 					DOWStyle = DOWNameStyle.Short;
 			}
 		}
+
+		public int ColumnWidth { get { return m_ColWidth; } }
 
 		public override void SetColumnWidth(Graphics g, int colWidth)
 		{
