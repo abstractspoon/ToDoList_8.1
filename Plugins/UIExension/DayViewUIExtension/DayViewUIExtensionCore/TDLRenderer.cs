@@ -312,13 +312,14 @@ namespace DayViewUIExtension
 
 			fmt.LineAlignment = StringAlignment.Center;
 			fmt.Alignment = StringAlignment.Near;
+			fmt.FormatFlags |= StringFormatFlags.NoWrap;
 
 			using (Font font = new Font(m_BaseFont, FontStyle.Bold))
 			{
 				if (DOWStyle == DOWNameStyle.None)
 					fmt.Alignment = StringAlignment.Center;
 
-				string dayNum = date.ToString(" d");
+				string dayNum = date.Day.ToString();
 				g.DrawString(dayNum, font, SystemBrushes.WindowText, rect, fmt);
 
 				if (DOWStyle == DOWNameStyle.Long)
