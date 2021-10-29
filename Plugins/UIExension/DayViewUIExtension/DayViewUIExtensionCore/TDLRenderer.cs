@@ -71,6 +71,24 @@ namespace DayViewUIExtension
             }
         }
 
+		private static string FormatHeaderText(DateTime date, DOWNameStyle style)
+		{
+			switch (style)
+			{
+			case DOWNameStyle.Long:
+				return string.Format("{0} {1}", CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(date.DayOfWeek), date.Day);
+
+			case DOWNameStyle.Short:
+				return string.Format("{0} {1}", CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(date.DayOfWeek), date.Day);
+
+			case DOWNameStyle.None:
+			default:
+				break;
+			}
+
+			return date.Day.ToString();
+		}
+
 		private void UpdateDOWStyle(Graphics g)
 		{
 			DOWStyle = DOWNameStyle.Long;
@@ -78,9 +96,9 @@ namespace DayViewUIExtension
 			// Subtract the width of the widest numerical component
 			int colWidth = m_ColWidth;
 
-			using (Font font = new Font(m_BaseFont, FontStyle.Bold))
+//			using (Font font = new Font(m_BaseFont, FontStyle.Bold))
 			{
-				colWidth -= (int)g.MeasureString("31", font).Width;
+				colWidth -= (int)g.MeasureString("31", m_BaseFont).Width;
 			}
 
 			// padding
@@ -312,13 +330,17 @@ namespace DayViewUIExtension
 			// Header text
 			g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-			// Day of month
 			var fmt = new StringFormat();
 
 			fmt.LineAlignment = StringAlignment.Center;
 			fmt.Alignment = StringAlignment.Near;
 			fmt.FormatFlags |= StringFormatFlags.NoWrap;
 
+			string headerText = FormatHeaderText(date, DOWStyle);
+			g.DrawString(headerText, m_BaseFont, SystemBrushes.WindowText, rect, fmt);
+
+            /*
+			// Day of month
 			using (Font font = new Font(m_BaseFont, FontStyle.Bold))
 			{
 				if (DOWStyle == DOWNameStyle.None)
@@ -353,6 +375,7 @@ namespace DayViewUIExtension
 
 				g.DrawString(dayName, m_BaseFont, SystemBrushes.WindowText, rect, fmt);
 			}
+            */
 		}
 
 		public override void DrawDayBackground(Graphics g, Rectangle rect)
