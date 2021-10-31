@@ -49,6 +49,7 @@ namespace DayViewUIExtension
             StrikeThruDoneTasks = true;
             GridlineColor = Color.Gray;
 			DowStyle = DowNameStyle.Long;
+			MonthStyle = MonthNameStyle.Long;
 		}
 
 		public bool ShowParentsAsFolder { get; set; }
