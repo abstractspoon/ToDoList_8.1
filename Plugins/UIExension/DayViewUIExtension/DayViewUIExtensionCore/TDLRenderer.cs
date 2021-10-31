@@ -143,9 +143,11 @@ namespace DayViewUIExtension
 
 		private void UpdateHeaderStyles(Graphics g)
 		{
+			int availWidth = (m_ColWidth - 2); // deduct a bit for .NET padding
+
 			// Basic header string format is '<Day of week> <Day of month> <Month>'
-			int maxDayNum = (int)(g.MeasureString("31", BaseFont, m_ColWidth).Width);
-			int maxDayAndMonthNum = (int)(g.MeasureString("31/12", BaseFont, m_ColWidth).Width);
+			int maxDayNum = (int)(g.MeasureString("31", BaseFont, availWidth).Width);
+			int maxDayAndMonthNum = (int)(g.MeasureString("31/12", BaseFont, availWidth).Width);
 
 			int maxLongDow = DateUtil.GetMaxDayOfWeekNameWidth(g, BoldFont, false);
 			int maxShortDow = DateUtil.GetMaxDayOfWeekNameWidth(g, BoldFont, true);
@@ -155,8 +157,6 @@ namespace DayViewUIExtension
 
 			DowStyle = DowNameStyle.Long;
 			MonthStyle = MonthNameStyle.Long;
-
-			int availWidth = (m_ColWidth - 2); // deduct a bit for .NET padding
 
 			if (availWidth < (maxLongDow + maxDayNum + maxLongMonth))
 			{
