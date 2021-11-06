@@ -640,42 +640,45 @@ namespace DayViewUIExtension
                 }
 
                 // draw appointment text
-                using (StringFormat format = new StringFormat())
-                {
-                    format.Alignment = StringAlignment.Near;
-                    format.LineAlignment = (isLong ? StringAlignment.Center : StringAlignment.Near);
+				if (rect.Width > 0)
+				{
+					using (StringFormat format = new StringFormat())
+					{
+						format.Alignment = StringAlignment.Near;
+						format.LineAlignment = (isLong ? StringAlignment.Center : StringAlignment.Near);
 
-					if (isLong)
-						format.FormatFlags |= (StringFormatFlags.NoClip | StringFormatFlags.NoWrap);
+						if (isLong)
+							format.FormatFlags |= (StringFormatFlags.NoClip | StringFormatFlags.NoWrap);
 
-                    rect.Y += 3;
+						rect.Y += 3;
 
-					if (isLong)
-						rect.Height = BaseFont.Height;
-					else
-						rect.Height -= 3;
+						if (isLong)
+							rect.Height = BaseFont.Height;
+						else
+							rect.Height -= 3;
 
-					taskItem.TextRect = rect;
-                    g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+						taskItem.TextRect = rect;
+						g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-                    using (SolidBrush brush = new SolidBrush(textColor))
-                    {
-                        if (taskItem.IsDone && StrikeThruDoneTasks)
-                        {
-                            using (Font font = new Font(this.BaseFont, FontStyle.Strikeout))
-                            {
-                                g.DrawString(appointment.Title, font, brush, rect, format);
-                            }
-                        }
-                        else
-                        {
-                            g.DrawString(appointment.Title, this.BaseFont, brush, rect, format);
-                        }
-                    }
+						using (SolidBrush brush = new SolidBrush(textColor))
+						{
+							if (taskItem.IsDone && StrikeThruDoneTasks)
+							{
+								using (Font font = new Font(this.BaseFont, FontStyle.Strikeout))
+								{
+									g.DrawString(appointment.Title, font, brush, rect, format);
+								}
+							}
+							else
+							{
+								g.DrawString(appointment.Title, this.BaseFont, brush, rect, format);
+							}
+						}
 
-                    g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                }
-            }
-        }
+						g.TextRenderingHint = TextRenderingHint.SystemDefault;
+					}
+				}
+			}
+		}
     }
 }
