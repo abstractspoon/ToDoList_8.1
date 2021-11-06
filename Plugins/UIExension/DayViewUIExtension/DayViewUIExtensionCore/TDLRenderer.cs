@@ -416,7 +416,6 @@ namespace DayViewUIExtension
 			fmt.LineAlignment = StringAlignment.Center;
 			fmt.Alignment = StringAlignment.Near;
 			fmt.FormatFlags |= StringFormatFlags.NoWrap | StringFormatFlags.NoClip;
-			//fmt.Trimming = StringTrimming.None;
 
 			// Use bold font for first-day-of-month
 			string text = FormatHeaderText(date, DowStyle, MonthStyle, firstDay);
