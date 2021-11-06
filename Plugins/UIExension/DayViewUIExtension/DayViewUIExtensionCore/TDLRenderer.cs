@@ -19,6 +19,7 @@ namespace DayViewUIExtension
 		private IntPtr m_hWnd;
 		private Font m_BaseFont, m_BoldFont;
 		private int m_ColWidth = -1;
+		private int m_HeaderPadding = DPIScaling.Scale(3);
 
 		enum DowNameStyle
 		{
@@ -133,6 +134,9 @@ namespace DayViewUIExtension
 				format += "d ";
 			}
 
+			if (format == "")
+				return date.Day.ToString();
+
 			return date.ToString(format);
 		}
 
@@ -143,11 +147,11 @@ namespace DayViewUIExtension
 
 		private void UpdateHeaderStyles(Graphics g)
 		{
-			int availWidth = (m_ColWidth - 2); // deduct a bit for .NET padding
+			int availWidth = (m_ColWidth - (m_HeaderPadding * 2));
 
 			// Basic header string format is '<Day of week> <Day of month> <Month>'
-			int maxDayNum = (int)(g.MeasureString("31", BaseFont, availWidth).Width);
-			int maxDayAndMonthNum = (int)(g.MeasureString("31/12", BaseFont, availWidth).Width);
+			int maxDayNum = (int)(g.MeasureString("31", BaseFont).Width);
+			int maxDayAndMonthNum = (int)(g.MeasureString("31/12", BaseFont).Width);
 
 			int maxLongDow = DateUtil.GetMaxDayOfWeekNameWidth(g, BoldFont, false);
 			int maxShortDow = DateUtil.GetMaxDayOfWeekNameWidth(g, BoldFont, true);
@@ -412,12 +416,17 @@ namespace DayViewUIExtension
 			fmt.LineAlignment = StringAlignment.Center;
 			fmt.Alignment = StringAlignment.Near;
 			fmt.FormatFlags |= StringFormatFlags.NoWrap | StringFormatFlags.NoClip;
+			//fmt.Trimming = StringTrimming.None;
 
 			// Use bold font for first-day-of-month
 			string text = FormatHeaderText(date, DowStyle, MonthStyle, firstDay);
 			Font font = ((date.Day == 1) ? BoldFont : BaseFont);
 
-			g.DrawString(text, font, SystemBrushes.WindowText, rect, fmt);
+			Rectangle rText = rect;
+			rText.X += m_HeaderPadding;
+			rText.Width -= m_HeaderPadding;
+
+			g.DrawString(text, font, SystemBrushes.WindowText, rText, fmt);
 		}
 
 		public override void DrawDayBackground(Graphics g, Rectangle rect)
