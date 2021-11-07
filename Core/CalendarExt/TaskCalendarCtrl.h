@@ -224,6 +224,7 @@ protected:
 
 	int RebuildCellTasks(BOOL bIncFutureItems = TRUE);
 	int RebuildCellTasks(CCalendarCell* pCell);
+	void ResortCellTasks();
 	void RebuildCellTaskDrawInfo();
 	void RebuildFutureOccurrences();
 	void AddTasksToCell(const CTaskCalItemMap& mapTasks, const COleDateTime& dtCell, CTaskCalItemArray* pTasks);

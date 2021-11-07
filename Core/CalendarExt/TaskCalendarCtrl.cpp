@@ -1339,7 +1339,7 @@ BOOL CTaskCalendarCtrl::SortBy(TDC_ATTRIBUTE nSortBy, BOOL bAscending)
 	m_bSortAscending = bAscending;
 
 	if (GetSafeHwnd())
-		Invalidate(FALSE);
+		ResortCellTasks();
 
 	return TRUE;
 }
@@ -1406,6 +1406,22 @@ int CTaskCalendarCtrl::RebuildCellTasks(BOOL bIncFutureItems)
 	RebuildCellTaskDrawInfo();
 
 	return nTotal;
+}
+
+void CTaskCalendarCtrl::ResortCellTasks()
+{
+	int nTotal = 0;
+
+	for (int i = 0; i < CALENDAR_MAX_ROWS; i++)
+	{
+		for (int u = 0; u < CALENDAR_NUM_COLUMNS; u++)
+		{
+			CTaskCalItemArray* pTasks = GetCellTasks(i, u);
+			pTasks->SortItems(m_nSortBy, m_bSortAscending);
+		}
+	}
+
+	Invalidate(TRUE);
 }
 
 void CTaskCalendarCtrl::RebuildFutureOccurrences()
