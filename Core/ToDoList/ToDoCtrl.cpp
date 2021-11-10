@@ -5769,7 +5769,7 @@ void CToDoCtrl::SetColumnFieldVisibility(const TDCCOLEDITVISIBILITY& vis)
 	TDCCOLEDITVISIBILITY visPrev = m_visColEdit;
 	m_visColEdit = vis;
 
-	if (!IsDelayLoaded())
+	if (GetSafeHwnd() && !IsDelayLoaded())
 	{
 		if (bColumnChange)
 		{
