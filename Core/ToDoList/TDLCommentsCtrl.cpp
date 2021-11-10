@@ -185,8 +185,8 @@ void CTDLCommentsCtrl::SetCtrlStates(RT_CTRLSTATE nComboState, RT_CTRLSTATE nCom
 	switch (nCommentsState)
 	{
 		case RTCS_ENABLED:
-			m_ctrlComments.SetReadOnly(FALSE);
 			m_ctrlComments.EnableWindow(TRUE);
+			m_ctrlComments.SetReadOnly(FALSE);
 			break;
 
 		case RTCS_DISABLED:
@@ -194,8 +194,8 @@ void CTDLCommentsCtrl::SetCtrlStates(RT_CTRLSTATE nComboState, RT_CTRLSTATE nCom
 			break;
 
 		case RTCS_READONLY:
-			m_ctrlComments.SetReadOnly(TRUE);
 			m_ctrlComments.EnableWindow(TRUE);
+			m_ctrlComments.SetReadOnly(TRUE);
 			break;
 	}
 }
