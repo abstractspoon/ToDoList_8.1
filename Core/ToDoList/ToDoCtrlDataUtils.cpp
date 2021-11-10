@@ -4180,7 +4180,7 @@ BOOL CTDCTaskExporter::ExportAllTaskAttributes(const TODOITEM* pTDI, const TODOS
 	return TRUE;
 }
 
-BOOL CTDCTaskExporter::ExportTaskAttributes(const TODOITEM* pTDI, const TODOSTRUCTURE* pTDS, CTaskFile& tasks, 
+BOOL CTDCTaskExporter::ExportMatchingTaskAttributes(const TODOITEM* pTDI, const TODOSTRUCTURE* pTDS, CTaskFile& tasks, 
 	HTASKITEM hTask, const TDCGETTASKS& filter) const
 {
 	ASSERT(pTDI);
@@ -4211,7 +4211,7 @@ BOOL CTDCTaskExporter::ExportTaskAttributes(const TODOITEM* pTDI, const TODOSTRU
 		DWORD dwTrueID = pTDI->dwTaskRefID;
 		GET_TDI_TDS(dwTrueID, pTDIReal, pTDSReal, FALSE);
 
-		if (!ExportTaskAttributes(pTDIReal, pTDSReal, tasks, hTask, filter)) // RECURSIVE CALL
+		if (!ExportMatchingTaskAttributes(pTDIReal, pTDSReal, tasks, hTask, filter)) // RECURSIVE CALL
 			return FALSE;
 
 		tasks.SetTaskReferenceID(hTask, pTDI->dwTaskRefID);

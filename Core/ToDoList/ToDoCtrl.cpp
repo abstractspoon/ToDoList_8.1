@@ -9756,7 +9756,7 @@ BOOL CToDoCtrl::AddTreeItemToTaskFile(HTREEITEM hti, DWORD dwTaskID, CTaskFile& 
 			const TODOSTRUCTURE* pTDS;
 			GET_DATA_TDS(m_data, dwTaskID, pTDS, FALSE);
 
-			m_exporter.ExportTaskAttributes(pTDI, pTDS, tasks, hTask, filter);
+			m_exporter.ExportMatchingTaskAttributes(pTDI, pTDS, tasks, hTask, filter);
 		}
 		else
 		{

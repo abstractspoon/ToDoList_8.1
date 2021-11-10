@@ -1129,7 +1129,7 @@ BOOL CTabbedToDoCtrl::AddTreeItemToTaskFile(HTREEITEM hti, CTaskFile& tasks, HTA
 	}
 
 	// Attributes
-	m_exporter.ExportTaskAttributes(pTDI, pTDS, tasks, hTask, filter);
+	m_exporter.ExportMatchingTaskAttributes(pTDI, pTDS, tasks, hTask, filter);
 
 	// Subtasks
 	AddTreeChildrenToTaskFile(hti, tasks, hTask, filter);
