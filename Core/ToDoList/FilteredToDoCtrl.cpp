@@ -297,6 +297,7 @@ BOOL CFilteredToDoCtrl::CopySelectedTasks() const
 		if (!hTask)
 			return FALSE;
 
+		// Note: For reference tasks this will copy the 'true' tasks attributes
 		m_exporter.ExportMatchingTaskAttributes(pTDI, pTDS, tasks, hTask, TDCGT_ALL);
 
 		// and subtasks
