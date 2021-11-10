@@ -155,7 +155,7 @@ void CTDLCommentsCtrl::SetWindowPrompts(LPCTSTR szComboPrompt, LPCTSTR szComment
 		m_mgrPrompts.SetComboPrompt(m_cbCommentsFmt, szComboPrompt);
 
 	if (m_ctrlComments.GetSafeHwnd() && CWinClasses::IsEditControl(m_ctrlComments))
-		m_mgrPrompts.SetEditPrompt(m_ctrlComments, szCommentsPrompt);
+		m_mgrPrompts.SetEditPrompt(m_ctrlComments, szCommentsPrompt, TRUE);
 }
 
 void CTDLCommentsCtrl::SetContentFont(HFONT hFont)
