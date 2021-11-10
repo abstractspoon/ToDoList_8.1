@@ -4012,9 +4012,13 @@ BOOL CTDCTaskExporter::ExportSubTasks(const TODOSTRUCTURE* pTDSParent, CTaskFile
 		if (!pTDS)
 			return FALSE;
 
-		DWORD dwTaskID = pTDS->GetTaskID();
-		const TODOITEM* pTDI = NULL;
-		GET_TDI(dwTaskID, pTDI, FALSE);
+		const TODOITEM* pTDI = m_data.GetTask(pTDS->GetTaskID()); // Not true task
+
+		if (!pTDI)
+		{
+			ASSERT(0);
+			return FALSE;
+		}
 
 		// Ignore duplicate 
 		if (!bIncDuplicateCompletedRecurringSubtasks)
@@ -4050,14 +4054,22 @@ BOOL CTDCTaskExporter::ExportTask(DWORD dwTaskID, CTaskFile& tasks, HTASKITEM hP
 	const TODOITEM* pTDI = NULL;
 	const TODOSTRUCTURE* pTDS = NULL;
 
-	GET_TDI_TDS(dwTaskID, pTDI, pTDS, NULL);
+	if (!m_data.GetTask(dwTaskID, pTDI, pTDS)) // Not true task
+	{
+		return FALSE;
+	}
 
 	return ExportTask(pTDI, pTDS, tasks, hParentTask, bIncDuplicateCompletedRecurringSubtasks);
 }
 
 BOOL CTDCTaskExporter::ExportTrueTask(DWORD dwTaskID, CTaskFile& tasks, HTASKITEM hParentTask, BOOL bIncDuplicateCompletedRecurringSubtasks) const
 {
-	return ExportTask(m_data.GetTrueTaskID(dwTaskID), tasks, hParentTask, bIncDuplicateCompletedRecurringSubtasks);
+	const TODOITEM* pTDI = NULL;
+	const TODOSTRUCTURE* pTDS = NULL;
+
+	GET_TDI_TDS(dwTaskID, pTDI, pTDS, FALSE);
+
+	return ExportTask(pTDI, pTDS, tasks, hParentTask, bIncDuplicateCompletedRecurringSubtasks);
 }
 
 BOOL CTDCTaskExporter::ExportTask(const TODOITEM* pTDI, const TODOSTRUCTURE* pTDS, CTaskFile& tasks, 
