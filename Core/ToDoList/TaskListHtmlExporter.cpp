@@ -106,9 +106,7 @@ bool CTaskListHtmlExporter::InitConsts(const ITASKLISTBASE* pTasks, LPCTSTR szDe
 	STRIKETHRUDONE = pPrefs->GetProfileInt(szKey, _T("StrikethroughDone"), TRUE);
 	EXPORTSTYLE = GetExportStyle(dwFlags);
 
-#ifndef _DEBUG
-	if (pPrefs->GetProfileInt(szKey, _T("EnableTDLProtocol"), FALSE))
-#endif
+	if (!PRINTING)
 	{
 		TASKLISTLINK.Format(_T("tdl://%s?"), pTasks->GetFileName(true));
 		TASKLISTLINK.Replace('\\', '/');
@@ -431,7 +429,7 @@ CString CTaskListHtmlExporter::FormatAttribute(const ITASKLISTBASE* pTasks, HTAS
 			}
 		}
 
-		if (!TASKLISTLINK.IsEmpty())
+		if (!PRINTING)
 		{
 			CString sTaskLink;
 			sTaskLink.Format(_T(" (<a href=\"%s%ld\">%s</a>)"), TASKLISTLINK, pTasks->GetTaskID(hTask), CLocalizer::TranslateText(_T("link")));
@@ -485,13 +483,20 @@ CString CTaskListHtmlExporter::FormatAttribute(const ITASKLISTBASE* pTasks, HTAS
 						sFileName = sFilePath;
 				}
 
-				CString sFileLink;
-				sFileLink.Format(_T("<a href=\"%s\">%s</a>"), sFilePath, sFileName);
-
 				if (!sFileLinks.IsEmpty())
 					sFileLinks += ' ';
 
-				sFileLinks += sFileLink;
+				if (PRINTING)
+				{
+					sFileLinks += sFileName;
+				}
+				else
+				{
+					CString sFileLink;
+					sFileLink.Format(_T("<a href=\"%s\">%s</a>"), sFilePath, sFileName);
+
+					sFileLinks += sFileLink;
+				}
 			} 
 
 			sItem = FormatAttribute(nAttrib, sAttribLabel, sFileLinks, FALSE); // FALSE = Don't encode
