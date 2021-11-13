@@ -207,6 +207,12 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates)
 
 		dtEndCalc = CDateHelper::GetEndOfDay(dtEndCalc);
 	}
+	else if (bHasDoneDate)
+	{
+		// adjust done date to point to end of day if it has no time component
+		if (!CDateHelper::DateHasTime(dtDone))
+			dtDone = CDateHelper::GetEndOfDay(dtDone);
+	}
 	else if (bHasDueDate)
 	{
 		// Special case: treat overdue tasks as due today
