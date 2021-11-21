@@ -461,16 +461,15 @@ CString CTaskListHtmlExporter::FormatAttribute(const ITASKLISTBASE* pTasks, HTAS
 		break;
 		
 	case TDCA_FILELINK:
-		if (!sItem.IsEmpty())
+		if (!sItem.IsEmpty() && !PRINTING)
 		{
 			// do it over creating a link for each file ref
-			CString sFileLinks;
+			CString sFileLinks, sTasklistFolder = FileMisc::GetFolderFromFilePath(TASKLISTPATH);
 			int nNumFiles = pTasks->GetTaskFileLinkCount(hTask);
 
 			for (int nFile = 0; nFile < nNumFiles; nFile++) 
 			{ 
-				CString sFilePath = pTasks->GetTaskFileLink(hTask, nFile), sFileName;
-				CString sTarget;
+				CString sFilePath = pTasks->GetTaskFileLink(hTask, nFile), sFileName, sTarget;
 
 				if (WebMisc::IsURL(sFilePath))
 				{
@@ -481,7 +480,7 @@ CString CTaskListHtmlExporter::FormatAttribute(const ITASKLISTBASE* pTasks, HTAS
 				}
 				else
 				{
-					FileMisc::MakeFullPath(sFilePath, TASKLISTPATH);
+					FileMisc::MakeFullPath(sFilePath, sTasklistFolder);
 					sFileName = FileMisc::GetFileNameFromPath(sFilePath);
 
 					// handle the absence of a filename
@@ -492,23 +491,43 @@ CString CTaskListHtmlExporter::FormatAttribute(const ITASKLISTBASE* pTasks, HTAS
 				}
 
 				if (!sFileLinks.IsEmpty())
-					sFileLinks += ' ';
+					sFileLinks += LISTSEPARATOR;
 
-				if (PRINTING)
-				{
-					sFileLinks += sFileName;
-				}
-				else
-				{
-					CString sFileLink;
-					sFileLink.Format(_T("<a href=\"%s\" %s>%s</a>"), sFilePath, sTarget, sFileName);
+				CString sFileLink;
+				sFileLink.Format(_T("<a href=\"%s\" %s>%s</a>"), sFilePath, sTarget, sFileName);
 
-					sFileLinks += sFileLink;
-				}
+				sFileLinks += sFileLink;
 			} 
 
 			sItem = FormatAttribute(nAttrib, sAttribLabel, sFileLinks, FALSE); // FALSE = Don't encode
-			bColor = FALSE;
+		}
+		break;
+		
+	case TDCA_DEPENDENCY:
+		if (!sItem.IsEmpty() && !PRINTING)
+		{
+			// do it over creating a link for each dependency
+			CString sDepends;
+			int nNumDepends = pTasks->GetTaskDependencyCount(hTask);
+
+			for (int nDepend = 0; nDepend < nNumDepends; nDepend++) 
+			{ 
+				CString sLinkText = pTasks->GetTaskDependency(hTask, nDepend);
+				TDCDEPENDENCY depend(sLinkText);
+
+				if (depend.IsLocal())
+					depend.sTasklist = TASKLISTPATH;
+
+				CString sDepend;
+				sDepend.Format(_T("<a href=\"%s\">%s</a>"), depend.Format(_T(""), TRUE), sLinkText);
+
+				if (!sDepends.IsEmpty())
+					sDepends += LISTSEPARATOR;
+
+				sDepends += sDepend;
+			} 
+
+			sItem = FormatAttribute(nAttrib, sAttribLabel, sDepends, FALSE); // FALSE = Don't encode
 		}
 		break;
 		

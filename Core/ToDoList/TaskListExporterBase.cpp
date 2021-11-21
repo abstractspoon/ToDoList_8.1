@@ -107,7 +107,7 @@ bool CTaskListExporterBase::InitConsts(const ITASKLISTBASE* pTasks, LPCTSTR /*sz
 	PARENTTITLECOMMENTSNLY = pPrefs->GetProfileInt(_T("Preferences"), _T("ExportParentTitleCommentsOnly"), FALSE);
 
 	PRINTING = Misc::HasFlag(dwFlags, IIEF_PRINTING);
-	TASKLISTPATH = FileMisc::GetFolderFromFilePath(pTasks->GetFileName(true));
+	TASKLISTPATH = pTasks->GetFileName(true);
 
 	BuildAttribList(pTasks);
 
