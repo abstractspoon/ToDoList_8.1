@@ -173,14 +173,7 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates)
 	{
 		if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASCREATION))
 		{
-			if (bHasEndDate)
-			{
-				dtStartCalc = min(dtEnd, dtCreation);
-			}
-			else
-			{
-				dtStartCalc = dtCreation;
-			}
+			dtStartCalc = dtCreation;
 		}
 		else if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASDUE))
 		{
