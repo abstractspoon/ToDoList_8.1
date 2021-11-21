@@ -2607,6 +2607,8 @@ void CToDoListWnd::EnableTDLProtocol(BOOL bEnable)
 	if (COSVersion() == OSV_LINUX)
 		return;
 	
+	ASSERT((COSVersion() < OSV_VISTA) || FileMisc::IsAdminProcess());
+
 	if (bEnable)
 	{
 		// If we are a pre-release version then don't overwrite
