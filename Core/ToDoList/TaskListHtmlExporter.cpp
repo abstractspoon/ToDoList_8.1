@@ -10,6 +10,7 @@
 #include "..\shared\filemisc.h"
 #include "..\shared\graphicsmisc.h"
 #include "..\shared\localizer.h"
+#include "..\shared\webmisc.h"
 
 #include "..\3rdparty\stdiofileex.h"
 
@@ -469,18 +470,25 @@ CString CTaskListHtmlExporter::FormatAttribute(const ITASKLISTBASE* pTasks, HTAS
 			for (int nFile = 0; nFile < nNumFiles; nFile++) 
 			{ 
 				CString sFilePath = pTasks->GetTaskFileLink(hTask, nFile), sFileName;
+				CString sTarget;
 
-				if (PathIsURL(sFilePath))
+				if (WebMisc::IsURL(sFilePath))
 				{
 					sFileName = sFilePath;
+
+					if (!WebMisc::IsFileURI(sFilePath))
+						sTarget = _T("target=\"_blank\"");
 				}
 				else
 				{
+					FileMisc::MakeFullPath(sFilePath, TASKLISTPATH);
 					sFileName = FileMisc::GetFileNameFromPath(sFilePath);
 
 					// handle the absence of a filename
 					if (sFileName.IsEmpty())
 						sFileName = sFilePath;
+
+					WebMisc::FormatFileURI(sFilePath, sFilePath);
 				}
 
 				if (!sFileLinks.IsEmpty())
@@ -493,7 +501,7 @@ CString CTaskListHtmlExporter::FormatAttribute(const ITASKLISTBASE* pTasks, HTAS
 				else
 				{
 					CString sFileLink;
-					sFileLink.Format(_T("<a href=\"%s\">%s</a>"), sFilePath, sFileName);
+					sFileLink.Format(_T("<a href=\"%s\" %s>%s</a>"), sFilePath, sTarget, sFileName);
 
 					sFileLinks += sFileLink;
 				}
