@@ -10525,8 +10525,8 @@ LRESULT CToDoListWnd::OnFindSelectAll(WPARAM /*wp*/, LPARAM /*lp*/)
 	if (!m_dlgFindTasks.IsDocked())
 		m_dlgFindTasks.Show(FALSE);
 	
-	CFilteredToDoCtrl& tdc = GetToDoCtrl();
-	CHoldRedraw hr(tdc);
+	CFilteredToDoCtrl& tdcSel = GetToDoCtrl();
+	CHoldRedraw hr(tdcSel);
 	CWaitCursor cursor;
 	
 	for (int nTDC = 0; nTDC < GetTDCCount(); nTDC++)
@@ -10538,7 +10538,7 @@ LRESULT CToDoListWnd::OnFindSelectAll(WPARAM /*wp*/, LPARAM /*lp*/)
 			tdc.SelectTasks(aTaskIDs);
 	}
 
-	tdc.SetFocusToTasks();
+	tdcSel.SetFocusToTasks();
 
 	return 0;
 }
