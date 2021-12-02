@@ -142,6 +142,7 @@
 #define IDD_TASKDEPENDENCY_DIALOG       321
 #define IDI_QUICKFIND_NEXT              322
 #define IDI_QUICKFIND_PREV              323
+#define IDD_DEBUG_FORMATGETLASTERROR_DIALOG 324
 #define IDC_TB_FRAME                    1001
 #define IDC_DAYS                        1003
 #define IDC_WEEKS                       1004
@@ -828,6 +829,8 @@
 #define IDC_HTMLOPTIONS_LABEL           1546
 #define IDC_TIMEPERIODS                 1547
 #define IDC_AUTODISPLAYREPORT           1548
+#define IDC_ERRORCODE                   1549
+#define IDC_ERRORTEXT                   1550
 #define IDC_TASKLIST                    2000
 #define IDD_IMPORT_OUTLOOK_DIALOG       2000
 #define IDI_OUTLOOK                     2001
@@ -1547,6 +1550,7 @@
 #define ID_DEBUG_RESTARTAPPFROMEXPLORER 34743
 #define ID_VIEW_SHOWALLBARS             34744
 #define ID_VIEW_HIDEALLBARS             34745
+#define ID_DEBUG_FORMATGETLASTERROR     34746
 #define IDS_FIRSTSTRING                 50601
 #define IDS_CMDLINE_FIRST               50601
 #define IDS_CMDLINE_INIFILE             50601
@@ -2422,9 +2426,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        324
-#define _APS_NEXT_COMMAND_VALUE         34746
-#define _APS_NEXT_CONTROL_VALUE         1549
+#define _APS_NEXT_RESOURCE_VALUE        325
+#define _APS_NEXT_COMMAND_VALUE         34747
+#define _APS_NEXT_CONTROL_VALUE         1551
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif
