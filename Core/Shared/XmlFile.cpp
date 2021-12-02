@@ -1017,8 +1017,8 @@ BOOL CXmlFile::Save(const CString& sFilePath, SFE_FORMAT nFormat)
 	// error handling
 	if (!bSuccess)
 	{
-		FileMisc::LogText(_T("CXmlFile::SaveEx(%s) failed(%s)"), sFilePath, Misc::FormatGetLastError());
 		m_nFileError = GetLastError();
+		FileMisc::LogText(_T("CXmlFile::SaveEx(%s) failed (%ld: %s)"), sFilePath, m_nFileError, Misc::FormatGetLastError(m_nFileError));
 	}
 
 	ASSERT(GetFileHandle() == (HANDLE)CStdioFileEx::hFileNull);
