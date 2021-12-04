@@ -31,6 +31,7 @@ namespace SpreadsheetContentControl
 		// --------------------------------------------
 
 		public event EventHandler ContentChanged;
+		public new EventHandler LostFocus;
 
 		// --------------------------------------------
 
@@ -104,6 +105,9 @@ namespace SpreadsheetContentControl
 		// text content if supported. return false if not supported
 		public String GetTextContent()
 		{
+			if (GridControl.CurrentWorksheet.IsEditing)
+				GridControl.CurrentWorksheet.EndEdit(EndEditReason.NormalFinish);
+
 			var text = GridControl.CurrentWorksheet.StringifyRange(ContentRange()).Trim();
 
 			text = text.Replace("\t\t", ""); // leaves single tabs as spacers
@@ -370,6 +374,17 @@ namespace SpreadsheetContentControl
 			{
 				if (e.Action is unvell.Common.IUndoableAction)
 					NotifyParentContentChange();
+			};
+
+			GridControl.EditTextChanged += (s, e) =>
+			{
+				NotifyParentContentChange();
+			};
+
+			GridControl.LostFocus += (s, e) =>
+			{
+				if (!GridControl.CurrentWorksheet.IsEditing)
+					LostFocus?.Invoke(this, e);
 			};
 
 			GridControl.WorksheetCreated += (s, e) =>
