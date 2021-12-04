@@ -333,7 +333,10 @@ namespace SpreadsheetContentControl
 			CommandHandling.RemoveCommand("focusCellStyleToolStripMenuItem", this.MenuBar.Items);
 			CommandHandling.RemoveCommand("selectionToolStripMenuItem", this.MenuBar.Items);
 
-			//CommandHandling.RemoveCommand("", this.MenuBar.Items);
+			// Remove keyboard shortcuts which conflict with the main app
+			CommandHandling.SetMenuItemShortcut("mergeCellsToolStripMenuItem", this.MenuBar.Items, Keys.None);
+			CommandHandling.SetMenuItemShortcut("unmergeCellsToolStripMenuItem", this.MenuBar.Items, Keys.None);
+			CommandHandling.SetMenuItemShortcut("filterToolStripMenuItem", this.MenuBar.Items, Keys.None);
 
 			// Hide unwanted toolbar options
 			CommandHandling.RemoveCommand("printPreviewToolStripButton", this.ToolBar.Items);
@@ -343,7 +346,8 @@ namespace SpreadsheetContentControl
 			CommandHandling.RemoveCommand("slashRightSolidToolStripButton", this.ToolBar.Items);
 
 			CommandHandling.RemoveCommand("zoomToolStripDropDownButton", this.FontBar.Items);
-			//CommandHandling.RemoveCommand("", this.ToolBar.Items);
+
+
 		}
 
 		public void SetUITheme(UITheme theme)
