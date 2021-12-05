@@ -102,20 +102,19 @@ namespace SpreadsheetContentControl
 			return new RangePosition(0, 0, worksheet.MaxContentRow + 1, worksheet.MaxContentCol + 1);
 		}
 
-		// text content if supported. return false if not supported
 		public String GetTextContent()
 		{
 			var text = GridControl.CurrentWorksheet.StringifyRange(ContentRange()).Trim();
-
-			text = text.Replace("\t\t", ""); // leaves single tabs as spacers
-			text = text.Replace("\n", " ");
 
 			return text;
 		}
 
 		public bool SetTextContent(String content, bool resetSelection)
 		{
-			return false;
+			// Insert content into 'A:1'
+			GridControl.CurrentWorksheet.PasteFromString(new CellPosition(0, 0), content);
+
+			return true;
 		}
 
 		public bool InsertTextContent(String content, bool bAtEnd)
