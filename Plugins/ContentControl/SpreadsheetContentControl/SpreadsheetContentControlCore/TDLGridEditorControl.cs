@@ -105,9 +105,6 @@ namespace SpreadsheetContentControl
 		// text content if supported. return false if not supported
 		public String GetTextContent()
 		{
-			if (GridControl.CurrentWorksheet.IsEditing)
-				GridControl.CurrentWorksheet.EndEdit(EndEditReason.NormalFinish);
-
 			var text = GridControl.CurrentWorksheet.StringifyRange(ContentRange()).Trim();
 
 			text = text.Replace("\t\t", ""); // leaves single tabs as spacers
@@ -399,8 +396,16 @@ namespace SpreadsheetContentControl
 				NotifyParentContentChange();
 			};
 
+			GridControl.EditTextLostFocus += (s, e) =>
+			{
+				// Only handle this if out edit cell is no longer editing
+				if (!GridControl.CurrentWorksheet.IsEditing)
+					LostFocus?.Invoke(this, e);
+			};
+
 			GridControl.LostFocus += (s, e) =>
 			{
+				// Handle only if it WASN'T our edit cell gaining the focus
 				if (!GridControl.CurrentWorksheet.IsEditing)
 					LostFocus?.Invoke(this, e);
 			};
