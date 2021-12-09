@@ -359,8 +359,7 @@ namespace SpreadsheetContentControl
 
 			CommandHandling.RemoveCommand("focusCellStyleToolStripMenuItem", this.MenuBar.Items);
 			CommandHandling.RemoveCommand("selectionToolStripMenuItem", this.MenuBar.Items);
-
-
+			
 			// Remove keyboard shortcuts which conflict with the main app
 			CommandHandling.SetMenuItemShortcut("mergeCellsToolStripMenuItem", this.MenuBar.Items, Keys.None);
 			CommandHandling.SetMenuItemShortcut("unmergeCellsToolStripMenuItem", this.MenuBar.Items, Keys.None);
