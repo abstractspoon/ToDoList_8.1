@@ -2782,9 +2782,12 @@ BOOL CTreeListSyncer::HandleMouseWheel(HWND hWnd, WPARAM wp, LPARAM lp)
 		// My investigations thus far reveal that when the 
 		// direction changes the zDelta value is NOT a multiple
 		// of 120, so for now I'm going to try ignoring such
-		// values and hope it doesn't break anything else
-// 		if ((zDelta % 120) != 0)
-// 			return TRUE; // we handled it
+		// values and hope it doesn't break anything else.
+		// Unfortunately it did, because use of the mouse-pad also 
+		// generates values which are not multiples of 120 so I 
+		// also add a check for 'large' scrolls
+		if ((zDelta % 120) && (nNumClicks > 10))
+			return TRUE; // stop 
 		
 		// Increase the number of rows scrolled per click 
 		// for higher numbers of clicks which is what Windows
