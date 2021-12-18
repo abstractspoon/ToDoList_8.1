@@ -22,7 +22,7 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 
 INIENTRY::INIENTRY(LPCTSTR szName, LPCTSTR szValue, BOOL bQuote) 
-	: sName(szName), sValue(szValue), bQuoted(bQuote) 
+	: sName(szName), sValue(szValue), bQuoted(bQuote ? TRUE : FALSE) 
 {
 }
 
@@ -46,7 +46,7 @@ BOOL INIENTRY::Parse(const CString& sEntry)
 		return FALSE;
 
 	// remove quotes
-	bQuoted = sValue.Replace(_T("\""), _T(""));
+	bQuoted = (sValue.Replace(_T("\""), _T("")) > 0);
 
 	return !sName.IsEmpty();
 }
