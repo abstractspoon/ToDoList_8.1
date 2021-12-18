@@ -2147,7 +2147,7 @@ void CToDoCtrl::UpdateTask(TDC_ATTRIBUTE nAttrib, DWORD dwFlags)
 			SetSelectedTaskPercentDone(m_nPercentDone);
 			
 			// check if we need to update 'done' state
-			if (bWasDone ^ bIsDone)
+			if (Misc::StateChanged(bWasDone, bIsDone))
 				SetSelectedTaskDone(bIsDone);
 		}
 		break;
@@ -2550,7 +2550,7 @@ BOOL CToDoCtrl::SetAutoComboReadOnly(CAutoComboBox& combo, BOOL bReadOnly, const
 {
 	BOOL bWasReadOnly = !CDialogHelper::ComboHasEdit(combo);
 
-	if (bReadOnly ^ bWasReadOnly)
+	if (Misc::StateChanged(bReadOnly, bWasReadOnly))
 	{
 		// cache the current state
 		CString sWndPrompt = m_mgrPrompts.GetPrompt(combo);
@@ -3488,7 +3488,7 @@ BOOL CToDoCtrl::SetSelectedTaskDone(const COleDateTime& date, BOOL bDateEdited)
 		DWORD dwTaskID = GetTaskID(hti);
 		BOOL bWasDone = m_data.IsTaskDone(dwTaskID);
 
-		bStateChange |= (bDone ^ bWasDone);
+		bStateChange |= Misc::StateChanged(bDone, bWasDone);
 
 		// Handle recurring tasks, but only if changing state to completed
 		COleDateTime dtNext;
@@ -3837,7 +3837,7 @@ BOOL CToDoCtrl::SetSelectedTaskPercentDone(int nPercent, BOOL bOffset, const COl
 		if (bOffset)
 			mapProcessed.Add(dwTaskID);
 
-		bDoneChange |= (bWasDone ^ m_data.IsTaskDone(dwTaskID));
+		bDoneChange |= Misc::StateChanged(bWasDone, m_data.IsTaskDone(dwTaskID));
 	}
 
 	if (aModTaskIDs.GetSize())
