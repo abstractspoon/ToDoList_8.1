@@ -6087,7 +6087,7 @@ BOOL CToDoListWnd::CalcToDoCtrlRect(CRect& rect, int cx, int cy, BOOL bMaximized
 			return FALSE;
 	}
 	
-	CRect rTaskList(0, 0, cx - BEVEL, cy);
+	CRect rTaskList(0, 0, cx, cy);
 	
 	// toolbar
 	if (m_bShowingMainToolbar) 
@@ -6161,7 +6161,7 @@ void CToDoListWnd::Resize(int cx, int cy, BOOL bMaximized)
 	// resize in one go
 	CDlgUnits dlu(this);
 	CDeferWndMove dwm(10);
-	CRect rTaskList(0, 0, cx - BEVEL, cy);
+	CRect rTaskList(0, 0, cx, cy);
 	
 	ReposToolbars(&dwm, rTaskList);
 	ReposStatusBar(&dwm, rTaskList);	
@@ -6340,7 +6340,7 @@ void CToDoListWnd::ReposTabBar(CDeferWndMove* pDwm, CRect& rAvailable)
 	int nTabHeight = rTabs.Height() - 4;
 
 	rTabs = rAvailable;
-//	rTabs.right = nWidth + 1;
+	rTabs.right++;
 	rTabs.bottom = rTabs.top + nTabHeight;
 //	rTabs.OffsetRect(0, rAvailable.y - rTabs.top); // add a pixel between tabbar and toolbar
 
