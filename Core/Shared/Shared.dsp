@@ -273,10 +273,6 @@ SOURCE=.\EnString.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\EnTabCtrl.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\entoolbar.cpp
 # End Source File
 # Begin Source File
@@ -942,10 +938,6 @@ SOURCE=.\enstatic.h
 # Begin Source File
 
 SOURCE=.\EnString.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\EnTabCtrl.h
 # End Source File
 # Begin Source File
 
