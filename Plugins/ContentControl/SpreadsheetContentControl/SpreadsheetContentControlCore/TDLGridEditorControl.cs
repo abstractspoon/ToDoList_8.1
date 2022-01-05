@@ -111,7 +111,8 @@ namespace SpreadsheetContentControl
 
 		public bool SetTextContent(String content, bool resetSelection)
 		{
-			// Insert content into 'A:1'
+			// Clear and then Insert content into 'A:1'
+			GridControl.CurrentWorksheet.Reset();
 			GridControl.CurrentWorksheet.PasteFromString(new CellPosition(0, 0), content);
 
 			return true;
