@@ -409,7 +409,7 @@ UINT CTDLTaskListCtrl::GetGroupCount() const
 	return (IsGrouped() ? m_mapGroupHeaders.GetCount() : 0);
 }
 
-BOOL CTDLTaskListCtrl::SetGroupBy(TDC_COLUMN nGroupBy)
+BOOL CTDLTaskListCtrl::SetGroupBy(TDC_COLUMN nGroupBy, BOOL bSortGroupsAscending)
 {
 	if (!CanGroupBy(nGroupBy))
 		return FALSE;
@@ -418,6 +418,9 @@ BOOL CTDLTaskListCtrl::SetGroupBy(TDC_COLUMN nGroupBy)
 		return TRUE;
 
 	m_nGroupBy = nGroupBy;
+
+	if (bSortGroupsAscending != -1)
+		m_bSortGroupsAscending = bSortGroupsAscending;
 
 	if (GetSafeHwnd())
 	{

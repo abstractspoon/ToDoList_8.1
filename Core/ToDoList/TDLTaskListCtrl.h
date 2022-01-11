@@ -107,7 +107,7 @@ public:
 	void RemoveDeletedItems();
 	void SetModified(const CTDCAttributeMap& mapAttribIDs, BOOL bAllowResort);
 
-	BOOL SetGroupBy(TDC_COLUMN nGroupBy);
+	BOOL SetGroupBy(TDC_COLUMN nGroupBy, BOOL bSortGroupsAscending = -1);
 	BOOL CanGroupBy(TDC_COLUMN nGroupBy) const;
 	UINT GetGroupCount() const;
 	void SetSortGroupsAscending(BOOL bAscending = TRUE);
