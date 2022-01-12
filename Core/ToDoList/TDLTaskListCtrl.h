@@ -125,6 +125,7 @@ protected:
 	CListCtrl m_lcTasks;
 	TDC_COLUMN m_nGroupBy;
 	BOOL m_bSortGroupsAscending;
+	BOOL m_bDeletingGroupHeaders;
 	COLORREF m_crGroupHeaderBkgnd;
 
 	typedef CMap<DWORD, DWORD, CString, CString&> CGroupHeaderMap;

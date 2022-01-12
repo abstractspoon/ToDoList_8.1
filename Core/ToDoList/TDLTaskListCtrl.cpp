@@ -90,6 +90,7 @@ CTDLTaskListCtrl::CTDLTaskListCtrl(const CTDCImageList& ilIcons,
 	CTDLTaskCtrlBase(ilIcons, data, find, styles, tld, mapVisibleCols, aCustAttribDefs),
 	m_nGroupBy(TDCC_NONE),
 	m_bSortGroupsAscending(TRUE),
+	m_bDeletingGroupHeaders(FALSE),
 	m_crGroupHeaderBkgnd(CLR_NONE)
 {
 }
@@ -164,6 +165,15 @@ void CTDLTaskListCtrl::OnStylesUpdated(const CTDCStyleMap& styles, BOOL bAllowRe
 		DWORD dwLabelTips = (styles.IsStyleEnabled(TDCS_SHOWINFOTIPS) ? 0 : LVS_EX_LABELTIP);
 		ListView_SetExtendedListViewStyleEx(Tasks(), LVS_EX_LABELTIP, dwLabelTips);
 	}
+
+// 	if (IsGrouped() && TDSORTCOLUMN(m_nGroupBy).Matches(mapAttribIDs, m_styles, m_aCustomAttribDefs));
+// 	{
+// 		UpdateGroupHeaders();
+// 
+// 		if (bAllowResort)
+// 			DoSort();
+// 	}
+
 }
 
 BOOL CTDLTaskListCtrl::BuildColumns()
@@ -499,16 +509,24 @@ BOOL CTDLTaskListCtrl::UpdateGroupHeaders()
 	if (mapNewHeaders.MatchAll(mapOldHeaders))
 		return FALSE;
 
-	// Update headers
+	// Delete existing headers
 	CHoldRedraw hr(*this);
-	m_mapGroupHeaders.RemoveAll();
 
-	// Remove old headers
-	// Note: column items will be automatically removed
-	int nItem = aOldHeaderItems.GetSize();
+	TDCSELECTIONCACHE cache;
+	CacheSelection(cache, FALSE);
 
-	while (nItem--)
-		m_lcTasks.DeleteItem(aOldHeaderItems[nItem]); 
+	{
+		// Prevent us forwarding spurious selections changes to
+		// our parent while we remove the existing group headers
+		CAutoFlag af(m_bDeletingGroupHeaders, TRUE);
+		int nItem = aOldHeaderItems.GetSize();
+
+		// Note: column items will be automatically removed
+		while (nItem--)
+			m_lcTasks.DeleteItem(aOldHeaderItems[nItem]); 
+
+		m_mapGroupHeaders.RemoveAll();
+	}
 
 	// Add new headers
 	DWORD dwNewHeaderID = 0xffffffff;
@@ -528,6 +546,8 @@ BOOL CTDLTaskListCtrl::UpdateGroupHeaders()
 
 	if (mapNewHeaders.GetCount() != mapOldHeaders.GetCount())
 		PostResize();
+
+	RestoreSelection(cache, TRUE);
 
 	return TRUE;
 }
@@ -715,13 +735,13 @@ void CTDLTaskListCtrl::SetModified(const CTDCAttributeMap& mapAttribIDs, BOOL bA
 {
 	if (IsGrouped())
 	{
-		BOOL bUpdateGroups = (mapAttribIDs.Has(TDC::MapColumnToAttribute(m_nGroupBy)) ||
-							  mapAttribIDs.Has(TDCA_UNDO) ||
+		BOOL bUpdateGroups = (mapAttribIDs.Has(TDCA_UNDO) ||
 							  mapAttribIDs.Has(TDCA_ALL) ||
 							  mapAttribIDs.Has(TDCA_PASTE) ||
 							  mapAttribIDs.Has(TDCA_DELETE) ||
 							  mapAttribIDs.Has(TDCA_ARCHIVE) ||
-							  mapAttribIDs.Has(TDCA_MERGE));
+							  mapAttribIDs.Has(TDCA_MERGE) ||
+							  TDSORTCOLUMN(m_nGroupBy).Matches(mapAttribIDs, m_styles, m_aCustomAttribDefs));
 
 		if (bUpdateGroups)
 		{
@@ -1452,6 +1472,8 @@ DWORD CTDLTaskListCtrl::GetNextSelectedTaskID(POSITION& pos) const
 BOOL CTDLTaskListCtrl::OnListSelectionChange(NMLISTVIEW* /*pNMLV*/)
 {
 	// only called for the list that currently has the focus
+	if (m_bDeletingGroupHeaders)
+		return TRUE; // eat
 	
 	// Don't notify if the up/down cursor key is still pressed
 	if (Misc::IsCursorKeyPressed(MKC_UPDOWN))
