@@ -166,13 +166,43 @@ void CTDLTaskListCtrl::OnStylesUpdated(const CTDCStyleMap& styles, BOOL bAllowRe
 		ListView_SetExtendedListViewStyleEx(Tasks(), LVS_EX_LABELTIP, dwLabelTips);
 	}
 
-// 	if (IsGrouped() && TDSORTCOLUMN(m_nGroupBy).Matches(mapAttribIDs, m_styles, m_aCustomAttribDefs));
-// 	{
-// 		UpdateGroupHeaders();
-// 
-// 		if (bAllowResort)
-// 			DoSort();
-// 	}
+	if (IsGrouped())
+	{
+		BOOL bRebuildHeaders = FALSE;
+
+		POSITION pos = styles.GetStartPosition();
+		TDC_STYLE nStyle;
+		BOOL bEnabled;
+
+		while (pos && !bRebuildHeaders)
+		{
+			styles.GetNextAssoc(pos, nStyle, bEnabled);
+
+			switch (nStyle)
+			{
+			case TDCS_DUEHAVEHIGHESTPRIORITY:
+			case TDCS_DONEHAVELOWESTPRIORITY:
+			case TDCS_USEHIGHESTPRIORITY:
+			case TDCS_INCLUDEDONEINPRIORITYCALC:
+				bRebuildHeaders = (m_nGroupBy == TDCC_PRIORITY);
+				break;
+
+			case TDCS_DONEHAVELOWESTRISK:
+			case TDCS_USEHIGHESTRISK:
+			case TDCS_INCLUDEDONEINRISKCALC:
+				bRebuildHeaders = (m_nGroupBy == TDCC_RISK);
+				break;
+			}
+		}
+
+		if (bRebuildHeaders)
+		{
+			UpdateGroupHeaders();
+
+			if (bAllowResort)
+				DoSort();
+		}
+	}
 
 }
 
