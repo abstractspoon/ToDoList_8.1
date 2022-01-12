@@ -1958,7 +1958,7 @@ BOOL CTabbedToDoCtrl::ProcessUIExtensionMod(const IUITASKMOD& mod, CDWordArray& 
 
 		// Note: We only save off the attribute if (dwTaskID != 0)
 		// because 'SetSelectedTask*' will already have handled it
-		GetAttributesAffectedByMod(mod.nAttrib, mapModAttribs);
+		m_taskTree.GetAttributesAffectedByMod(mod.nAttrib, mapModAttribs);
 	}
 
 	return bChange;
