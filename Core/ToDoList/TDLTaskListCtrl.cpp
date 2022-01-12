@@ -580,7 +580,7 @@ BOOL CTDLTaskListCtrl::TaskHasGroupValue(DWORD dwTaskID) const
 	case TDCC_ALLOCTO:		return pTDI->aAllocTo.GetSize();
 	case TDCC_TAGS:			return pTDI->aTags.GetSize();
 
-	case TDCC_PRIORITY:		return (m_calculator.GetTaskPriority(pTDI, m_data.LocateTask(dwTaskID)) != FM_NOPRIORITY);
+	case TDCC_PRIORITY:		return (m_calculator.GetTaskPriority(pTDI, m_data.LocateTask(dwTaskID), TRUE) != FM_NOPRIORITY);
 	case TDCC_RISK:			return (m_calculator.GetTaskRisk(pTDI, m_data.LocateTask(dwTaskID)) != FM_NORISK);
 
 	case TDCC_ALLOCBY:		return !pTDI->sAllocBy.IsEmpty();
@@ -624,8 +624,8 @@ CString CTDLTaskListCtrl::GetTaskGroupValue(DWORD dwTaskID) const
 		case TDCC_ALLOCTO:		sGroupBy = m_formatter.GetTaskAllocTo(pTDI);	break;
 		case TDCC_TAGS:			sGroupBy = m_formatter.GetTaskTags(pTDI);		break;
 
-		case TDCC_PRIORITY:		sGroupBy = m_formatter.GetTaskPriority(pTDI, m_data.LocateTask(dwTaskID));	break;
-		case TDCC_RISK:			sGroupBy = m_formatter.GetTaskRisk(pTDI, m_data.LocateTask(dwTaskID));		break;
+		case TDCC_PRIORITY:		sGroupBy = m_formatter.GetTaskPriority(pTDI, m_data.LocateTask(dwTaskID), TRUE); break;
+		case TDCC_RISK:			sGroupBy = m_formatter.GetTaskRisk(pTDI, m_data.LocateTask(dwTaskID)); break;
 
 		case TDCC_ALLOCBY:		sGroupBy = pTDI->sAllocBy;	break;
 		case TDCC_VERSION:		sGroupBy = pTDI->sVersion;	break;

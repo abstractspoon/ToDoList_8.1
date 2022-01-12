@@ -222,7 +222,7 @@ void CToDoCtrlDataTest::TestDataModelFormattingPerformance(const CToDoCtrlData& 
 		formatter.GetTaskTimeRemaining(dwTaskID);
 		formatter.GetTaskPercentDone(dwTaskID);
 		formatter.GetTaskCost(dwTaskID);
-		formatter.GetTaskPriority(dwTaskID);
+		formatter.GetTaskPriority(dwTaskID, FALSE);
 		formatter.GetTaskRisk(dwTaskID);
 		formatter.GetTaskRecentlyModified(dwTaskID);
 		formatter.GetTaskDoneDate(dwTaskID);

@@ -2119,7 +2119,7 @@ BOOL CTDLTaskCtrlBase::GetTaskTextColors(const TODOITEM* pTDI, const TODOSTRUCTU
 				}
 				else
 				{
-					nPriority = m_calculator.GetTaskPriority(pTDI, pTDS);
+					nPriority = m_calculator.GetTaskPriority(pTDI, pTDS, TRUE);
 				}
 
 				if (nPriority != FM_NOPRIORITY)
@@ -3885,7 +3885,7 @@ CString CTDLTaskCtrlBase::GetTaskColumnText(DWORD dwTaskID, const TODOITEM* pTDI
 
 	case TDCC_PRIORITY:
 		if (!bDrawing || !HasStyle(TDCS_HIDEPRIORITYNUMBER))
-			return m_formatter.GetTaskPriority(pTDI, pTDS);
+			return m_formatter.GetTaskPriority(pTDI, pTDS, FALSE);
 		break;
 
 	default:
