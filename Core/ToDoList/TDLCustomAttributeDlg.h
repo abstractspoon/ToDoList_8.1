@@ -19,6 +19,7 @@
 #include "..\shared\menubutton.h"
 #include "..\shared\iconbutton.h"
 #include "..\shared\checklistboxex.h"
+#include "..\shared\wndprompt.h"
 
 #include "..\Interfaces\uithemefile.h"
 
@@ -65,6 +66,7 @@ protected:
 	CTDCCustomAttribDefinitionArray m_aAttrib;
 	CUIThemeFile m_theme;
 	CIconButton m_btBrowseImages;
+	CWndPromptManager m_mgrPrompts;
 
 	const CToDoCtrl& m_tdc;
 

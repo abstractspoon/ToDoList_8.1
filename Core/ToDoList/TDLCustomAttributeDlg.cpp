@@ -243,6 +243,8 @@ BOOL CTDLCustomAttributeDlg::OnInitDialog()
 	m_btInsertSymbol.SetWindowText(0x2211);
 	m_btInsertSymbol.SetTooltip(CEnString(IDS_CAD_INSERTSYMBOL));
 
+	m_mgrPrompts.SetComboPrompt(m_cbFeatures, IDS_TDC_NONE);
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
