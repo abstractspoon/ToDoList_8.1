@@ -6192,16 +6192,12 @@ void CToDoListWnd::ReposToolbars(CDeferWndMove* pDwm, CRect& rAvailable)
 
 	CRect rNewPos;
 	m_toolbarMain.GetItemRect(nPos, rNewPos);
-	m_toolbarMain.ClientToScreen(rNewPos);
 
 	// check if it needs to be moved
-	CRect rPrevPos;
-	m_cbQuickFind.CWnd::GetWindowRect(rPrevPos);
+	CRect rPrevPos = GetChildRect(&m_cbQuickFind);
 
 	if (rNewPos.TopLeft() != rPrevPos.TopLeft())
 	{
-		m_toolbarMain.ScreenToClient(rNewPos);
-
 		rNewPos.top += QUICKFIND_VOFFSET;
 		rNewPos.bottom = rNewPos.top + QUICKFIND_HEIGHT;
 		rNewPos.OffsetRect(QUICKFIND_HOFFSET, 0);
