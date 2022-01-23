@@ -2527,6 +2527,9 @@ LRESULT CToDoListWnd::OnPostOnCreate(WPARAM /*wp*/, LPARAM /*lp*/)
 		
 		if (userPrefs.GetRefreshFindOnLoad())
 			m_dlgFindTasks.RefreshSearch();
+
+		// Find dialog will have stolen focus
+		GetToDoCtrl().SetFocusToTasks();
 	}
 
 	// log the app and its dlls for debugging
@@ -10535,6 +10538,8 @@ void CToDoListWnd::OnFindTasks()
 		// active tasklist
 		if (!m_dlgFindTasks.IsWindowVisible())
 		{
+			ASSERT(!m_dlgFindTasks.IsDocked());
+
 			int nSelTDC = GetSelToDoCtrl();
 			int nTDC = GetTDCCount();
 
@@ -10545,12 +10550,16 @@ void CToDoListWnd::OnFindTasks()
 				if (nTDC != nSelTDC && tdc.IsEncrypted())
 					m_dlgFindTasks.DeleteResults(&tdc);
 			}
+
+			m_dlgFindTasks.Show();
 		}
-
-		m_dlgFindTasks.Show();
-
-		if (m_dlgFindTasks.IsDocked())
+		else if (m_dlgFindTasks.IsDocked())
+		{
 			Resize();
+
+			if (!IsChildOrSame(m_dlgFindTasks, ::GetFocus()))
+				m_dlgFindTasks.SetFocus();
+		}
 	}
 	
 	m_bFindShowing = TRUE;
