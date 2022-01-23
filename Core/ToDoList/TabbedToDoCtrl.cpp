@@ -229,21 +229,19 @@ void CTabbedToDoCtrl::BuildListGroupByCombo()
 
 	for (int nCol = 0; nCol < NUM_COLUMNS; nCol++)
 	{
-		if (!m_taskList.CanGroupBy(COLUMNS[nCol].nColID, TRUE))
-			continue;
-
-		AddString(m_cbListGroupBy, COLUMNS[nCol].nIDLongName, COLUMNS[nCol].nColID);
+		if (m_taskList.CanGroupBy(COLUMNS[nCol].nColID, TRUE))
+			AddString(m_cbListGroupBy, COLUMNS[nCol].nIDLongName, COLUMNS[nCol].nColID);
 	}
 	
 	for (int nAttrib = 0; nAttrib < m_aCustomAttribDefs.GetSize(); nAttrib++)
 	{
 		const TDCCUSTOMATTRIBUTEDEFINITION& attribDef = m_aCustomAttribDefs[nAttrib];
 
-		if (!m_taskList.CanGroupBy(attribDef.GetColumnID(), TRUE))
-			continue;
-
-		CEnString sAttrib(IDS_CUSTOMCOLUMN, attribDef.sLabel);
-		AddString(m_cbListGroupBy, sAttrib, attribDef.GetColumnID());
+		if (m_taskList.CanGroupBy(attribDef.GetColumnID(), TRUE))
+		{
+			CEnString sAttrib(IDS_CUSTOMCOLUMN, attribDef.sLabel);
+			AddString(m_cbListGroupBy, sAttrib, attribDef.GetColumnID());
+		}
 	}
 	
 	if (SelectItemByData(m_cbListGroupBy, m_nListViewGroupBy) == CB_ERR)
