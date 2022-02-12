@@ -3072,13 +3072,13 @@ void CTreeListSyncer::Resize(const CRect& rect, int nLeftWidth)
 
 	if (!IsHiding())
 	{
-		if (nLeftWidth >= rect.Width())
-			nLeftWidth = (rect.Width() - MIN_SPLIT_WIDTH);
-
 		if (nLeftWidth < MIN_SPLIT_WIDTH)
 			return;
 
 		m_nSplitPos = nLeftWidth;
+
+		if (nLeftWidth >= rect.Width())
+			nLeftWidth = (rect.Width() - MIN_SPLIT_WIDTH);
 	}
 
     CRect rLeft(rect), rRight(rect);
