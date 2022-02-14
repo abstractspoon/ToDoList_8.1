@@ -682,7 +682,7 @@ BOOL CFilteredToDoCtrl::WantAddTaskToTree(const TODOITEM* pTDI, const TODOSTRUCT
 					// eg. "Give me all tasks where the category is not empty"
 					// User is explicitly interested in tasks WITH attribute values
 					// so we always want these tasks
-					ASSERT(!sWhatMatched.IsEmpty());
+					ASSERT(rule.AttributeIs(TDCA_SELECTION) || !sWhatMatched.IsEmpty());
 					bWantTask = TRUE;
 					break;
 
