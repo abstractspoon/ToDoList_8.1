@@ -20,7 +20,6 @@
 
 #include "..\Shared\EnHeaderCtrl.h"
 #include "..\Shared\TreeListSyncer.h"
-#include "..\Shared\runtimedlg.h"
 
 /////////////////////////////////////////////////////////////////////////////
 
