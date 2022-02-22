@@ -1511,9 +1511,9 @@ BOOL CTDLTaskListCtrl::OnListSelectionChange(NMLISTVIEW* /*pNMLV*/)
 	// key is not pressed. ie. the user is in 
 	// the middle of selecting a new item
 	if (Misc::IsKeyPressed(VK_LBUTTON) &&
-			HitTestTask(GetMessagePos(), false) &&
-			!Misc::IsKeyPressed(VK_CONTROL) &&
-			!GetSelectedCount())
+		HitTestTask(GetMessagePos(), FALSE) &&
+		!Misc::IsKeyPressed(VK_CONTROL) &&
+		!GetSelectedCount())
 	{
 		return FALSE;
 	}
