@@ -989,21 +989,6 @@ LRESULT CTDLTaskListCtrl::WindowProc(HWND hRealWnd, UINT msg, WPARAM wp, LPARAM 
 					
 				case LVN_GETDISPINFO:
 					return OnListGetDispInfo((NMLVDISPINFO*)pNMHDR);
-
-// 				case LVN_GETINFOTIP:
-// 					{
-// 						NMLVGETINFOTIP* pLVGIT = (NMLVGETINFOTIP*)pNMHDR;
-// 						DWORD dwTaskID = GetTaskID(pLVGIT->iItem);
-// 						
-// 						if (dwTaskID)
-// 						{
-// 							CString sInfoTip(FormatInfoTip(dwTaskID, (pLVGIT->cchTextMax - 1)));
-// 							lstrcpyn(pLVGIT->pszText, sInfoTip, (pLVGIT->cchTextMax - 1));
-// 
-// 							return 0L; // eat
-// 						}
-// 					}
-// 					break;
 				}
 			}
 		}
