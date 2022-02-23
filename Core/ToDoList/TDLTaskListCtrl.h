@@ -153,7 +153,7 @@ protected:
  	LRESULT OnListCustomDraw(NMLVCUSTOMDRAW* pLVCD);
 	LRESULT OnListGetDispInfo(NMLVDISPINFO* pLVDI);
 
-	BOOL OnListSelectionChange(NMLISTVIEW* pNMLV);
+	void OnListSelectionChange(NMLISTVIEW* pNMLV);
 	void OnNotifySplitterChange(int nSplitPos);
 
 	// pure virtual overrides
