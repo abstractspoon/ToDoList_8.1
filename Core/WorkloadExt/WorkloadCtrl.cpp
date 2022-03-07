@@ -57,17 +57,17 @@ const int HD_COLPADDING			= GraphicsMisc::ScaleByDPIFactor(6);
 #define GET_WI_RET(id, wi, ret)	\
 {								\
 	if (id == 0) return ret;	\
-	wi = GetWorkloadItem(id);		\
+	wi = GetWorkloadItem(id);	\
 	ASSERT(wi);					\
 	if (wi == NULL) return ret;	\
 }
 
-#define GET_WI(id, wi)		\
-{							\
-	if (id == 0) return;	\
+#define GET_WI(id, wi)			\
+{								\
+	if (id == 0) return;		\
 	wi = GetWorkloadItem(id);	\
-	ASSERT(wi);				\
-	if (wi == NULL)	return;	\
+	ASSERT(wi);					\
+	if (wi == NULL)	return;		\
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1092,7 +1092,7 @@ int CWorkloadCtrl::GetRequiredListColumnCount() const
 void CWorkloadCtrl::BuildTaskTreeColumns()
 {
 	// add columns
-	m_treeHeader.InsertItem(0, 0, _T("Task"), (HDF_LEFT | HDF_STRING), 0, WLCC_TITLE);
+	m_treeHeader.InsertItem(0, 0, _T("Title"), (HDF_LEFT | HDF_STRING), 0, WLCC_TITLE);
 	m_treeHeader.EnableItemDragging(0, FALSE);
 
 	for (int nCol = 0; nCol < NUM_TREECOLUMNS; nCol++)
