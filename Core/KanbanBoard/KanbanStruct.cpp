@@ -775,46 +775,6 @@ BOOL CKanbanItemMap::IsDone(DWORD dwTaskID, BOOL bIncGoodAsDone) const
 	return (pKI && pKI->IsDone(bIncGoodAsDone));
 }
 
-int CKanbanItemMap::IsParent(DWORD dwParentID, DWORD dwTaskID, BOOL bRecursive) const
-{
-	if ((dwParentID == 0) || (dwTaskID == 0))
-		return FALSE;
-
-	const KANBANITEM* pKI = GetItem(dwTaskID);
-
-	if (!pKI)
-	{
-		ASSERT(0);
-		return FALSE;
-	}
-
-	if (dwParentID == pKI->dwParentID)
-		return TRUE;
-
-	if (!bRecursive)
-		return FALSE;
-
-	// Keep going
-	return IsParent(dwParentID, pKI->dwParentID, TRUE);
-}
-
-BOOL CKanbanItemMap::IsSibling(DWORD dwSiblingID, DWORD dwTaskID) const
-{
-	if ((dwSiblingID == 0) || (dwTaskID == 0))
-		return FALSE;
-
-	const KANBANITEM* pKI = GetItem(dwTaskID);
-	const KANBANITEM* pKISibling = GetItem(dwSiblingID);
-
-	if (!pKI || !pKISibling)
-	{
-		ASSERT(0);
-		return FALSE;
-	}
-
-	return (pKISibling->dwParentID == pKI->dwParentID);
-}
-
 KANBANITEM* CKanbanItemMap::NewItem(DWORD dwTaskID, const CString& sTitle)
 {
 	ASSERT(!sTitle.IsEmpty());

@@ -1052,37 +1052,29 @@ BOOL CKanbanColumnCtrl::GetItemRect(HTREEITEM hti, CRect& rItem) const
 
 int CKanbanColumnCtrl::CalculateIndentation(HTREEITEM hti) const
 {
-	if (!hti)
-	{
-		ASSERT(0);
-		return 0;
-	}
-
 	if (HasOption(KBCF_INDENTSUBTASKS))
 	{
-		// Work our way up the tree looking for first parent/grandparent/etc
+		ASSERT(hti);
+		ASSERT(HasOption(KBCF_SORTSUBTASTASKSBELOWPARENTS));
+
+		// Look for the first first parent/grandparent/etc elsewhere in the tree
+		// Any such task will necessarily be above us in the tree due to the sorting
 		DWORD dwTaskID = GetTaskID(hti);
-		HTREEITEM htiPrev = GetNextItem(hti, TVGN_PREVIOUS);
 
-		while (htiPrev)
+		while (dwTaskID)
 		{
-			DWORD dwPrevID = GetTaskID(htiPrev);
+			const KANBANITEM* pKI = m_data.GetItem(dwTaskID);
+			HTREEITEM htiParent = FindItem(pKI->dwParentID);
 
-			if (m_data.IsParent(dwPrevID, dwTaskID, TRUE))
-			{
-				return CalculateIndentation(htiPrev) + LEVEL_INDENT;
-			}
+			if (htiParent)
+				return (CalculateIndentation(htiParent) + LEVEL_INDENT);
 
-			// Break when we hit the first non-sibling
-			if (!m_data.IsSibling(dwPrevID, dwTaskID))
-				break;
-
-			// next above
-			htiPrev = GetNextItem(htiPrev, TVGN_PREVIOUS);
+			// else keep going
+			dwTaskID = pKI->dwParentID;
 		}
 	}
 
-	return 0; // no indentation, first item or non-sibling/parent
+	return 0; // no indentation, first item or no parent
 }
 
 BOOL CKanbanColumnCtrl::GetItemCheckboxRect(CRect& rItem) const
