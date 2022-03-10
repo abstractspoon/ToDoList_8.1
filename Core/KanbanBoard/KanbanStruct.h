@@ -158,6 +158,9 @@ public:
 	void SetPinnedItems(const CDWordArray& aTaskIDs, BOOL bReset = TRUE);
 	void ClearPinnedItems();
 		
+	BOOL IsParent(DWORD dwParentID, DWORD dwTaskID, BOOL bRecursive) const;
+	BOOL IsSibling(DWORD dwSiblingID, DWORD dwTaskID) const;
+
 #ifdef _DEBUG
 	void TraceSummary(LPCTSTR szAttribID, DWORD dwOptions) const;
 #endif

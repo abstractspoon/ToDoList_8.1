@@ -610,7 +610,7 @@ void CKanbanColumnCtrl::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 				CDC* pDC = CDC::FromHandle(pTVCD->nmcd.hdc);
 		
 				CRect rItem;
-				GetItemRect(hti, rItem, NULL);
+				GetItemRect(hti, rItem);
 				rItem.DeflateRect(ITEM_PADDING, ITEM_PADDING);
 
 				DrawItem(pDC, dwTaskID, rItem);
@@ -1024,13 +1024,12 @@ void CKanbanColumnCtrl::DrawItemCheckbox(CDC* pDC, const KANBANITEM* pKI, CRect&
 	}
 }
 
-BOOL CKanbanColumnCtrl::GetItemCheckboxRect(HTREEITEM hti, CRect& rItem, const KANBANITEM* pKI) const
+BOOL CKanbanColumnCtrl::GetItemCheckboxRect(HTREEITEM hti, CRect& rItem) const
 {
 	if (HasOption(KBCF_SHOWCOMPLETIONCHECKBOXES))
 	{
-		GetItemRect(hti, rItem, pKI);
-
-		return GetItemCheckboxRect(rItem);
+		if (GetItemRect(hti, rItem))
+			return GetItemCheckboxRect(rItem);
 	}
 
 	// else
@@ -1042,23 +1041,48 @@ BOOL CKanbanColumnCtrl::GetItemBounds(HTREEITEM hti, LPRECT lpRect) const
 	return CTreeCtrl::GetItemRect(hti, lpRect, FALSE);
 }
 
-BOOL CKanbanColumnCtrl::GetItemRect(HTREEITEM hti, CRect& rItem, const KANBANITEM* pKI) const
+BOOL CKanbanColumnCtrl::GetItemRect(HTREEITEM hti, CRect& rItem) const
 {
 	if (!GetItemBounds(hti, rItem))
 		return FALSE;
 
-	if (HasOption(KBCF_INDENTSUBTASKS))
+	rItem.left += CalculateIndentation(hti);
+	return TRUE;
+}
+
+int CKanbanColumnCtrl::CalculateIndentation(HTREEITEM hti) const
+{
+	if (!hti)
 	{
-		if (!pKI)
-			pKI = m_data.GetItem(GetTaskID(hti));
-
-		ASSERT(pKI);
-
-		// Indent to match level
-		rItem.left += (pKI->nLevel * LEVEL_INDENT);
+		ASSERT(0);
+		return 0;
 	}
 
-	return TRUE;
+	if (HasOption(KBCF_INDENTSUBTASKS))
+	{
+		// Work our way up the tree looking for first parent/grandparent/etc
+		DWORD dwTaskID = GetTaskID(hti);
+		HTREEITEM htiPrev = GetNextItem(hti, TVGN_PREVIOUS);
+
+		while (htiPrev)
+		{
+			DWORD dwPrevID = GetTaskID(htiPrev);
+
+			if (m_data.IsParent(dwPrevID, dwTaskID, TRUE))
+			{
+				return CalculateIndentation(htiPrev) + LEVEL_INDENT;
+			}
+
+			// Break when we hit the first non-sibling
+			if (!m_data.IsSibling(dwPrevID, dwTaskID))
+				break;
+
+			// next above
+			htiPrev = GetNextItem(htiPrev, TVGN_PREVIOUS);
+		}
+	}
+
+	return 0; // no indentation, first item or non-sibling/parent
 }
 
 BOOL CKanbanColumnCtrl::GetItemCheckboxRect(CRect& rItem) const
@@ -1077,9 +1101,9 @@ BOOL CKanbanColumnCtrl::GetItemCheckboxRect(CRect& rItem) const
 	return FALSE;
 }
 
-BOOL CKanbanColumnCtrl::GetItemLabelTextRect(HTREEITEM hti, CRect& rItem, BOOL bEdit, const KANBANITEM* pKI) const
+BOOL CKanbanColumnCtrl::GetItemLabelTextRect(HTREEITEM hti, CRect& rItem, BOOL bEdit) const
 {
-	if (!GetItemRect(hti, rItem, pKI))
+	if (!GetItemRect(hti, rItem))
 		return FALSE;
 
 	rItem.DeflateRect(1, 1); // border
@@ -1113,18 +1137,17 @@ BOOL CKanbanColumnCtrl::GetItemLabelTextRect(HTREEITEM hti, CRect& rItem, BOOL b
 	return TRUE;
 }
 
-BOOL CKanbanColumnCtrl::GetItemTooltipRect(HTREEITEM hti, CRect& rTip, const KANBANITEM* pKI) const
+BOOL CKanbanColumnCtrl::GetItemTooltipRect(HTREEITEM hti, CRect& rTip) const
 {
-	if (!pKI)
-		pKI = m_data.GetItem(GetTaskID(hti));
-
-	if (!pKI)
+	if (!GetItemLabelTextRect(hti, rTip, FALSE))
 	{
 		ASSERT(0);
 		return FALSE;
 	}
 
-	if (!GetItemLabelTextRect(hti, rTip, FALSE, pKI))
+	const KANBANITEM* pKI = m_data.GetItem(GetTaskID(hti));
+
+	if (!pKI)
 	{
 		ASSERT(0);
 		return FALSE;
@@ -2093,7 +2116,7 @@ CString CKanbanColumnCtrl::HitTestFileLink(HTREEITEM hti, CPoint point) const
 		if (nNumLinks)
 		{
 			CRect rLinks;
-			GetItemLabelTextRect(hti, rLinks, FALSE, pKI);
+			GetItemLabelTextRect(hti, rLinks, FALSE);
 
 			// Undo the indent for the icon
 			rLinks.left -= (DEF_IMAGE_SIZE + IMAGE_PADDING);
@@ -2194,7 +2217,7 @@ BOOL CKanbanColumnCtrl::HitTestCheckbox(HTREEITEM hti, CPoint point) const
 {
 	CRect rCheckbox;
 
-	return (GetItemCheckboxRect(hti, rCheckbox, NULL) && rCheckbox.PtInRect(point));
+	return (GetItemCheckboxRect(hti, rCheckbox) && rCheckbox.PtInRect(point));
 }
 
 BOOL CKanbanColumnCtrl::SaveToImage(CBitmap& bmImage, const CSize& reqColSize)
@@ -2240,10 +2263,7 @@ CSize CKanbanColumnCtrl::CalcRequiredSizeForImage() const
 
 		if (pKI)
 		{
-			int nItemIndent = nDefItemIndent;
-
-			if (HasOption(KBCF_INDENTSUBTASKS))
-				nItemIndent += (pKI->nLevel * LEVEL_INDENT);
+			int nItemIndent = nDefItemIndent + CalculateIndentation(hti);
 
 			// Start with attributes
 			CFont* pOldFont = dc.SelectObject(m_fonts.GetFont(0));
@@ -2425,9 +2445,9 @@ int CKanbanColumnCtrl::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
 	{
 		CRect rText, rUnused;
 
-		if (GetItemLabelTextRect(hti, rText, FALSE, NULL) && rText.PtInRect(point))
+		if (GetItemLabelTextRect(hti, rText, FALSE) && rText.PtInRect(point))
 		{
-			if (GetItemTooltipRect(hti, rUnused, NULL))
+			if (GetItemTooltipRect(hti, rUnused))
 			{
 				DWORD dwTaskID = GetTaskID(hti);
 
@@ -2451,11 +2471,11 @@ void CKanbanColumnCtrl::OnTooltipShow(NMHDR* pNMHDR, LRESULT* pResult)
 	HTREEITEM hti = FindItem(dwTaskID);
 	ASSERT(hti);
 
+	CRect rTip;
+	VERIFY(GetItemTooltipRect(hti, rTip));
+
 	const KANBANITEM* pKI = m_data.GetItem(dwTaskID);
 	ASSERT(pKI);
-
-	CRect rTip;
-	VERIFY(GetItemTooltipRect(hti, rTip, pKI));
 
 	m_tooltip.SetMaxTipWidth(rTip.Width());
 	m_tooltip.SetFont(m_fonts.GetFont((pKI->dwParentID == 0) ? GMFS_BOLD : 0));
