@@ -190,6 +190,7 @@ public:
 	inline DWORD GetSelectedTaskID() const { return m_taskTree.GetSelectedTaskID(); }
 	int GetSelectedTaskIDs(CDWordArray& aTaskIDs, BOOL bTrue = FALSE) const;
 	int GetSelectedTaskIDs(CDWordArray& aTaskIDs, DWORD& dwFocusedTaskID, BOOL bRemoveChildDupes) const;
+	int GetSubTaskIDs(DWORD dwTaskID, CDWordArray& aSubtaskIDs) const;
 
 	BOOL SelectTask(DWORD dwTaskID) { return SelectTask(dwTaskID, TRUE); }
 	BOOL SelectTasks(const CDWordArray& aTaskIDs) { return SelectTasks(aTaskIDs, TRUE); }

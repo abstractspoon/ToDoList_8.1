@@ -11899,7 +11899,20 @@ void CToDoListWnd::OnEditOffsetDates()
 		}
 		
 		if (dwWhat & ODD_DONEDATE)
+		{
 			tdc.OffsetSelectedTaskDate(TDCD_DONE, nAmount, nUnits, bSubtasks);
+		}
+		
+		if (dwWhat & ODD_REMINDER)
+		{
+			CDWordArray aTaskIDs;
+			DWORD dwUnused;
+
+			int nTask = tdc.GetSelectedTaskIDs(aTaskIDs, dwUnused, bSubtasks);
+
+			while (nTask--)
+				m_dlgReminders.OffsetReminder(aTaskIDs[nTask], nAmount, nUnits, &tdc, bSubtasks);
+		}
 	}
 }
 
