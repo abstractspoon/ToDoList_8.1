@@ -279,7 +279,7 @@ BOOL CToDoCtrlReminders::UpdateModifiedTasks(const CFilteredToDoCtrl* pTDC, cons
 	COleDateTime dtNow = COleDateTime::GetCurrentTime();
 
 	CTDCReminderArray aRem;
-	int nRem = GetVisibleReminders(*pTDC, aRem);
+	int nRem = GetListReminders(*pTDC, aRem);
 
 	while (nRem--)
 	{

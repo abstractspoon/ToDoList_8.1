@@ -169,7 +169,7 @@ void CTDLShowReminderDlg::OnDestroy()
 	CTDLDialog::OnDestroy();
 }
 
-int CTDLShowReminderDlg::GetListReminderCount() const
+int CTDLShowReminderDlg::GetVisibleReminderCount() const
 {
 	ASSERT(m_mapReminders.GetCount() == m_lcReminders.GetItemCount());
 
@@ -323,7 +323,7 @@ void CTDLShowReminderDlg::SnoozeReminders(BOOL bAll)
 
 	CTDCReminderArray aRem;
 
-	if ((bAll && GetVisibleReminders(aRem)) || 
+	if ((bAll && GetListReminders(aRem)) || 
 		(!bAll && GetSelectedReminders(aRem)))
 	{
 		CAutoFlag af(m_bChangingReminders, TRUE);
@@ -352,7 +352,7 @@ void CTDLShowReminderDlg::OnSnoozeAll()
 	SnoozeReminders(TRUE);
 }
 
-int CTDLShowReminderDlg::GetVisibleReminders(CTDCReminderArray& aRem) const
+int CTDLShowReminderDlg::GetListReminders(CTDCReminderArray& aRem) const
 {
 	int nRem = m_lcReminders.GetItemCount();
 	aRem.SetSize(nRem);
@@ -368,7 +368,7 @@ int CTDLShowReminderDlg::GetVisibleReminders(CTDCReminderArray& aRem) const
 	return aRem.GetSize();
 }
 
-int CTDLShowReminderDlg::GetVisibleReminders(const CFilteredToDoCtrl& tdc, CTDCReminderArray& aRem) const
+int CTDLShowReminderDlg::GetListReminders(const CFilteredToDoCtrl& tdc, CTDCReminderArray& aRem) const
 {
 	int nNumRem = m_lcReminders.GetItemCount(), nItem = 0;
 	aRem.SetSize(nNumRem); // max possible

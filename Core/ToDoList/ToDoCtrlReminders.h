@@ -46,10 +46,7 @@ public:
 	BOOL ToDoCtrlHasReminders(const CFilteredToDoCtrl* pTDC);
 	BOOL ToDoCtrlHasReminders(const CString& sFilePath);
 	BOOL UpdateModifiedTasks(const CFilteredToDoCtrl* pTDC, const CDWordArray& aTaskIDs, const CTDCAttributeMap& mapAttrib);
-
 	BOOL GetReminderDate(int nRem, COleDateTime& dtRem) const;
-	BOOL IsEmpty() const { return (GetListReminderCount() == 0); }
-
 	void CheckReminders();
 
 // Attributes
