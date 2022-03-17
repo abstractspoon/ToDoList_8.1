@@ -423,6 +423,7 @@ public:
 	// undo/redo
 	BOOL UndoLastAction(BOOL bUndo);
 	BOOL CanUndoLastAction(BOOL bUndo) const;
+	int GetLastModifiedTaskIDs(CDWordArray& aTaskIDs) const { return m_data.GetLastUndoActionTaskIDs(TRUE, aTaskIDs); }
 
 	// misc
 	void Spellcheck();
