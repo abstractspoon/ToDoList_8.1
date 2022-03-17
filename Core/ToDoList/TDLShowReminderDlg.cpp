@@ -169,13 +169,6 @@ void CTDLShowReminderDlg::OnDestroy()
 	CTDLDialog::OnDestroy();
 }
 
-int CTDLShowReminderDlg::GetVisibleReminderCount() const
-{
-	ASSERT(m_mapReminders.GetCount() == m_lcReminders.GetItemCount());
-
-	return (m_mapReminders.GetCount());
-}
-
 BOOL CTDLShowReminderDlg::AddListReminder(const TDCREMINDER& rem)
 {
 	ASSERT(GetSafeHwnd());
