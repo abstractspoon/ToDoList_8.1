@@ -1028,6 +1028,13 @@ void CEnListCtrl::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 				Delete();
 			break;
 		}
+
+		// Select All = ctrl + 'x'
+		case 'A':
+		case 'a':
+			if (bCtrlDown && (!(GetStyle() & LVS_SINGLESEL) || (GetItemCount() == 1)))
+				SelectAll();
+			break;
 	}
 	
 	// otherwise do default processing 
