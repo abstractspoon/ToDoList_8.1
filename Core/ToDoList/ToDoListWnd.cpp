@@ -11421,13 +11421,20 @@ void CToDoListWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 {
 	CFrameWnd::OnActivate(nState, pWndOther, bMinimized);
 
-	// If we are being activated as a consequence of closing
-	// the time tracker or the reminder window then we set the 
-	// focus back to the active tasklist
-	if ((nState == WA_ACTIVE) && (GetTDCCount() > 0) &&
-		((pWndOther == &m_dlgReminders) || (pWndOther == &m_dlgTimeTracker)))
+	if (GetTDCCount() == 0)
+		return;
+
+	switch (nState)
 	{
-		GetToDoCtrl().SetFocusToTasks();
+	case WA_ACTIVE:
+		// If we are being activated as a consequence of closing
+		// the time tracker or the reminder window then we set the 
+		// focus back to the active tasklist
+		if ((pWndOther == &m_dlgReminders) || (pWndOther == &m_dlgTimeTracker))
+		{
+			GetToDoCtrl().SetFocusToTasks();
+		}
+		break;
 	}
 }
 
