@@ -338,7 +338,9 @@ void CTDLShowReminderDlg::RestoreFocusToList()
 	if (m_lcReminders.GetItemCount())
 	{
 		m_lcReminders.SetFocus();
-		m_lcReminders.SetItemState(0, (LVIS_SELECTED | LVIS_FOCUSED), (LVIS_SELECTED | LVIS_FOCUSED));
+
+		if (m_lcReminders.GetSelectedCount() == 0)
+			m_lcReminders.SetItemState(0, (LVIS_SELECTED | LVIS_FOCUSED), (LVIS_SELECTED | LVIS_FOCUSED));
 	}
 }
 
