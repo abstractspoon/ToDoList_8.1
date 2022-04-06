@@ -687,6 +687,7 @@ BEGIN_MESSAGE_MAP(CToDoListWnd, CFrameWnd)
 	ON_WM_SYSCOLORCHANGE()
 	ON_WM_SYSCOMMAND()
 	ON_WM_TIMER()
+	ON_WM_WINDOWPOSCHANGING()
 
 	ON_COMMAND(ID_TOOLS_ADDTOSOURCECONTROL, OnToolsAddtoSourceControl)
 	ON_UPDATE_COMMAND_UI(ID_TOOLS_ADDTOSOURCECONTROL, OnUpdateToolsAddtoSourceControl)
@@ -1208,8 +1209,16 @@ void CToDoListWnd::PostAppRestoreFocus(HWND hwndFocus)
 	if (!hwndFocus)
 		hwndFocus = m_hwndLastFocus;
 
-	if (hwndFocus && (hwndFocus != *this))
-		PostMessage(WM_APPRESTOREFOCUS, 0L, (LPARAM)hwndFocus);
+	if (!hwndFocus || (hwndFocus == *this))
+		return;
+	
+	if (!CDialogHelper::IsChildOrSame(m_dlgReminders, hwndFocus))
+		return;
+
+	if (!CDialogHelper::IsChildOrSame(m_dlgTimeTracker, hwndFocus))
+		return;
+
+	PostMessage(WM_APPRESTOREFOCUS, 0L, (LPARAM)hwndFocus);
 }
 
 LRESULT CToDoListWnd::OnFocusChange(WPARAM wp, LPARAM /*lp*/)
@@ -3969,6 +3978,20 @@ BOOL CToDoListWnd::VerifyToDoCtrlPassword() const
 BOOL CToDoListWnd::VerifyToDoCtrlPassword(int nIndex) const
 {
 	return m_mgrToDoCtrls.VerifyPassword(nIndex);
+}
+
+void CToDoListWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
+{
+	// Keep the reminder window in from of the app
+	if (m_dlgReminders.GetSafeHwnd() && 
+		m_dlgReminders.IsWindowVisible() &&
+		!m_dlgReminders.IsIconic() &&
+		!Gui::IsObscured(m_dlgReminders))
+	{
+		lpwndpos->hwndInsertAfter = m_dlgReminders;
+	}
+
+	CFrameWnd::OnWindowPosChanging(lpwndpos);
 }
 
 void CToDoListWnd::Show(BOOL bAllowToggle)
