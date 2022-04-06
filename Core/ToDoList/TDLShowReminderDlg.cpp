@@ -449,7 +449,7 @@ void CTDLShowReminderDlg::OnGotoTask()
 		DoGotoTask(rem);	
 
 	UpdateControls();
-	RestoreFocusToList();
+	// Note: We DON'T set the focus back to ourselves like elsewhere
 }
 
 void CTDLShowReminderDlg::OnCompleteTask()
