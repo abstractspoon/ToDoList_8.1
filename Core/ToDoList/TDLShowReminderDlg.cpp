@@ -577,13 +577,8 @@ void CTDLShowReminderDlg::OnItemchangedReminders(NMHDR* /*pNMHDR*/, LRESULT* pRe
 
 void CTDLShowReminderDlg::OnDblClkReminders(NMHDR* /*pNMHDR*/, LRESULT* pResult) 
 {
-	ASSERT(m_lcReminders.GetSelectedCount() == 1);
-
-	TDCREMINDER rem;
-	int nSel = GetSelectedReminder(rem);
-
-	if (nSel != -1)
-		DoGotoTask(rem);
+	if (m_lcReminders.GetSelectedCount() == 1)
+		OnGotoTask();
 
 	*pResult = 0;
 }
