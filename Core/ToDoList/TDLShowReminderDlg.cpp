@@ -332,7 +332,6 @@ void CTDLShowReminderDlg::SnoozeReminders(BOOL bAll)
 			DoSnoozeReminder(aRem[nRem]);
 	}
 
-	UpdateControls();
 	RestoreFocusToList(nPrevSel);
 }
 
@@ -350,8 +349,12 @@ void CTDLShowReminderDlg::RestoreFocusToList(int nPrevSel)
 				nPrevSel = (nNumItems - 1);
 
 			m_lcReminders.SetItemState(nPrevSel, (LVIS_SELECTED | LVIS_FOCUSED), (LVIS_SELECTED | LVIS_FOCUSED));
+			return;
 		}
 	}
+
+	// all else
+	UpdateControls();
 }
 
 void CTDLShowReminderDlg::OnSnoozeAll() 
@@ -473,7 +476,6 @@ void CTDLShowReminderDlg::OnCompleteTask()
 		int nPrevSel = m_lcReminders.GetCurSel();
 		DoCompleteTask(rem);
 
-		UpdateControls();
 		RestoreFocusToList(nPrevSel);
 	}
 }
@@ -487,12 +489,13 @@ void CTDLShowReminderDlg::OnDismiss()
 	if (GetSelectedReminders(aRem))
 	{
 		int nPrevSel = m_lcReminders.GetLastSel();
-		CAutoFlag af(m_bChangingReminders, TRUE);
+		{
+			CAutoFlag af(m_bChangingReminders, TRUE);
 
-		for (int nRem = 0; nRem < aRem.GetSize(); nRem++)
-			DoDismissReminder(aRem[nRem]);	
+			for (int nRem = 0; nRem < aRem.GetSize(); nRem++)
+				DoDismissReminder(aRem[nRem]);
+		}
 
-		UpdateControls();
 		RestoreFocusToList(nPrevSel);
 	}
 }
