@@ -185,7 +185,8 @@ BOOL CTDLShowReminderDlg::AddListReminder(const TDCREMINDER& rem)
 
 	if (bNewReminder)
 	{
-		nItem = m_lcReminders.InsertItem(0, rem.GetTaskTitle());
+		// Insert at end
+		nItem = m_lcReminders.InsertItem(m_lcReminders.GetItemCount(), rem.GetTaskTitle());
 		ASSERT(nItem != -1);
 
 		if (nItem == -1)
@@ -202,6 +203,7 @@ BOOL CTDLShowReminderDlg::AddListReminder(const TDCREMINDER& rem)
 		if (!rem.sSoundFile.IsEmpty())
 			PlaySound(rem.sSoundFile, NULL, (SND_FILENAME | SND_ASYNC));
 		
+		// Select this item if it's the first or nothing is selected
 		if ((m_lcReminders.GetItemCount() == 1) || (m_lcReminders.GetSelectedCount() == 0))
 			m_lcReminders.SetItemState(nItem, (LVIS_SELECTED | LVIS_FOCUSED), (LVIS_SELECTED | LVIS_FOCUSED));
 		
