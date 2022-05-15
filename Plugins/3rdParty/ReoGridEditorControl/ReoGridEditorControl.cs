@@ -1381,7 +1381,7 @@ namespace unvell.ReoGrid.Editor
 		private bool isUIUpdating = false;
 		private void UpdateMenuAndToolStrips()
 		{
-			if (isUIUpdating)
+			if (isUIUpdating || grid.IsDisposing)
 				return;
 
 			var worksheet = this.CurrentWorksheet;
