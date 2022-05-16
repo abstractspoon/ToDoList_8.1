@@ -3215,7 +3215,7 @@ BOOL CTabbedToDoCtrl::CanCreateNewTask(TDC_INSERTWHERE nInsertWhere) const
 	return bCanCreate;
 }
 
-void CTabbedToDoCtrl::RebuildList(BOOL bChangeGroup, TDC_COLUMN nNewGroupBy)
+void CTabbedToDoCtrl::RebuildList(BOOL bChangeGroup, TDC_COLUMN nNewGroupBy, const void* pContext)
 {
 	GetViewData(FTCV_TASKLIST)->bNeedFullTaskUpdate = FALSE;
 
@@ -3234,7 +3234,7 @@ void CTabbedToDoCtrl::RebuildList(BOOL bChangeGroup, TDC_COLUMN nNewGroupBy)
 
 	BOOL bInList = InListView();
 
-	// note: the call to m_taskList.RestoreSelection at the bottom fails if the 
+	// note: the call to SyncListSelectionToTree at the bottom fails if the 
 	// list has redraw disabled so it must happen outside the scope of hr2
 	{
 		CHoldRedraw hr(*this);
@@ -3248,20 +3248,13 @@ void CTabbedToDoCtrl::RebuildList(BOOL bChangeGroup, TDC_COLUMN nNewGroupBy)
 		if (bChangeGroup)
 			m_taskList.SetGroupBy(m_nListViewGroupBy);
 
-		BOOL bHideNoneGroup = ((m_nListViewGroupBy != TDCC_NONE) && HasListOption(LVO_HIDENOGROUPVALUE));
-		
 		for (int nID = 0; nID < aTaskIDs.GetSize(); nID++)
 		{
 			DWORD dwTaskID = aTaskIDs[nID];
 
-			if (bHideNoneGroup && !m_taskList.TaskHasGroupValue(dwTaskID))
+			if (WantAddTreeTaskToList(dwTaskID, pContext))
 			{
-				continue;
-			}
-
-			if (m_taskList.InsertItem(dwTaskID) == -1)
-			{
-				ASSERT(m_data.IsTaskReference(dwTaskID));
+				VERIFY (m_taskList.InsertItem(dwTaskID) >= 0);
 			}	
 		}
 
@@ -3276,6 +3269,19 @@ void CTabbedToDoCtrl::RebuildList(BOOL bChangeGroup, TDC_COLUMN nNewGroupBy)
 		SyncListSelectionToTree(TRUE);
 	
 	BuildListGroupByCombo();
+}
+
+BOOL CTabbedToDoCtrl::WantAddTreeTaskToList(DWORD dwTaskID, const void* pContext) const
+{
+	BOOL bHideNoneGroup = ((m_nListViewGroupBy != TDCC_NONE) && HasListOption(LVO_HIDENOGROUPVALUE));
+
+	if (bHideNoneGroup && !m_taskList.TaskHasGroupValue(dwTaskID))
+		return FALSE;
+
+	if (m_data.IsTaskReference(dwTaskID))
+		return FALSE;
+
+	return TRUE;
 }
 
 void CTabbedToDoCtrl::ResortList(BOOL bAllowToggle)
