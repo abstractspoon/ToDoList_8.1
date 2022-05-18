@@ -64,7 +64,6 @@ CFileComboBox::~CFileComboBox()
 IMPLEMENT_DYNAMIC(CFileComboBox, CAutoComboBox)
 
 BEGIN_MESSAGE_MAP(CFileComboBox, CAutoComboBox)
-	ON_WM_SIZE()
 	ON_REGISTERED_MESSAGE(WM_FEN_BROWSECHANGE, OnFileEditBrowseChange)
 	ON_REGISTERED_MESSAGE(WM_FE_GETFILEICON, OnFileEditGetFileIcon)
 	ON_REGISTERED_MESSAGE(WM_FE_GETFILETOOLTIP, OnFileEditGetFileTooltip)
@@ -120,28 +119,6 @@ int CFileComboBox::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
 	return CAutoComboBox::OnToolHitTest(point, pTI);
 }
 
-void CFileComboBox::OnSize(UINT nType, int cx, int cy)
-{
-	CAutoComboBox::OnSize(nType, cx, cy);
-
-	ResizeEdit();
-}
-
-void CFileComboBox::ResizeEdit()
-{
-	// resize the edit to better fit the combo
-	if (m_fileEdit.GetSafeHwnd())
-	{
-		CRect rCombo;
-		GetClientRect(rCombo);
-
-		CRect rEdit(rCombo);
-		rEdit.DeflateRect(1, 3, 2, 3);
-		rEdit.right -= GetSystemMetrics(SM_CXVSCROLL);
-		m_fileEdit.MoveWindow(rEdit, FALSE);
-	}
-}
-
 BOOL CFileComboBox::InitFileEdit()
 {
 	if (!m_fileEdit.GetSafeHwnd())
@@ -150,7 +127,6 @@ BOOL CFileComboBox::InitFileEdit()
 			return FALSE;
 
 		m_fileEdit.SendMessage(EM_SETREADONLY, m_bReadOnly);
-		ResizeEdit();
 
 		// CFileEdit disables its tooltips when embedded in a combobox
 		// simply because they don't seem to work
@@ -178,7 +154,6 @@ LRESULT CFileComboBox::OnFileEditBrowseChange(WPARAM wp, LPARAM lp)
 	}
 
 	HandleReturnKey();
-	ResizeEdit();
 
 	return 0L;
 }
