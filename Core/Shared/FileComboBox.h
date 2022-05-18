@@ -53,6 +53,7 @@ protected:
 	afx_msg LRESULT OnFileEditDisplayFile(WPARAM wp, LPARAM lp);
 	afx_msg BOOL OnSelChange();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnPaint();
 	DECLARE_MESSAGE_MAP()
 
 	// pseudo message handler

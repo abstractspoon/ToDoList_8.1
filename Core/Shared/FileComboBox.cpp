@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "FileComboBox.h"
 #include "FileMisc.h"
+#include "GraphicsMisc.h"
 #include "enbitmap.h"
 #include "enfiledialog.h"
 
@@ -70,6 +71,7 @@ BEGIN_MESSAGE_MAP(CFileComboBox, CAutoComboBox)
 	ON_REGISTERED_MESSAGE(WM_FE_DISPLAYFILE, OnFileEditDisplayFile)
 	ON_CONTROL_REFLECT_EX(CBN_SELCHANGE, OnSelChange)
 	ON_WM_CTLCOLOR()
+	ON_WM_PAINT()
 	END_MESSAGE_MAP()
 	
 // CFileComboBox message handlers
@@ -82,6 +84,36 @@ BOOL CFileComboBox::PreCreateWindow(CREATESTRUCT& cs)
 	cs.style |= (CBS_OWNERDRAWFIXED | CBS_HASSTRINGS);
 	
 	return CAutoComboBox::PreCreateWindow(cs);
+}
+
+void CFileComboBox::OnPaint()
+{
+	CPaintDC dc(this);
+
+	// default painting
+	DefWindowProc(WM_PAINT, (WPARAM)(HDC)dc, 0);
+
+	// If the edit field has an image and its icon rect 
+	// is less than the height of the image, then we draw 
+	// the extra bit that MIGHT have been clipped out
+	if (m_fileEdit.GetSafeHwnd() && m_fileEdit.GetWindowTextLength() > 0)
+	{
+		CRect rIcon = m_fileEdit.GetIconScreenRect();
+
+		if (rIcon.Height() < GraphicsMisc::ScaleByDPIFactor(16))
+		{
+			ScreenToClient(rIcon);
+
+			// Because CFileEdit messes with its non-client rect
+			// we can end up with a negative rectangle during startup
+			if (rIcon.left > 0)
+			{
+				CString sIcon;
+				m_fileEdit.GetWindowText(sIcon);
+				m_fileEdit.DrawFileIcon(&dc, sIcon, rIcon);
+			}
+		}
+	}
 }
 
 HBRUSH CFileComboBox::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
