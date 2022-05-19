@@ -92,6 +92,8 @@ namespace SpreadsheetContentControl
 					try
 					{
 						// Backwards compatibility
+						memStream.Position = 0;
+
  						GridControl.Load(memStream, unvell.ReoGrid.IO.FileFormat.Excel2007);
 					}
 					catch (Exception)
