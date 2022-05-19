@@ -52,7 +52,7 @@ CFileComboBox::CFileComboBox(int nEditStyle)
 	: 
 	CAutoComboBox(ACBS_ALLOWDELETE | ACBS_ADDTOSTART),
 	m_fileEdit(nEditStyle),
-	m_imageIcons(16, 16),
+	m_imageIcons(FALSE), // small icons
 	m_bReadOnly(FALSE)
 {
 
@@ -96,24 +96,33 @@ void CFileComboBox::OnPaint()
 	// If the edit field has an image and its icon rect 
 	// is less than the height of the image, then we draw 
 	// the extra bit that MIGHT have been clipped out
-	if (m_fileEdit.GetSafeHwnd() && m_fileEdit.GetWindowTextLength() > 0)
-	{
-		CRect rIcon = m_fileEdit.GetIconScreenRect();
+	if (!m_fileEdit.GetSafeHwnd() || m_fileEdit.GetWindowTextLength() == 0)
+		return;
 
-		if (rIcon.Height() < GraphicsMisc::ScaleByDPIFactor(16))
-		{
-			ScreenToClient(rIcon);
+	CRect rIcon = m_fileEdit.GetIconScreenRect();
 
-			// Because CFileEdit messes with its non-client rect
-			// we can end up with a negative rectangle during startup
-			if (rIcon.left > 0)
-			{
-				CString sIcon;
-				m_fileEdit.GetWindowText(sIcon);
-				m_fileEdit.DrawFileIcon(&dc, sIcon, rIcon);
-			}
-		}
-	}
+	if (rIcon.Height() >= m_imageIcons.GetIconSize())
+		return;
+
+	ScreenToClient(rIcon);
+
+	// Because CFileEdit messes with its non-client rect
+	// we can end up with a negative rectangle during startup
+	if (rIcon.left < 0)
+		return;
+
+	// Check that the bit we need to draw is visible
+	CRect rClip(rIcon);
+
+	rClip.bottom = rClip.top + m_imageIcons.GetIconSize();
+	rClip.top = rIcon.bottom;
+
+	if (!dc.IntersectClipRect(rClip))
+		return;
+
+	CString sIcon;
+	m_fileEdit.GetWindowText(sIcon);
+	m_fileEdit.DrawFileIcon(&dc, sIcon, rIcon);
 }
 
 HBRUSH CFileComboBox::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
@@ -296,7 +305,7 @@ void CFileComboBox::DrawItemText(CDC& dc, const CRect& rect, int nItem, UINT nIt
 		if (!bDrawn)
 			m_fileEdit.DrawFileIcon(&dc, sItem, rText);
 
-		rText.left += 20;
+		rText.left += m_imageIcons.GetIconSize() + 2;
 	}
 
 	CAutoComboBox::DrawItemText(dc, rText, nItem, nItemState, dwItemData, sItem, bList, crText);
