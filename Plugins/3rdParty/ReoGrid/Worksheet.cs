@@ -106,8 +106,8 @@ namespace unvell.ReoGrid
 		/// </summary>
 		internal const int OutlineButtonSize = 13;
 
-		internal static string m_DefaultFontName = "Calibri";
-		internal static float m_DefaultFontSize = 10.25f;
+		internal static string m_DefaultFontName = "Tahoma";
+		internal static float m_DefaultFontSize = 8.25f;
 
 		/// <summary>
 		/// Default root style of entire range of grid control
