@@ -714,6 +714,13 @@ namespace unvell.ReoGrid
 		}
 		#endregion
 
+		public bool CanEdit()
+		{
+			return (!this.IsEditing &&
+					(this.SelectionRange.Rows == 1) &&
+					(this.SelectionRange.Cols == 1));
+		}
+
 		#region Index Getter/Setter
 
 		/// <summary>

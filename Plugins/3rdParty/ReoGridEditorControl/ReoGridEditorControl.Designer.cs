@@ -383,6 +383,8 @@ namespace unvell.ReoGrid.Editor
 			this.leadHeaderContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.resetAllPageBreaksToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.formulaBar = new unvell.ReoGrid.Editor.FormulaBarControl();
+			this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+			this.editCellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1.SuspendLayout();
 			this.columnContextMenuStrip.SuspendLayout();
 			this.rowContextMenuStrip.SuspendLayout();
@@ -396,20 +398,21 @@ namespace unvell.ReoGrid.Editor
 			// toolStripSeparator4
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
 			// 
 			// toolStrip1
 			// 
+			this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripButton,
             this.loadToolStripButton,
@@ -448,10 +451,11 @@ namespace unvell.ReoGrid.Editor
             this.backColorPickerToolStripButton,
             this.toolStripSeparator6,
             this.showDebugFormToolStripButton});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+			this.toolStrip1.Location = new System.Drawing.Point(0, 35);
 			this.toolStrip1.Name = "toolStrip1";
+			this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this.toolStrip1.ShowItemToolTips = false;
-			this.toolStrip1.Size = new System.Drawing.Size(1002, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(1503, 31);
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -461,7 +465,7 @@ namespace unvell.ReoGrid.Editor
 			this.newToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.NewDocumentHS;
 			this.newToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.newToolStripButton.Name = "newToolStripButton";
-			this.newToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.newToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.newToolStripButton.Text = "New";
 			this.newToolStripButton.Click += new System.EventHandler(this.newToolStripButton_Click);
 			// 
@@ -471,7 +475,7 @@ namespace unvell.ReoGrid.Editor
 			this.loadToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.openHS;
 			this.loadToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.loadToolStripButton.Name = "loadToolStripButton";
-			this.loadToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.loadToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.loadToolStripButton.Text = "Open";
 			this.loadToolStripButton.Click += new System.EventHandler(this.loadToolStripButton_Click);
 			// 
@@ -481,7 +485,7 @@ namespace unvell.ReoGrid.Editor
 			this.saveToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.saveHS;
 			this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.saveToolStripButton.Name = "saveToolStripButton";
-			this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.saveToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.saveToolStripButton.Text = "Save";
 			// 
 			// printPreviewToolStripButton
@@ -490,7 +494,7 @@ namespace unvell.ReoGrid.Editor
 			this.printPreviewToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PrintPreviewHS;
 			this.printPreviewToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.printPreviewToolStripButton.Name = "printPreviewToolStripButton";
-			this.printPreviewToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.printPreviewToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.printPreviewToolStripButton.Text = "toolStripButton1";
 			this.printPreviewToolStripButton.ToolTipText = "Print Preview";
 			this.printPreviewToolStripButton.Click += new System.EventHandler(this.printPreviewToolStripButton_Click);
@@ -501,7 +505,7 @@ namespace unvell.ReoGrid.Editor
 			this.cutToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CutHS;
 			this.cutToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cutToolStripButton.Name = "cutToolStripButton";
-			this.cutToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.cutToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.cutToolStripButton.Text = "Cut";
 			this.cutToolStripButton.Click += new System.EventHandler(this.cutRangeToolStripMenuItem_Click);
 			// 
@@ -511,7 +515,7 @@ namespace unvell.ReoGrid.Editor
 			this.copyToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CopyHS;
 			this.copyToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.copyToolStripButton.Name = "copyToolStripButton";
-			this.copyToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.copyToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.copyToolStripButton.Text = "Copy";
 			this.copyToolStripButton.Click += new System.EventHandler(this.copyRangeToolStripMenuItem_Click);
 			// 
@@ -521,14 +525,14 @@ namespace unvell.ReoGrid.Editor
 			this.pasteToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PasteHS;
 			this.pasteToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.pasteToolStripButton.Name = "pasteToolStripButton";
-			this.pasteToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.pasteToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.pasteToolStripButton.Text = "Paste";
 			this.pasteToolStripButton.Click += new System.EventHandler(this.pasteRangeToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator14
 			// 
 			this.toolStripSeparator14.Name = "toolStripSeparator14";
-			this.toolStripSeparator14.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator14.Size = new System.Drawing.Size(6, 31);
 			// 
 			// styleBrushToolStripButton
 			// 
@@ -536,14 +540,14 @@ namespace unvell.ReoGrid.Editor
 			this.styleBrushToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.style_brush;
 			this.styleBrushToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.styleBrushToolStripButton.Name = "styleBrushToolStripButton";
-			this.styleBrushToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.styleBrushToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.styleBrushToolStripButton.Text = "Style Brush";
 			this.styleBrushToolStripButton.Click += new System.EventHandler(this.styleBrushToolStripButton_Click);
 			// 
 			// toolStripSeparator10
 			// 
 			this.toolStripSeparator10.Name = "toolStripSeparator10";
-			this.toolStripSeparator10.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator10.Size = new System.Drawing.Size(6, 31);
 			// 
 			// undoToolStripButton
 			// 
@@ -552,7 +556,7 @@ namespace unvell.ReoGrid.Editor
 			this.undoToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.Edit_UndoHS;
 			this.undoToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.undoToolStripButton.Name = "undoToolStripButton";
-			this.undoToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.undoToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.undoToolStripButton.Text = "Undo";
 			this.undoToolStripButton.ToolTipText = "Undo";
 			// 
@@ -563,13 +567,13 @@ namespace unvell.ReoGrid.Editor
 			this.redoToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.Edit_RedoHS;
 			this.redoToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.redoToolStripButton.Name = "redoToolStripButton";
-			this.redoToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.redoToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.redoToolStripButton.Text = "Redo";
 			// 
 			// toolStripSeparator11
 			// 
 			this.toolStripSeparator11.Name = "toolStripSeparator11";
-			this.toolStripSeparator11.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator11.Size = new System.Drawing.Size(6, 31);
 			// 
 			// borderColorPickToolStripItem
 			// 
@@ -579,7 +583,7 @@ namespace unvell.ReoGrid.Editor
 			this.borderColorPickToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.borderColorPickToolStripItem.Mode = unvell.UIControls.ColorPickMode.Outline;
 			this.borderColorPickToolStripItem.Name = "borderColorPickToolStripItem";
-			this.borderColorPickToolStripItem.Size = new System.Drawing.Size(32, 22);
+			this.borderColorPickToolStripItem.Size = new System.Drawing.Size(45, 28);
 			this.borderColorPickToolStripItem.SolidColor = System.Drawing.Color.Black;
 			this.borderColorPickToolStripItem.Text = "Border Color";
 			this.borderColorPickToolStripItem.ToolTipText = "Border Color";
@@ -595,7 +599,7 @@ namespace unvell.ReoGrid.Editor
 			this.outlineSolidToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.outline_solid;
 			this.outlineSolidToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.outlineSolidToolStripButton.Name = "outlineSolidToolStripButton";
-			this.outlineSolidToolStripButton.Size = new System.Drawing.Size(32, 22);
+			this.outlineSolidToolStripButton.Size = new System.Drawing.Size(45, 28);
 			this.outlineSolidToolStripButton.Text = "Outside Borders";
 			this.outlineSolidToolStripButton.ButtonClick += new System.EventHandler(this.boundsSolidToolStripButton_ButtonClick);
 			// 
@@ -603,7 +607,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.solidOutlineToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.outline_solid;
 			this.solidOutlineToolStripMenuItem.Name = "solidOutlineToolStripMenuItem";
-			this.solidOutlineToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.solidOutlineToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.solidOutlineToolStripMenuItem.Text = "Solid";
 			this.solidOutlineToolStripMenuItem.Click += new System.EventHandler(this.solidOutlineToolStripMenuItem_Click);
 			// 
@@ -611,7 +615,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.boldOutlineToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.outline_bold;
 			this.boldOutlineToolStripMenuItem.Name = "boldOutlineToolStripMenuItem";
-			this.boldOutlineToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.boldOutlineToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.boldOutlineToolStripMenuItem.Text = "Bold";
 			this.boldOutlineToolStripMenuItem.Click += new System.EventHandler(this.boldOutlineToolStripMenuItem_Click);
 			// 
@@ -619,7 +623,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.dottedOutlineToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.outline_dot;
 			this.dottedOutlineToolStripMenuItem.Name = "dottedOutlineToolStripMenuItem";
-			this.dottedOutlineToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.dottedOutlineToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.dottedOutlineToolStripMenuItem.Text = "Dotted";
 			this.dottedOutlineToolStripMenuItem.Click += new System.EventHandler(this.dottedOutlineToolStripMenuItem_Click);
 			// 
@@ -627,7 +631,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.dashedOutlineToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.outline_dash;
 			this.dashedOutlineToolStripMenuItem.Name = "dashedOutlineToolStripMenuItem";
-			this.dashedOutlineToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.dashedOutlineToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.dashedOutlineToolStripMenuItem.Text = "Dashed";
 			this.dashedOutlineToolStripMenuItem.Click += new System.EventHandler(this.dashedOutlineToolStripMenuItem_Click);
 			// 
@@ -642,7 +646,7 @@ namespace unvell.ReoGrid.Editor
 			this.insideSolidToolStripSplitButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.inside_solid;
 			this.insideSolidToolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.insideSolidToolStripSplitButton.Name = "insideSolidToolStripSplitButton";
-			this.insideSolidToolStripSplitButton.Size = new System.Drawing.Size(32, 22);
+			this.insideSolidToolStripSplitButton.Size = new System.Drawing.Size(45, 28);
 			this.insideSolidToolStripSplitButton.Text = "Inside Borders";
 			this.insideSolidToolStripSplitButton.ButtonClick += new System.EventHandler(this.insideSolidToolStripSplitButton_ButtonClick);
 			// 
@@ -650,7 +654,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.insideSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.inside_solid;
 			this.insideSolidToolStripMenuItem.Name = "insideSolidToolStripMenuItem";
-			this.insideSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.insideSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.insideSolidToolStripMenuItem.Text = "Solid";
 			this.insideSolidToolStripMenuItem.Click += new System.EventHandler(this.insideSolidToolStripMenuItem_Click);
 			// 
@@ -658,7 +662,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.insideBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.inside_bold;
 			this.insideBoldToolStripMenuItem.Name = "insideBoldToolStripMenuItem";
-			this.insideBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.insideBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.insideBoldToolStripMenuItem.Text = "Bold";
 			this.insideBoldToolStripMenuItem.Click += new System.EventHandler(this.insideBoldToolStripMenuItem_Click);
 			// 
@@ -666,7 +670,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.insideDottedToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.inside_dot;
 			this.insideDottedToolStripMenuItem.Name = "insideDottedToolStripMenuItem";
-			this.insideDottedToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.insideDottedToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.insideDottedToolStripMenuItem.Text = "Dotted";
 			this.insideDottedToolStripMenuItem.Click += new System.EventHandler(this.insideDottedToolStripMenuItem_Click);
 			// 
@@ -674,7 +678,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.insideDashedToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.inside_dash;
 			this.insideDashedToolStripMenuItem.Name = "insideDashedToolStripMenuItem";
-			this.insideDashedToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.insideDashedToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.insideDashedToolStripMenuItem.Text = "Dashed";
 			this.insideDashedToolStripMenuItem.Click += new System.EventHandler(this.insideDashedToolStripMenuItem_Click);
 			// 
@@ -689,7 +693,7 @@ namespace unvell.ReoGrid.Editor
 			this.allSolidToolStripSplitButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.all_solid;
 			this.allSolidToolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.allSolidToolStripSplitButton.Name = "allSolidToolStripSplitButton";
-			this.allSolidToolStripSplitButton.Size = new System.Drawing.Size(32, 22);
+			this.allSolidToolStripSplitButton.Size = new System.Drawing.Size(45, 28);
 			this.allSolidToolStripSplitButton.Text = "All Borders";
 			this.allSolidToolStripSplitButton.ButtonClick += new System.EventHandler(this.allSolidToolStripSplitButton_ButtonClick);
 			// 
@@ -697,7 +701,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.allSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.all_solid;
 			this.allSolidToolStripMenuItem.Name = "allSolidToolStripMenuItem";
-			this.allSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.allSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.allSolidToolStripMenuItem.Text = "Solid";
 			this.allSolidToolStripMenuItem.Click += new System.EventHandler(this.allSolidToolStripMenuItem_Click);
 			// 
@@ -705,7 +709,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.allBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.all_bold;
 			this.allBoldToolStripMenuItem.Name = "allBoldToolStripMenuItem";
-			this.allBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.allBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.allBoldToolStripMenuItem.Text = "Bold";
 			this.allBoldToolStripMenuItem.Click += new System.EventHandler(this.allBoldToolStripMenuItem_Click);
 			// 
@@ -713,7 +717,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.allDottedToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.all_dot;
 			this.allDottedToolStripMenuItem.Name = "allDottedToolStripMenuItem";
-			this.allDottedToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.allDottedToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.allDottedToolStripMenuItem.Text = "Dotted";
 			this.allDottedToolStripMenuItem.Click += new System.EventHandler(this.allDottedToolStripMenuItem_Click);
 			// 
@@ -721,7 +725,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.allDashedToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.all_dash;
 			this.allDashedToolStripMenuItem.Name = "allDashedToolStripMenuItem";
-			this.allDashedToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.allDashedToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.allDashedToolStripMenuItem.Text = "Dashed";
 			this.allDashedToolStripMenuItem.Click += new System.EventHandler(this.allDashedToolStripMenuItem_Click);
 			// 
@@ -731,7 +735,7 @@ namespace unvell.ReoGrid.Editor
 			this.clearBordersToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.none_border;
 			this.clearBordersToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.clearBordersToolStripButton.Name = "clearBordersToolStripButton";
-			this.clearBordersToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.clearBordersToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.clearBordersToolStripButton.Text = "Clear Borders";
 			this.clearBordersToolStripButton.Click += new System.EventHandler(this.clearBordersToolStripButton_Click);
 			// 
@@ -746,7 +750,7 @@ namespace unvell.ReoGrid.Editor
 			this.topBottomSolidToolStripSplitButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_bottom_solid;
 			this.topBottomSolidToolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.topBottomSolidToolStripSplitButton.Name = "topBottomSolidToolStripSplitButton";
-			this.topBottomSolidToolStripSplitButton.Size = new System.Drawing.Size(32, 22);
+			this.topBottomSolidToolStripSplitButton.Size = new System.Drawing.Size(45, 28);
 			this.topBottomSolidToolStripSplitButton.Text = "Top and Bottom Borders";
 			this.topBottomSolidToolStripSplitButton.ButtonClick += new System.EventHandler(this.topBottomSolidToolStripSplitButton_ButtonClick);
 			// 
@@ -754,7 +758,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.topBottomSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_bottom_solid;
 			this.topBottomSolidToolStripMenuItem.Name = "topBottomSolidToolStripMenuItem";
-			this.topBottomSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.topBottomSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.topBottomSolidToolStripMenuItem.Text = "Solid";
 			this.topBottomSolidToolStripMenuItem.Click += new System.EventHandler(this.topBottomSolidToolStripMenuItem_Click);
 			// 
@@ -762,7 +766,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.topBottomBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_bottom_bold;
 			this.topBottomBoldToolStripMenuItem.Name = "topBottomBoldToolStripMenuItem";
-			this.topBottomBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.topBottomBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.topBottomBoldToolStripMenuItem.Text = "Bold";
 			this.topBottomBoldToolStripMenuItem.Click += new System.EventHandler(this.topBottomBoldToolStripMenuItem_Click);
 			// 
@@ -770,7 +774,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.topBottomDotToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_bottom_dot;
 			this.topBottomDotToolStripMenuItem.Name = "topBottomDotToolStripMenuItem";
-			this.topBottomDotToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.topBottomDotToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.topBottomDotToolStripMenuItem.Text = "Dotted";
 			this.topBottomDotToolStripMenuItem.Click += new System.EventHandler(this.topBottomDotToolStripMenuItem_Click);
 			// 
@@ -778,7 +782,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.topBottomDashToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_bottom_dash;
 			this.topBottomDashToolStripMenuItem.Name = "topBottomDashToolStripMenuItem";
-			this.topBottomDashToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.topBottomDashToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.topBottomDashToolStripMenuItem.Text = "Dashed";
 			this.topBottomDashToolStripMenuItem.Click += new System.EventHandler(this.topBottomDashToolStripMenuItem_Click);
 			// 
@@ -793,7 +797,7 @@ namespace unvell.ReoGrid.Editor
 			this.leftRightSolidToolStripSplitButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_right_solid;
 			this.leftRightSolidToolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.leftRightSolidToolStripSplitButton.Name = "leftRightSolidToolStripSplitButton";
-			this.leftRightSolidToolStripSplitButton.Size = new System.Drawing.Size(32, 22);
+			this.leftRightSolidToolStripSplitButton.Size = new System.Drawing.Size(45, 28);
 			this.leftRightSolidToolStripSplitButton.Text = "Left and Right Borders";
 			this.leftRightSolidToolStripSplitButton.ButtonClick += new System.EventHandler(this.leftRightSolidToolStripSplitButton_ButtonClick);
 			// 
@@ -801,7 +805,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.leftRightSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_right_solid;
 			this.leftRightSolidToolStripMenuItem.Name = "leftRightSolidToolStripMenuItem";
-			this.leftRightSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.leftRightSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.leftRightSolidToolStripMenuItem.Text = "Solid";
 			this.leftRightSolidToolStripMenuItem.Click += new System.EventHandler(this.leftRightSolidToolStripMenuItem_Click);
 			// 
@@ -809,7 +813,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.leftRightBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_right_blod;
 			this.leftRightBoldToolStripMenuItem.Name = "leftRightBoldToolStripMenuItem";
-			this.leftRightBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.leftRightBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.leftRightBoldToolStripMenuItem.Text = "Bold";
 			this.leftRightBoldToolStripMenuItem.Click += new System.EventHandler(this.leftRightBoldToolStripMenuItem_Click);
 			// 
@@ -817,7 +821,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.leftRightDotToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_right_dot;
 			this.leftRightDotToolStripMenuItem.Name = "leftRightDotToolStripMenuItem";
-			this.leftRightDotToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.leftRightDotToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.leftRightDotToolStripMenuItem.Text = "Dotted";
 			this.leftRightDotToolStripMenuItem.Click += new System.EventHandler(this.leftRightDotToolStripMenuItem_Click);
 			// 
@@ -825,14 +829,14 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.leftRightDashToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_right_dash;
 			this.leftRightDashToolStripMenuItem.Name = "leftRightDashToolStripMenuItem";
-			this.leftRightDashToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.leftRightDashToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.leftRightDashToolStripMenuItem.Text = "Dashed";
 			this.leftRightDashToolStripMenuItem.Click += new System.EventHandler(this.leftRightDashToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator9
 			// 
 			this.toolStripSeparator9.Name = "toolStripSeparator9";
-			this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator9.Size = new System.Drawing.Size(6, 31);
 			// 
 			// topSolidToolStripButton
 			// 
@@ -845,7 +849,7 @@ namespace unvell.ReoGrid.Editor
 			this.topSolidToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_line_solid;
 			this.topSolidToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.topSolidToolStripButton.Name = "topSolidToolStripButton";
-			this.topSolidToolStripButton.Size = new System.Drawing.Size(32, 22);
+			this.topSolidToolStripButton.Size = new System.Drawing.Size(45, 28);
 			this.topSolidToolStripButton.Text = "Top Border";
 			this.topSolidToolStripButton.ButtonClick += new System.EventHandler(this.topSolidToolStripButton_ButtonClick);
 			// 
@@ -853,7 +857,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.topSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_line_solid;
 			this.topSolidToolStripMenuItem.Name = "topSolidToolStripMenuItem";
-			this.topSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.topSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.topSolidToolStripMenuItem.Text = "Solid";
 			this.topSolidToolStripMenuItem.Click += new System.EventHandler(this.topSolidToolStripMenuItem_Click);
 			// 
@@ -861,7 +865,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.topBlodToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_line_bold;
 			this.topBlodToolStripMenuItem.Name = "topBlodToolStripMenuItem";
-			this.topBlodToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.topBlodToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.topBlodToolStripMenuItem.Text = "Bold";
 			this.topBlodToolStripMenuItem.Click += new System.EventHandler(this.topBlodToolStripMenuItem_Click);
 			// 
@@ -869,7 +873,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.topDotToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_line_dot;
 			this.topDotToolStripMenuItem.Name = "topDotToolStripMenuItem";
-			this.topDotToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.topDotToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.topDotToolStripMenuItem.Text = "Dotted";
 			this.topDotToolStripMenuItem.Click += new System.EventHandler(this.topDotToolStripMenuItem_Click);
 			// 
@@ -877,7 +881,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.topDashToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.top_line_dash;
 			this.topDashToolStripMenuItem.Name = "topDashToolStripMenuItem";
-			this.topDashToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.topDashToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.topDashToolStripMenuItem.Text = "Dashed";
 			this.topDashToolStripMenuItem.Click += new System.EventHandler(this.topDashToolStripMenuItem_Click);
 			// 
@@ -892,7 +896,7 @@ namespace unvell.ReoGrid.Editor
 			this.bottomToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.bottom_line_solid;
 			this.bottomToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.bottomToolStripButton.Name = "bottomToolStripButton";
-			this.bottomToolStripButton.Size = new System.Drawing.Size(32, 22);
+			this.bottomToolStripButton.Size = new System.Drawing.Size(45, 28);
 			this.bottomToolStripButton.Text = "Bottom Border";
 			this.bottomToolStripButton.ButtonClick += new System.EventHandler(this.bottomToolStripButton_ButtonClick);
 			// 
@@ -900,7 +904,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.bottomSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.bottom_line_solid;
 			this.bottomSolidToolStripMenuItem.Name = "bottomSolidToolStripMenuItem";
-			this.bottomSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.bottomSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.bottomSolidToolStripMenuItem.Text = "Solid";
 			this.bottomSolidToolStripMenuItem.Click += new System.EventHandler(this.bottomSolidToolStripMenuItem_Click);
 			// 
@@ -908,7 +912,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.bottomBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.bottom_line_bold;
 			this.bottomBoldToolStripMenuItem.Name = "bottomBoldToolStripMenuItem";
-			this.bottomBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.bottomBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.bottomBoldToolStripMenuItem.Text = "Bold";
 			this.bottomBoldToolStripMenuItem.Click += new System.EventHandler(this.bottomBoldToolStripMenuItem_Click);
 			// 
@@ -916,7 +920,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.bottomDotToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.bottom_line_dot;
 			this.bottomDotToolStripMenuItem.Name = "bottomDotToolStripMenuItem";
-			this.bottomDotToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.bottomDotToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.bottomDotToolStripMenuItem.Text = "Dotted";
 			this.bottomDotToolStripMenuItem.Click += new System.EventHandler(this.bottomDotToolStripMenuItem_Click);
 			// 
@@ -924,7 +928,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.bottomDashToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.bottom_line_dash;
 			this.bottomDashToolStripMenuItem.Name = "bottomDashToolStripMenuItem";
-			this.bottomDashToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.bottomDashToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.bottomDashToolStripMenuItem.Text = "Dashed";
 			this.bottomDashToolStripMenuItem.Click += new System.EventHandler(this.bottomDashToolStripMenuItem_Click);
 			// 
@@ -939,7 +943,7 @@ namespace unvell.ReoGrid.Editor
 			this.leftSolidToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_line_solid;
 			this.leftSolidToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.leftSolidToolStripButton.Name = "leftSolidToolStripButton";
-			this.leftSolidToolStripButton.Size = new System.Drawing.Size(32, 22);
+			this.leftSolidToolStripButton.Size = new System.Drawing.Size(45, 28);
 			this.leftSolidToolStripButton.Text = "Left Border";
 			this.leftSolidToolStripButton.ButtonClick += new System.EventHandler(this.leftSolidToolStripButton_ButtonClick);
 			// 
@@ -947,7 +951,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.leftSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_line_solid;
 			this.leftSolidToolStripMenuItem.Name = "leftSolidToolStripMenuItem";
-			this.leftSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.leftSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.leftSolidToolStripMenuItem.Text = "Solid";
 			this.leftSolidToolStripMenuItem.Click += new System.EventHandler(this.leftSolidToolStripMenuItem_Click);
 			// 
@@ -955,7 +959,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.leftBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_line_bold;
 			this.leftBoldToolStripMenuItem.Name = "leftBoldToolStripMenuItem";
-			this.leftBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.leftBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.leftBoldToolStripMenuItem.Text = "Bold";
 			this.leftBoldToolStripMenuItem.Click += new System.EventHandler(this.leftBoldToolStripMenuItem_Click);
 			// 
@@ -963,7 +967,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.leftDotToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_line_dot;
 			this.leftDotToolStripMenuItem.Name = "leftDotToolStripMenuItem";
-			this.leftDotToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.leftDotToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.leftDotToolStripMenuItem.Text = "Dotted";
 			this.leftDotToolStripMenuItem.Click += new System.EventHandler(this.leftDotToolStripMenuItem_Click);
 			// 
@@ -971,7 +975,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.leftDashToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.left_line_dash;
 			this.leftDashToolStripMenuItem.Name = "leftDashToolStripMenuItem";
-			this.leftDashToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.leftDashToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.leftDashToolStripMenuItem.Text = "Dashed";
 			this.leftDashToolStripMenuItem.Click += new System.EventHandler(this.leftDashToolStripMenuItem_Click);
 			// 
@@ -986,7 +990,7 @@ namespace unvell.ReoGrid.Editor
 			this.rightSolidToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.right_line_solid;
 			this.rightSolidToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.rightSolidToolStripButton.Name = "rightSolidToolStripButton";
-			this.rightSolidToolStripButton.Size = new System.Drawing.Size(32, 22);
+			this.rightSolidToolStripButton.Size = new System.Drawing.Size(45, 28);
 			this.rightSolidToolStripButton.Text = "Right Border";
 			this.rightSolidToolStripButton.ButtonClick += new System.EventHandler(this.rightSolidToolStripButton_ButtonClick);
 			// 
@@ -994,7 +998,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.rightSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.right_line_solid;
 			this.rightSolidToolStripMenuItem.Name = "rightSolidToolStripMenuItem";
-			this.rightSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.rightSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.rightSolidToolStripMenuItem.Text = "Solid";
 			this.rightSolidToolStripMenuItem.Click += new System.EventHandler(this.rightSolidToolStripMenuItem_Click);
 			// 
@@ -1002,7 +1006,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.rightBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.right_line_bold;
 			this.rightBoldToolStripMenuItem.Name = "rightBoldToolStripMenuItem";
-			this.rightBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.rightBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.rightBoldToolStripMenuItem.Text = "Bold";
 			this.rightBoldToolStripMenuItem.Click += new System.EventHandler(this.rightBoldToolStripMenuItem_Click);
 			// 
@@ -1010,7 +1014,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.rightDotToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.right_line_dot;
 			this.rightDotToolStripMenuItem.Name = "rightDotToolStripMenuItem";
-			this.rightDotToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.rightDotToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.rightDotToolStripMenuItem.Text = "Dotted";
 			this.rightDotToolStripMenuItem.Click += new System.EventHandler(this.rightDotToolStripMenuItem_Click);
 			// 
@@ -1018,14 +1022,14 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.rightDashToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.right_line_dash;
 			this.rightDashToolStripMenuItem.Name = "rightDashToolStripMenuItem";
-			this.rightDashToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.rightDashToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.rightDashToolStripMenuItem.Text = "Dashed";
 			this.rightDashToolStripMenuItem.Click += new System.EventHandler(this.rightDashToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator8
 			// 
 			this.toolStripSeparator8.Name = "toolStripSeparator8";
-			this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator8.Size = new System.Drawing.Size(6, 31);
 			// 
 			// slashRightSolidToolStripButton
 			// 
@@ -1038,7 +1042,7 @@ namespace unvell.ReoGrid.Editor
 			this.slashRightSolidToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_right_solid;
 			this.slashRightSolidToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.slashRightSolidToolStripButton.Name = "slashRightSolidToolStripButton";
-			this.slashRightSolidToolStripButton.Size = new System.Drawing.Size(32, 22);
+			this.slashRightSolidToolStripButton.Size = new System.Drawing.Size(45, 28);
 			this.slashRightSolidToolStripButton.Text = "Forward Diagonal";
 			this.slashRightSolidToolStripButton.ButtonClick += new System.EventHandler(this.slashRightSolidToolStripButton_ButtonClick);
 			// 
@@ -1046,7 +1050,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.slashRightSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_right_solid;
 			this.slashRightSolidToolStripMenuItem.Name = "slashRightSolidToolStripMenuItem";
-			this.slashRightSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.slashRightSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.slashRightSolidToolStripMenuItem.Text = "Solid";
 			this.slashRightSolidToolStripMenuItem.Click += new System.EventHandler(this.slashRightSolidToolStripMenuItem_Click);
 			// 
@@ -1054,7 +1058,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.slashRightBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_right_blod;
 			this.slashRightBoldToolStripMenuItem.Name = "slashRightBoldToolStripMenuItem";
-			this.slashRightBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.slashRightBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.slashRightBoldToolStripMenuItem.Text = "Bold";
 			this.slashRightBoldToolStripMenuItem.Click += new System.EventHandler(this.slashRightBoldToolStripMenuItem_Click);
 			// 
@@ -1062,7 +1066,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.slashRightDotToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_right_dot;
 			this.slashRightDotToolStripMenuItem.Name = "slashRightDotToolStripMenuItem";
-			this.slashRightDotToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.slashRightDotToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.slashRightDotToolStripMenuItem.Text = "Dotted";
 			this.slashRightDotToolStripMenuItem.Click += new System.EventHandler(this.slashRightDotToolStripMenuItem_Click);
 			// 
@@ -1070,7 +1074,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.slashRightDashToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_right_dash;
 			this.slashRightDashToolStripMenuItem.Name = "slashRightDashToolStripMenuItem";
-			this.slashRightDashToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.slashRightDashToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.slashRightDashToolStripMenuItem.Text = "Dashed";
 			this.slashRightDashToolStripMenuItem.Click += new System.EventHandler(this.slashRightDashToolStripMenuItem_Click);
 			// 
@@ -1085,7 +1089,7 @@ namespace unvell.ReoGrid.Editor
 			this.slashLeftSolidToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_left_solid;
 			this.slashLeftSolidToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.slashLeftSolidToolStripButton.Name = "slashLeftSolidToolStripButton";
-			this.slashLeftSolidToolStripButton.Size = new System.Drawing.Size(32, 22);
+			this.slashLeftSolidToolStripButton.Size = new System.Drawing.Size(45, 28);
 			this.slashLeftSolidToolStripButton.Text = "Backward Diagonal";
 			this.slashLeftSolidToolStripButton.ButtonClick += new System.EventHandler(this.slashLeftSolidToolStripButton_ButtonClick);
 			// 
@@ -1093,7 +1097,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.slashLeftSolidToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_left_solid;
 			this.slashLeftSolidToolStripMenuItem.Name = "slashLeftSolidToolStripMenuItem";
-			this.slashLeftSolidToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.slashLeftSolidToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.slashLeftSolidToolStripMenuItem.Text = "Solid";
 			this.slashLeftSolidToolStripMenuItem.Click += new System.EventHandler(this.slashLeftSolidToolStripMenuItem_Click);
 			// 
@@ -1101,7 +1105,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.slashLeftBoldToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_left_blod;
 			this.slashLeftBoldToolStripMenuItem.Name = "slashLeftBoldToolStripMenuItem";
-			this.slashLeftBoldToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.slashLeftBoldToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.slashLeftBoldToolStripMenuItem.Text = "Bold";
 			this.slashLeftBoldToolStripMenuItem.Click += new System.EventHandler(this.slashLeftBoldToolStripMenuItem_Click);
 			// 
@@ -1109,7 +1113,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.slashLeftDotToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_left_dot;
 			this.slashLeftDotToolStripMenuItem.Name = "slashLeftDotToolStripMenuItem";
-			this.slashLeftDotToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.slashLeftDotToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.slashLeftDotToolStripMenuItem.Text = "Dotted";
 			this.slashLeftDotToolStripMenuItem.Click += new System.EventHandler(this.slashLeftDotToolStripMenuItem_Click);
 			// 
@@ -1117,7 +1121,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.slashLeftDashToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.slash_left_solid;
 			this.slashLeftDashToolStripMenuItem.Name = "slashLeftDashToolStripMenuItem";
-			this.slashLeftDashToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+			this.slashLeftDashToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.slashLeftDashToolStripMenuItem.Text = "Dashed";
 			this.slashLeftDashToolStripMenuItem.Click += new System.EventHandler(this.slashLeftDashToolStripMenuItem_Click);
 			// 
@@ -1127,7 +1131,7 @@ namespace unvell.ReoGrid.Editor
 			this.cellMergeToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.cell_merge;
 			this.cellMergeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cellMergeToolStripButton.Name = "cellMergeToolStripButton";
-			this.cellMergeToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.cellMergeToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.cellMergeToolStripButton.Text = "Merge";
 			// 
 			// unmergeRangeToolStripButton
@@ -1136,13 +1140,13 @@ namespace unvell.ReoGrid.Editor
 			this.unmergeRangeToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.cell_unmerge;
 			this.unmergeRangeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.unmergeRangeToolStripButton.Name = "unmergeRangeToolStripButton";
-			this.unmergeRangeToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.unmergeRangeToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.unmergeRangeToolStripButton.Text = "Unmerge";
 			// 
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator5.Size = new System.Drawing.Size(6, 31);
 			// 
 			// backColorPickerToolStripButton
 			// 
@@ -1151,7 +1155,7 @@ namespace unvell.ReoGrid.Editor
 			this.backColorPickerToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.placeholder;
 			this.backColorPickerToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.backColorPickerToolStripButton.Name = "backColorPickerToolStripButton";
-			this.backColorPickerToolStripButton.Size = new System.Drawing.Size(32, 22);
+			this.backColorPickerToolStripButton.Size = new System.Drawing.Size(45, 28);
 			this.backColorPickerToolStripButton.SolidColor = System.Drawing.Color.Empty;
 			this.backColorPickerToolStripButton.Text = "Background Colour";
 			this.backColorPickerToolStripButton.ToolTipText = "Background Colour";
@@ -1160,7 +1164,7 @@ namespace unvell.ReoGrid.Editor
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator6.Size = new System.Drawing.Size(6, 31);
 			// 
 			// showDebugFormToolStripButton
 			// 
@@ -1168,11 +1172,12 @@ namespace unvell.ReoGrid.Editor
 			this.showDebugFormToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.RadialChartHS;
 			this.showDebugFormToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.showDebugFormToolStripButton.Name = "showDebugFormToolStripButton";
-			this.showDebugFormToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.showDebugFormToolStripButton.Size = new System.Drawing.Size(28, 28);
 			this.showDebugFormToolStripButton.Text = "Debug Info";
 			// 
 			// columnContextMenuStrip
 			// 
+			this.columnContextMenuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.columnContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.colCutToolStripMenuItem,
             this.colCopyToolStripMenuItem,
@@ -1199,156 +1204,157 @@ namespace unvell.ReoGrid.Editor
             this.columnPropertiesToolStripMenuItem,
             this.colFormatCellsToolStripMenuItem});
 			this.columnContextMenuStrip.Name = "columnContextMenuStrip";
-			this.columnContextMenuStrip.Size = new System.Drawing.Size(193, 436);
+			this.columnContextMenuStrip.Size = new System.Drawing.Size(272, 580);
 			// 
 			// colCutToolStripMenuItem
 			// 
 			this.colCutToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CutHS;
 			this.colCutToolStripMenuItem.Name = "colCutToolStripMenuItem";
-			this.colCutToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.colCutToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.colCutToolStripMenuItem.Text = "Cut";
 			// 
 			// colCopyToolStripMenuItem
 			// 
 			this.colCopyToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CopyHS;
 			this.colCopyToolStripMenuItem.Name = "colCopyToolStripMenuItem";
-			this.colCopyToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.colCopyToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.colCopyToolStripMenuItem.Text = "Copy";
 			// 
 			// colPasteToolStripMenuItem
 			// 
 			this.colPasteToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PasteHS;
 			this.colPasteToolStripMenuItem.Name = "colPasteToolStripMenuItem";
-			this.colPasteToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.colPasteToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.colPasteToolStripMenuItem.Text = "Paste";
 			// 
 			// toolStripMenuItem42
 			// 
 			this.toolStripMenuItem42.Name = "toolStripMenuItem42";
-			this.toolStripMenuItem42.Size = new System.Drawing.Size(189, 6);
+			this.toolStripMenuItem42.Size = new System.Drawing.Size(268, 6);
 			// 
 			// insertColToolStripMenuItem
 			// 
 			this.insertColToolStripMenuItem.Name = "insertColToolStripMenuItem";
-			this.insertColToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.insertColToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.insertColToolStripMenuItem.Text = "Insert &Columns";
 			this.insertColToolStripMenuItem.Click += new System.EventHandler(this.insertColToolStripMenuItem_Click);
 			// 
 			// deleteColumnToolStripMenuItem
 			// 
 			this.deleteColumnToolStripMenuItem.Name = "deleteColumnToolStripMenuItem";
-			this.deleteColumnToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.deleteColumnToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.deleteColumnToolStripMenuItem.Text = "Delete Columns";
 			this.deleteColumnToolStripMenuItem.Click += new System.EventHandler(this.deleteColumnToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(189, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(268, 6);
 			// 
 			// resetToDefaultWidthToolStripMenuItem
 			// 
 			this.resetToDefaultWidthToolStripMenuItem.Name = "resetToDefaultWidthToolStripMenuItem";
-			this.resetToDefaultWidthToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.resetToDefaultWidthToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.resetToDefaultWidthToolStripMenuItem.Text = "Reset to Default Width";
 			this.resetToDefaultWidthToolStripMenuItem.Click += new System.EventHandler(this.resetToDefaultWidthToolStripMenuItem_Click);
 			// 
 			// columnWidthToolStripMenuItem
 			// 
 			this.columnWidthToolStripMenuItem.Name = "columnWidthToolStripMenuItem";
-			this.columnWidthToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.columnWidthToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.columnWidthToolStripMenuItem.Text = "Column &Width...";
 			// 
 			// hideColumnsToolStripMenuItem
 			// 
 			this.hideColumnsToolStripMenuItem.Name = "hideColumnsToolStripMenuItem";
-			this.hideColumnsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.hideColumnsToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.hideColumnsToolStripMenuItem.Text = "Hide";
 			// 
 			// unhideColumnsToolStripMenuItem
 			// 
 			this.unhideColumnsToolStripMenuItem.Name = "unhideColumnsToolStripMenuItem";
-			this.unhideColumnsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.unhideColumnsToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.unhideColumnsToolStripMenuItem.Text = "Unhide";
 			// 
 			// toolStripMenuItem21
 			// 
 			this.toolStripMenuItem21.Name = "toolStripMenuItem21";
-			this.toolStripMenuItem21.Size = new System.Drawing.Size(189, 6);
+			this.toolStripMenuItem21.Size = new System.Drawing.Size(268, 6);
 			// 
 			// columnFilterToolStripMenuItem
 			// 
 			this.columnFilterToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.Filter2HS;
 			this.columnFilterToolStripMenuItem.Name = "columnFilterToolStripMenuItem";
-			this.columnFilterToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.columnFilterToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.columnFilterToolStripMenuItem.Text = "Filter";
 			// 
 			// clearColumnFilterToolStripMenuItem
 			// 
 			this.clearColumnFilterToolStripMenuItem.Name = "clearColumnFilterToolStripMenuItem";
-			this.clearColumnFilterToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.clearColumnFilterToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.clearColumnFilterToolStripMenuItem.Text = "Clear Filter";
 			// 
 			// toolStripMenuItem35
 			// 
 			this.toolStripMenuItem35.Name = "toolStripMenuItem35";
-			this.toolStripMenuItem35.Size = new System.Drawing.Size(189, 6);
+			this.toolStripMenuItem35.Size = new System.Drawing.Size(268, 6);
 			// 
 			// groupColumnsToolStripMenuItem1
 			// 
 			this.groupColumnsToolStripMenuItem1.Name = "groupColumnsToolStripMenuItem1";
-			this.groupColumnsToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
+			this.groupColumnsToolStripMenuItem1.Size = new System.Drawing.Size(271, 30);
 			this.groupColumnsToolStripMenuItem1.Text = "Group";
 			// 
 			// ungroupColumnsToolStripMenuItem1
 			// 
 			this.ungroupColumnsToolStripMenuItem1.Name = "ungroupColumnsToolStripMenuItem1";
-			this.ungroupColumnsToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
+			this.ungroupColumnsToolStripMenuItem1.Size = new System.Drawing.Size(271, 30);
 			this.ungroupColumnsToolStripMenuItem1.Text = "Ungroup";
 			// 
 			// ungroupAllColumnsToolStripMenuItem
 			// 
 			this.ungroupAllColumnsToolStripMenuItem.Name = "ungroupAllColumnsToolStripMenuItem";
-			this.ungroupAllColumnsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.ungroupAllColumnsToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.ungroupAllColumnsToolStripMenuItem.Text = "Ungroup All";
 			// 
 			// toolStripMenuItem26
 			// 
 			this.toolStripMenuItem26.Name = "toolStripMenuItem26";
-			this.toolStripMenuItem26.Size = new System.Drawing.Size(189, 6);
+			this.toolStripMenuItem26.Size = new System.Drawing.Size(268, 6);
 			// 
 			// insertColPageBreakToolStripMenuItem
 			// 
 			this.insertColPageBreakToolStripMenuItem.Name = "insertColPageBreakToolStripMenuItem";
-			this.insertColPageBreakToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.insertColPageBreakToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.insertColPageBreakToolStripMenuItem.Text = "Insert Page Break";
 			// 
 			// removeColPageBreakToolStripMenuItem
 			// 
 			this.removeColPageBreakToolStripMenuItem.Name = "removeColPageBreakToolStripMenuItem";
-			this.removeColPageBreakToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.removeColPageBreakToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.removeColPageBreakToolStripMenuItem.Text = "Remove Page Break";
 			// 
 			// toolStripMenuItem32
 			// 
 			this.toolStripMenuItem32.Name = "toolStripMenuItem32";
-			this.toolStripMenuItem32.Size = new System.Drawing.Size(189, 6);
+			this.toolStripMenuItem32.Size = new System.Drawing.Size(268, 6);
 			// 
 			// columnPropertiesToolStripMenuItem
 			// 
 			this.columnPropertiesToolStripMenuItem.Name = "columnPropertiesToolStripMenuItem";
-			this.columnPropertiesToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.columnPropertiesToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.columnPropertiesToolStripMenuItem.Text = "Properties...";
 			// 
 			// colFormatCellsToolStripMenuItem
 			// 
 			this.colFormatCellsToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PropertiesHS;
 			this.colFormatCellsToolStripMenuItem.Name = "colFormatCellsToolStripMenuItem";
-			this.colFormatCellsToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+			this.colFormatCellsToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.colFormatCellsToolStripMenuItem.Text = "Format Cells...";
 			// 
 			// rowContextMenuStrip
 			// 
+			this.rowContextMenuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.rowContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rowCutToolStripMenuItem,
             this.rowCopyToolStripMenuItem,
@@ -1372,139 +1378,142 @@ namespace unvell.ReoGrid.Editor
             this.rowPropertiesToolStripMenuItem,
             this.rowFormatCellsToolStripMenuItem});
 			this.rowContextMenuStrip.Name = "columnContextMenuStrip";
-			this.rowContextMenuStrip.Size = new System.Drawing.Size(197, 386);
+			this.rowContextMenuStrip.Size = new System.Drawing.Size(277, 514);
 			// 
 			// rowCutToolStripMenuItem
 			// 
 			this.rowCutToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CutHS;
 			this.rowCutToolStripMenuItem.Name = "rowCutToolStripMenuItem";
-			this.rowCutToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.rowCutToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.rowCutToolStripMenuItem.Text = "Cut";
 			// 
 			// rowCopyToolStripMenuItem
 			// 
 			this.rowCopyToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CopyHS;
 			this.rowCopyToolStripMenuItem.Name = "rowCopyToolStripMenuItem";
-			this.rowCopyToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.rowCopyToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.rowCopyToolStripMenuItem.Text = "Copy";
 			// 
 			// rowPasteToolStripMenuItem
 			// 
 			this.rowPasteToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PasteHS;
 			this.rowPasteToolStripMenuItem.Name = "rowPasteToolStripMenuItem";
-			this.rowPasteToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.rowPasteToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.rowPasteToolStripMenuItem.Text = "Paste";
 			// 
 			// toolStripMenuItem41
 			// 
 			this.toolStripMenuItem41.Name = "toolStripMenuItem41";
-			this.toolStripMenuItem41.Size = new System.Drawing.Size(193, 6);
+			this.toolStripMenuItem41.Size = new System.Drawing.Size(273, 6);
 			// 
 			// insertRowToolStripMenuItem
 			// 
 			this.insertRowToolStripMenuItem.Name = "insertRowToolStripMenuItem";
-			this.insertRowToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.insertRowToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.insertRowToolStripMenuItem.Text = "Insert &Rows";
 			this.insertRowToolStripMenuItem.Click += new System.EventHandler(this.insertRowToolStripMenuItem_Click);
 			// 
 			// deleteRowsToolStripMenuItem
 			// 
 			this.deleteRowsToolStripMenuItem.Name = "deleteRowsToolStripMenuItem";
-			this.deleteRowsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.deleteRowsToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.deleteRowsToolStripMenuItem.Text = "&Delete Rows";
 			this.deleteRowsToolStripMenuItem.Click += new System.EventHandler(this.deleteRowsToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(193, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(273, 6);
 			// 
 			// resetToDefaultHeightToolStripMenuItem
 			// 
 			this.resetToDefaultHeightToolStripMenuItem.Name = "resetToDefaultHeightToolStripMenuItem";
-			this.resetToDefaultHeightToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.resetToDefaultHeightToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.resetToDefaultHeightToolStripMenuItem.Text = "Reset to Default Height";
 			this.resetToDefaultHeightToolStripMenuItem.Click += new System.EventHandler(this.resetToDefaultHeightToolStripMenuItem_Click);
 			// 
 			// rowHeightToolStripMenuItem
 			// 
 			this.rowHeightToolStripMenuItem.Name = "rowHeightToolStripMenuItem";
-			this.rowHeightToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.rowHeightToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.rowHeightToolStripMenuItem.Text = "Row &Height...";
 			// 
 			// hideRowsToolStripMenuItem
 			// 
 			this.hideRowsToolStripMenuItem.Name = "hideRowsToolStripMenuItem";
-			this.hideRowsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.hideRowsToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.hideRowsToolStripMenuItem.Text = "&Hide";
 			// 
 			// unhideRowsToolStripMenuItem
 			// 
 			this.unhideRowsToolStripMenuItem.Name = "unhideRowsToolStripMenuItem";
-			this.unhideRowsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.unhideRowsToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.unhideRowsToolStripMenuItem.Text = "&Unhide";
 			// 
 			// toolStripMenuItem20
 			// 
 			this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-			this.toolStripMenuItem20.Size = new System.Drawing.Size(193, 6);
+			this.toolStripMenuItem20.Size = new System.Drawing.Size(273, 6);
 			// 
 			// groupRowsToolStripMenuItem1
 			// 
 			this.groupRowsToolStripMenuItem1.Name = "groupRowsToolStripMenuItem1";
-			this.groupRowsToolStripMenuItem1.Size = new System.Drawing.Size(196, 22);
+			this.groupRowsToolStripMenuItem1.Size = new System.Drawing.Size(276, 30);
 			this.groupRowsToolStripMenuItem1.Text = "&Group";
 			// 
 			// ungroupRowsToolStripMenuItem1
 			// 
 			this.ungroupRowsToolStripMenuItem1.Name = "ungroupRowsToolStripMenuItem1";
-			this.ungroupRowsToolStripMenuItem1.Size = new System.Drawing.Size(196, 22);
+			this.ungroupRowsToolStripMenuItem1.Size = new System.Drawing.Size(276, 30);
 			this.ungroupRowsToolStripMenuItem1.Text = "Ungroup";
 			// 
 			// ungroupAllRowsToolStripMenuItem
 			// 
 			this.ungroupAllRowsToolStripMenuItem.Name = "ungroupAllRowsToolStripMenuItem";
-			this.ungroupAllRowsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.ungroupAllRowsToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.ungroupAllRowsToolStripMenuItem.Text = "Ungroup All";
 			// 
 			// toolStripMenuItem27
 			// 
 			this.toolStripMenuItem27.Name = "toolStripMenuItem27";
-			this.toolStripMenuItem27.Size = new System.Drawing.Size(193, 6);
+			this.toolStripMenuItem27.Size = new System.Drawing.Size(273, 6);
 			// 
 			// insertRowPageBreakToolStripMenuItem
 			// 
 			this.insertRowPageBreakToolStripMenuItem.Name = "insertRowPageBreakToolStripMenuItem";
-			this.insertRowPageBreakToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.insertRowPageBreakToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.insertRowPageBreakToolStripMenuItem.Text = "Insert Page Break";
 			// 
 			// removeRowPageBreakToolStripMenuItem
 			// 
 			this.removeRowPageBreakToolStripMenuItem.Name = "removeRowPageBreakToolStripMenuItem";
-			this.removeRowPageBreakToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.removeRowPageBreakToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.removeRowPageBreakToolStripMenuItem.Text = "Remove Page Break";
 			// 
 			// toolStripMenuItem33
 			// 
 			this.toolStripMenuItem33.Name = "toolStripMenuItem33";
-			this.toolStripMenuItem33.Size = new System.Drawing.Size(193, 6);
+			this.toolStripMenuItem33.Size = new System.Drawing.Size(273, 6);
 			// 
 			// rowPropertiesToolStripMenuItem
 			// 
 			this.rowPropertiesToolStripMenuItem.Name = "rowPropertiesToolStripMenuItem";
-			this.rowPropertiesToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.rowPropertiesToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.rowPropertiesToolStripMenuItem.Text = "Properties...";
 			// 
 			// rowFormatCellsToolStripMenuItem
 			// 
 			this.rowFormatCellsToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PropertiesHS;
 			this.rowFormatCellsToolStripMenuItem.Name = "rowFormatCellsToolStripMenuItem";
-			this.rowFormatCellsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+			this.rowFormatCellsToolStripMenuItem.Size = new System.Drawing.Size(276, 30);
 			this.rowFormatCellsToolStripMenuItem.Text = "Format Cells...";
 			// 
 			// cellContextMenuStrip
 			// 
+			this.cellContextMenuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.cellContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editCellToolStripMenuItem,
+            this.toolStripSeparator15,
             this.cutRangeToolStripMenuItem,
             this.copyRangeToolStripMenuItem,
             this.pasteRangeToolStripMenuItem,
@@ -1516,13 +1525,13 @@ namespace unvell.ReoGrid.Editor
             this.toolStripMenuItem6,
             this.formatCellToolStripMenuItem});
 			this.cellContextMenuStrip.Name = "cellContextMenuStrip";
-			this.cellContextMenuStrip.Size = new System.Drawing.Size(202, 176);
+			this.cellContextMenuStrip.Size = new System.Drawing.Size(281, 301);
 			// 
 			// cutRangeToolStripMenuItem
 			// 
 			this.cutRangeToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CutHS;
 			this.cutRangeToolStripMenuItem.Name = "cutRangeToolStripMenuItem";
-			this.cutRangeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+			this.cutRangeToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.cutRangeToolStripMenuItem.Text = "Cut";
 			this.cutRangeToolStripMenuItem.Click += new System.EventHandler(this.cutRangeToolStripMenuItem_Click);
 			// 
@@ -1530,7 +1539,7 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.copyRangeToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CopyHS;
 			this.copyRangeToolStripMenuItem.Name = "copyRangeToolStripMenuItem";
-			this.copyRangeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+			this.copyRangeToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.copyRangeToolStripMenuItem.Text = "Copy";
 			this.copyRangeToolStripMenuItem.Click += new System.EventHandler(this.copyRangeToolStripMenuItem_Click);
 			// 
@@ -1538,56 +1547,57 @@ namespace unvell.ReoGrid.Editor
 			// 
 			this.pasteRangeToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PasteHS;
 			this.pasteRangeToolStripMenuItem.Name = "pasteRangeToolStripMenuItem";
-			this.pasteRangeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+			this.pasteRangeToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.pasteRangeToolStripMenuItem.Text = "Paste";
 			this.pasteRangeToolStripMenuItem.Click += new System.EventHandler(this.pasteRangeToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(198, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(277, 6);
 			// 
 			// mergeRangeToolStripMenuItem
 			// 
 			this.mergeRangeToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.cell_merge;
 			this.mergeRangeToolStripMenuItem.Name = "mergeRangeToolStripMenuItem";
-			this.mergeRangeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+			this.mergeRangeToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.mergeRangeToolStripMenuItem.Text = "Merge";
 			// 
 			// unmergeRangeToolStripMenuItem
 			// 
 			this.unmergeRangeToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.cell_unmerge;
 			this.unmergeRangeToolStripMenuItem.Name = "unmergeRangeToolStripMenuItem";
-			this.unmergeRangeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+			this.unmergeRangeToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.unmergeRangeToolStripMenuItem.Text = "Unmerge";
 			// 
 			// toolStripMenuItem11
 			// 
 			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-			this.toolStripMenuItem11.Size = new System.Drawing.Size(198, 6);
+			this.toolStripMenuItem11.Size = new System.Drawing.Size(277, 6);
 			// 
 			// changeCellsTypeToolStripMenuItem2
 			// 
 			this.changeCellsTypeToolStripMenuItem2.Name = "changeCellsTypeToolStripMenuItem2";
-			this.changeCellsTypeToolStripMenuItem2.Size = new System.Drawing.Size(201, 22);
+			this.changeCellsTypeToolStripMenuItem2.Size = new System.Drawing.Size(280, 30);
 			this.changeCellsTypeToolStripMenuItem2.Text = "Change Cell Type";
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(198, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(277, 6);
 			// 
 			// formatCellToolStripMenuItem
 			// 
 			this.formatCellToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PropertiesHS;
 			this.formatCellToolStripMenuItem.Name = "formatCellToolStripMenuItem";
 			this.formatCellToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Return)));
-			this.formatCellToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+			this.formatCellToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.formatCellToolStripMenuItem.Text = "&Format Cell...";
 			this.formatCellToolStripMenuItem.Click += new System.EventHandler(this.formatCellToolStripMenuItem_Click);
 			// 
 			// fontToolStrip
 			// 
+			this.fontToolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.fontToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fontToolStripComboBox,
             this.fontSizeToolStripComboBox,
@@ -1611,10 +1621,11 @@ namespace unvell.ReoGrid.Editor
             this.textAlignBottomToolStripButton,
             this.toolStripSeparator12,
             this.zoomToolStripDropDownButton});
-			this.fontToolStrip.Location = new System.Drawing.Point(0, 49);
+			this.fontToolStrip.Location = new System.Drawing.Point(0, 66);
 			this.fontToolStrip.Name = "fontToolStrip";
+			this.fontToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this.fontToolStrip.ShowItemToolTips = false;
-			this.fontToolStrip.Size = new System.Drawing.Size(1002, 25);
+			this.fontToolStrip.Size = new System.Drawing.Size(1503, 33);
 			this.fontToolStrip.TabIndex = 3;
 			this.fontToolStrip.Text = "toolStrip2";
 			// 
@@ -1626,7 +1637,7 @@ namespace unvell.ReoGrid.Editor
 			this.fontToolStripComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.fontToolStripComboBox.IntegralHeight = false;
 			this.fontToolStripComboBox.Name = "fontToolStripComboBox";
-			this.fontToolStripComboBox.Size = new System.Drawing.Size(160, 25);
+			this.fontToolStripComboBox.Size = new System.Drawing.Size(238, 33);
 			this.fontToolStripComboBox.Text = "Segoe UI";
 			this.fontToolStripComboBox.ToolTipText = "Change font";
 			this.fontToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.fontToolStripComboBox_SelectedIndexChanged);
@@ -1636,7 +1647,7 @@ namespace unvell.ReoGrid.Editor
 			this.fontSizeToolStripComboBox.AutoSize = false;
 			this.fontSizeToolStripComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.fontSizeToolStripComboBox.Name = "fontSizeToolStripComboBox";
-			this.fontSizeToolStripComboBox.Size = new System.Drawing.Size(40, 23);
+			this.fontSizeToolStripComboBox.Size = new System.Drawing.Size(58, 33);
 			this.fontSizeToolStripComboBox.Text = "8";
 			this.fontSizeToolStripComboBox.ToolTipText = "Change font size";
 			this.fontSizeToolStripComboBox.TextChanged += new System.EventHandler(this.fontSizeToolStripComboBox_TextChanged);
@@ -1647,7 +1658,7 @@ namespace unvell.ReoGrid.Editor
 			this.enlargeFontToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.font_larger;
 			this.enlargeFontToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.enlargeFontToolStripButton.Name = "enlargeFontToolStripButton";
-			this.enlargeFontToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.enlargeFontToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.enlargeFontToolStripButton.Text = "Increase Font Size";
 			this.enlargeFontToolStripButton.Click += new System.EventHandler(this.enlargeFontToolStripButton_Click);
 			// 
@@ -1657,7 +1668,7 @@ namespace unvell.ReoGrid.Editor
 			this.fontSmallerToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.font_smaller;
 			this.fontSmallerToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.fontSmallerToolStripButton.Name = "fontSmallerToolStripButton";
-			this.fontSmallerToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.fontSmallerToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.fontSmallerToolStripButton.Text = "Decrease Font Size";
 			this.fontSmallerToolStripButton.Click += new System.EventHandler(this.fontSmallerToolStripButton_Click);
 			// 
@@ -1669,7 +1680,7 @@ namespace unvell.ReoGrid.Editor
 			this.textColorPickToolStripItem.Margin = new System.Windows.Forms.Padding(3, 1, 0, 2);
 			this.textColorPickToolStripItem.Mode = unvell.UIControls.ColorPickMode.Font;
 			this.textColorPickToolStripItem.Name = "textColorPickToolStripItem";
-			this.textColorPickToolStripItem.Size = new System.Drawing.Size(32, 22);
+			this.textColorPickToolStripItem.Size = new System.Drawing.Size(45, 30);
 			this.textColorPickToolStripItem.SolidColor = System.Drawing.Color.Empty;
 			this.textColorPickToolStripItem.Text = "Text Colour";
 			this.textColorPickToolStripItem.ToolTipText = "Text Colour";
@@ -1683,7 +1694,7 @@ namespace unvell.ReoGrid.Editor
 			this.boldToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.boldToolStripButton.Margin = new System.Windows.Forms.Padding(2, 1, 0, 2);
 			this.boldToolStripButton.Name = "boldToolStripButton";
-			this.boldToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.boldToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.boldToolStripButton.Text = "Bold";
 			this.boldToolStripButton.Click += new System.EventHandler(this.boldToolStripButton_Click);
 			// 
@@ -1694,7 +1705,7 @@ namespace unvell.ReoGrid.Editor
 			this.italicToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.italic;
 			this.italicToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.italicToolStripButton.Name = "italicToolStripButton";
-			this.italicToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.italicToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.italicToolStripButton.Text = "Italic";
 			this.italicToolStripButton.Click += new System.EventHandler(this.italicToolStripButton_Click);
 			// 
@@ -1705,7 +1716,7 @@ namespace unvell.ReoGrid.Editor
 			this.underlineToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.underlinee;
 			this.underlineToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.underlineToolStripButton.Name = "underlineToolStripButton";
-			this.underlineToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.underlineToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.underlineToolStripButton.Text = "Underline";
 			this.underlineToolStripButton.Click += new System.EventHandler(this.underlineToolStripButton_Click);
 			// 
@@ -1716,14 +1727,14 @@ namespace unvell.ReoGrid.Editor
 			this.strikethroughToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.strikethrough;
 			this.strikethroughToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.strikethroughToolStripButton.Name = "strikethroughToolStripButton";
-			this.strikethroughToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.strikethroughToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.strikethroughToolStripButton.Text = "Strikethrough";
 			this.strikethroughToolStripButton.Click += new System.EventHandler(this.strikethroughToolStripButton_Click);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 33);
 			// 
 			// textWrapToolStripButton
 			// 
@@ -1732,13 +1743,13 @@ namespace unvell.ReoGrid.Editor
 			this.textWrapToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.textwrap;
 			this.textWrapToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.textWrapToolStripButton.Name = "textWrapToolStripButton";
-			this.textWrapToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.textWrapToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.textWrapToolStripButton.Text = "Word Wrap";
 			// 
 			// toolStripSeparator13
 			// 
 			this.toolStripSeparator13.Name = "toolStripSeparator13";
-			this.toolStripSeparator13.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator13.Size = new System.Drawing.Size(6, 33);
 			// 
 			// textAlignLeftToolStripButton
 			// 
@@ -1747,7 +1758,7 @@ namespace unvell.ReoGrid.Editor
 			this.textAlignLeftToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.AlignTableCellMiddleLeftJustHS;
 			this.textAlignLeftToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.textAlignLeftToolStripButton.Name = "textAlignLeftToolStripButton";
-			this.textAlignLeftToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.textAlignLeftToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.textAlignLeftToolStripButton.Text = "Left Align";
 			this.textAlignLeftToolStripButton.Click += new System.EventHandler(this.textLeftToolStripButton_Click);
 			// 
@@ -1758,7 +1769,7 @@ namespace unvell.ReoGrid.Editor
 			this.textAlignCenterToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.AlignTableCellMiddleCenterHS;
 			this.textAlignCenterToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.textAlignCenterToolStripButton.Name = "textAlignCenterToolStripButton";
-			this.textAlignCenterToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.textAlignCenterToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.textAlignCenterToolStripButton.Text = "Centre Align";
 			this.textAlignCenterToolStripButton.Click += new System.EventHandler(this.textCenterToolStripButton_Click);
 			// 
@@ -1769,7 +1780,7 @@ namespace unvell.ReoGrid.Editor
 			this.textAlignRightToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.AlignTableCellMiddleRightHS;
 			this.textAlignRightToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.textAlignRightToolStripButton.Name = "textAlignRightToolStripButton";
-			this.textAlignRightToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.textAlignRightToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.textAlignRightToolStripButton.Text = "Right Align";
 			this.textAlignRightToolStripButton.Click += new System.EventHandler(this.textRightToolStripButton_Click);
 			// 
@@ -1780,14 +1791,14 @@ namespace unvell.ReoGrid.Editor
 			this.distributedIndentToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PageWidthHS;
 			this.distributedIndentToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.distributedIndentToolStripButton.Name = "distributedIndentToolStripButton";
-			this.distributedIndentToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.distributedIndentToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.distributedIndentToolStripButton.Text = "Justify";
 			this.distributedIndentToolStripButton.Click += new System.EventHandler(this.distributedIndentToolStripButton_Click);
 			// 
 			// toolStripSeparator7
 			// 
 			this.toolStripSeparator7.Name = "toolStripSeparator7";
-			this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator7.Size = new System.Drawing.Size(6, 33);
 			// 
 			// textAlignTopToolStripButton
 			// 
@@ -1796,7 +1807,7 @@ namespace unvell.ReoGrid.Editor
 			this.textAlignTopToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.AlignLayoutTop;
 			this.textAlignTopToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.textAlignTopToolStripButton.Name = "textAlignTopToolStripButton";
-			this.textAlignTopToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.textAlignTopToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.textAlignTopToolStripButton.Text = "Top Align";
 			this.textAlignTopToolStripButton.Click += new System.EventHandler(this.textAlignTopToolStripButton_Click);
 			// 
@@ -1807,7 +1818,7 @@ namespace unvell.ReoGrid.Editor
 			this.textAlignMiddleToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.AlignLayoutMiddle;
 			this.textAlignMiddleToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.textAlignMiddleToolStripButton.Name = "textAlignMiddleToolStripButton";
-			this.textAlignMiddleToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.textAlignMiddleToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.textAlignMiddleToolStripButton.Text = "Middle Align";
 			this.textAlignMiddleToolStripButton.Click += new System.EventHandler(this.textAlignMiddleToolStripButton_Click);
 			// 
@@ -1818,14 +1829,14 @@ namespace unvell.ReoGrid.Editor
 			this.textAlignBottomToolStripButton.Image = global::unvell.ReoGrid.Editor.Properties.Resources.AlignLayoutBottom;
 			this.textAlignBottomToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.textAlignBottomToolStripButton.Name = "textAlignBottomToolStripButton";
-			this.textAlignBottomToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.textAlignBottomToolStripButton.Size = new System.Drawing.Size(28, 30);
 			this.textAlignBottomToolStripButton.Text = "Bottom Align";
 			this.textAlignBottomToolStripButton.Click += new System.EventHandler(this.textAlignBottomToolStripButton_Click);
 			// 
 			// toolStripSeparator12
 			// 
 			this.toolStripSeparator12.Name = "toolStripSeparator12";
-			this.toolStripSeparator12.Size = new System.Drawing.Size(6, 25);
+			this.toolStripSeparator12.Size = new System.Drawing.Size(6, 33);
 			// 
 			// zoomToolStripDropDownButton
 			// 
@@ -1856,10 +1867,11 @@ namespace unvell.ReoGrid.Editor
             "250%",
             "400%"});
 			this.zoomToolStripDropDownButton.Name = "zoomToolStripDropDownButton";
-			this.zoomToolStripDropDownButton.Size = new System.Drawing.Size(60, 23);
+			this.zoomToolStripDropDownButton.Size = new System.Drawing.Size(88, 33);
 			// 
 			// menuStrip1
 			// 
+			this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
@@ -1872,7 +1884,8 @@ namespace unvell.ReoGrid.Editor
             this.helpToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(1002, 24);
+			this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+			this.menuStrip1.Size = new System.Drawing.Size(1503, 35);
 			this.menuStrip1.TabIndex = 4;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -1895,7 +1908,7 @@ namespace unvell.ReoGrid.Editor
             this.toolStripMenuItem5,
             this.exitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(50, 29);
 			this.fileToolStripMenuItem.Text = "&File";
 			// 
 			// newToolStripMenuItem
@@ -1903,14 +1916,14 @@ namespace unvell.ReoGrid.Editor
 			this.newToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.NewDocumentHS;
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
 			this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.newToolStripMenuItem.Text = "New";
 			this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
 			// 
 			// newWindowToolStripMenuItem
 			// 
 			this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
-			this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.newWindowToolStripMenuItem.Text = "New Window...";
 			this.newWindowToolStripMenuItem.Click += new System.EventHandler(this.newWindowToolStripMenuItem_Click);
 			// 
@@ -1919,7 +1932,7 @@ namespace unvell.ReoGrid.Editor
 			this.openToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.openHS;
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
 			this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.openToolStripMenuItem.Text = "&Open...";
 			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
 			// 
@@ -1928,30 +1941,30 @@ namespace unvell.ReoGrid.Editor
 			this.saveToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.saveHS;
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
 			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.saveToolStripMenuItem.Text = "&Save";
 			// 
 			// saveAsToolStripMenuItem
 			// 
 			this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.saveAsToolStripMenuItem.Text = "Save As...";
 			// 
 			// toolStripMenuItem17
 			// 
 			this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-			this.toolStripMenuItem17.Size = new System.Drawing.Size(190, 6);
+			this.toolStripMenuItem17.Size = new System.Drawing.Size(268, 6);
 			// 
 			// editXMLToolStripMenuItem
 			// 
 			this.editXMLToolStripMenuItem.Name = "editXMLToolStripMenuItem";
-			this.editXMLToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.editXMLToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.editXMLToolStripMenuItem.Text = "Edit XML...";
 			// 
 			// exportAsHtmlToolStripMenuItem
 			// 
 			this.exportAsHtmlToolStripMenuItem.Name = "exportAsHtmlToolStripMenuItem";
-			this.exportAsHtmlToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.exportAsHtmlToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.exportAsHtmlToolStripMenuItem.Text = "Export as HTML...";
 			// 
 			// exportAsCSVToolStripMenuItem
@@ -1960,56 +1973,56 @@ namespace unvell.ReoGrid.Editor
             this.exportCurrentWorksheetToolStripMenuItem,
             this.exportSelectedRangeToolStripMenuItem});
 			this.exportAsCSVToolStripMenuItem.Name = "exportAsCSVToolStripMenuItem";
-			this.exportAsCSVToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.exportAsCSVToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.exportAsCSVToolStripMenuItem.Text = "Export as CSV";
 			// 
 			// exportCurrentWorksheetToolStripMenuItem
 			// 
 			this.exportCurrentWorksheetToolStripMenuItem.Name = "exportCurrentWorksheetToolStripMenuItem";
-			this.exportCurrentWorksheetToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+			this.exportCurrentWorksheetToolStripMenuItem.Size = new System.Drawing.Size(311, 30);
 			this.exportCurrentWorksheetToolStripMenuItem.Text = "Export Current Worksheet...";
 			// 
 			// exportSelectedRangeToolStripMenuItem
 			// 
 			this.exportSelectedRangeToolStripMenuItem.Name = "exportSelectedRangeToolStripMenuItem";
-			this.exportSelectedRangeToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+			this.exportSelectedRangeToolStripMenuItem.Size = new System.Drawing.Size(311, 30);
 			this.exportSelectedRangeToolStripMenuItem.Text = "Export Selected Range...";
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(190, 6);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(268, 6);
 			// 
 			// printPreviewToolStripMenuItem
 			// 
 			this.printPreviewToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PrintPreviewHS;
 			this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
 			this.printPreviewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.printPreviewToolStripMenuItem.Text = "Print Preview...";
 			this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.printPreviewToolStripMenuItem_Click);
 			// 
 			// printSettingsToolStripMenuItem
 			// 
 			this.printSettingsToolStripMenuItem.Name = "printSettingsToolStripMenuItem";
-			this.printSettingsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.printSettingsToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.printSettingsToolStripMenuItem.Text = "Print Settings...";
 			// 
 			// printToolStripMenuItem
 			// 
 			this.printToolStripMenuItem.Name = "printToolStripMenuItem";
-			this.printToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.printToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.printToolStripMenuItem.Text = "Print...";
 			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(190, 6);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(268, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(271, 30);
 			this.exitToolStripMenuItem.Text = "&Exit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 			// 
@@ -2030,7 +2043,7 @@ namespace unvell.ReoGrid.Editor
             this.selectionToolStripMenuItem,
             this.selectAllToolStripMenuItem});
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-			this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+			this.editToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
 			this.editToolStripMenuItem.Text = "&Edit";
 			// 
 			// undoToolStripMenuItem
@@ -2039,7 +2052,7 @@ namespace unvell.ReoGrid.Editor
 			this.undoToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.Edit_UndoHS;
 			this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
 			this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-			this.undoToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.undoToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.undoToolStripMenuItem.Text = "&Undo";
 			// 
 			// redoToolStripMenuItem
@@ -2048,13 +2061,13 @@ namespace unvell.ReoGrid.Editor
 			this.redoToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.Edit_RedoHS;
 			this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
 			this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-			this.redoToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.redoToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.redoToolStripMenuItem.Text = "&Redo";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(188, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(270, 6);
 			// 
 			// repeatLastActionToolStripMenuItem
 			// 
@@ -2062,21 +2075,21 @@ namespace unvell.ReoGrid.Editor
 			this.repeatLastActionToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.RepeatHS;
 			this.repeatLastActionToolStripMenuItem.Name = "repeatLastActionToolStripMenuItem";
 			this.repeatLastActionToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4;
-			this.repeatLastActionToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.repeatLastActionToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.repeatLastActionToolStripMenuItem.Text = "Repeat Last Action";
 			this.repeatLastActionToolStripMenuItem.Click += new System.EventHandler(this.repeatLastActionToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem9
 			// 
 			this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-			this.toolStripMenuItem9.Size = new System.Drawing.Size(188, 6);
+			this.toolStripMenuItem9.Size = new System.Drawing.Size(270, 6);
 			// 
 			// cutToolStripMenuItem
 			// 
 			this.cutToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CutHS;
 			this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
 			this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-			this.cutToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.cutToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.cutToolStripMenuItem.Text = "&Cut";
 			this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
 			// 
@@ -2085,7 +2098,7 @@ namespace unvell.ReoGrid.Editor
 			this.copyToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.CopyHS;
 			this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
 			this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.copyToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.copyToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.copyToolStripMenuItem.Text = "&Copy";
 			this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
 			// 
@@ -2094,7 +2107,7 @@ namespace unvell.ReoGrid.Editor
 			this.pasteToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PasteHS;
 			this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
 			this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.pasteToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.pasteToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.pasteToolStripMenuItem.Text = "&Paste";
 			this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
 			// 
@@ -2110,60 +2123,60 @@ namespace unvell.ReoGrid.Editor
             this.clearStylesToolStripMenuItem,
             this.clearBordersToolStripMenuItem});
 			this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-			this.clearToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.clearToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.clearToolStripMenuItem.Text = "Clear";
 			// 
 			// clearAllToolStripMenuItem
 			// 
 			this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-			this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+			this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(195, 30);
 			this.clearAllToolStripMenuItem.Text = "All";
 			// 
 			// toolStripMenuItem38
 			// 
 			this.toolStripMenuItem38.Name = "toolStripMenuItem38";
-			this.toolStripMenuItem38.Size = new System.Drawing.Size(136, 6);
+			this.toolStripMenuItem38.Size = new System.Drawing.Size(192, 6);
 			// 
 			// clearDataToolStripMenuItem
 			// 
 			this.clearDataToolStripMenuItem.Name = "clearDataToolStripMenuItem";
-			this.clearDataToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+			this.clearDataToolStripMenuItem.Size = new System.Drawing.Size(195, 30);
 			this.clearDataToolStripMenuItem.Text = "Data";
 			// 
 			// clearDataFormatToolStripMenuItem
 			// 
 			this.clearDataFormatToolStripMenuItem.Name = "clearDataFormatToolStripMenuItem";
-			this.clearDataFormatToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+			this.clearDataFormatToolStripMenuItem.Size = new System.Drawing.Size(195, 30);
 			this.clearDataFormatToolStripMenuItem.Text = "Data Format";
 			// 
 			// clearFormulaToolStripMenuItem
 			// 
 			this.clearFormulaToolStripMenuItem.Name = "clearFormulaToolStripMenuItem";
-			this.clearFormulaToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+			this.clearFormulaToolStripMenuItem.Size = new System.Drawing.Size(195, 30);
 			this.clearFormulaToolStripMenuItem.Text = "Formula";
 			// 
 			// clearCellBodyToolStripMenuItem
 			// 
 			this.clearCellBodyToolStripMenuItem.Name = "clearCellBodyToolStripMenuItem";
-			this.clearCellBodyToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+			this.clearCellBodyToolStripMenuItem.Size = new System.Drawing.Size(195, 30);
 			this.clearCellBodyToolStripMenuItem.Text = "Body";
 			// 
 			// clearStylesToolStripMenuItem
 			// 
 			this.clearStylesToolStripMenuItem.Name = "clearStylesToolStripMenuItem";
-			this.clearStylesToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+			this.clearStylesToolStripMenuItem.Size = new System.Drawing.Size(195, 30);
 			this.clearStylesToolStripMenuItem.Text = "Styles";
 			// 
 			// clearBordersToolStripMenuItem
 			// 
 			this.clearBordersToolStripMenuItem.Name = "clearBordersToolStripMenuItem";
-			this.clearBordersToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+			this.clearBordersToolStripMenuItem.Size = new System.Drawing.Size(195, 30);
 			this.clearBordersToolStripMenuItem.Text = "Borders";
 			// 
 			// toolStripMenuItem10
 			// 
 			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(188, 6);
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(270, 6);
 			// 
 			// focusCellStyleToolStripMenuItem
 			// 
@@ -2171,7 +2184,7 @@ namespace unvell.ReoGrid.Editor
             this.focusStyleDefaultToolStripMenuItem,
             this.focusStyleNoneToolStripMenuItem});
 			this.focusCellStyleToolStripMenuItem.Name = "focusCellStyleToolStripMenuItem";
-			this.focusCellStyleToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.focusCellStyleToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.focusCellStyleToolStripMenuItem.Text = "Focus Cell Style";
 			// 
 			// focusStyleDefaultToolStripMenuItem
@@ -2180,14 +2193,14 @@ namespace unvell.ReoGrid.Editor
 			this.focusStyleDefaultToolStripMenuItem.CheckOnClick = true;
 			this.focusStyleDefaultToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.focusStyleDefaultToolStripMenuItem.Name = "focusStyleDefaultToolStripMenuItem";
-			this.focusStyleDefaultToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.focusStyleDefaultToolStripMenuItem.Size = new System.Drawing.Size(153, 30);
 			this.focusStyleDefaultToolStripMenuItem.Text = "Default";
 			// 
 			// focusStyleNoneToolStripMenuItem
 			// 
 			this.focusStyleNoneToolStripMenuItem.CheckOnClick = true;
 			this.focusStyleNoneToolStripMenuItem.Name = "focusStyleNoneToolStripMenuItem";
-			this.focusStyleNoneToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.focusStyleNoneToolStripMenuItem.Size = new System.Drawing.Size(153, 30);
 			this.focusStyleNoneToolStripMenuItem.Text = "None";
 			// 
 			// selectionToolStripMenuItem
@@ -2200,7 +2213,7 @@ namespace unvell.ReoGrid.Editor
             this.selectionModeToolStripMenuItem,
             this.selectionMoveDirectionToolStripMenuItem});
 			this.selectionToolStripMenuItem.Name = "selectionToolStripMenuItem";
-			this.selectionToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.selectionToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.selectionToolStripMenuItem.Text = "Selection";
 			// 
 			// dragToMoveRangeToolStripMenuItem
@@ -2209,20 +2222,20 @@ namespace unvell.ReoGrid.Editor
 			this.dragToMoveRangeToolStripMenuItem.CheckOnClick = true;
 			this.dragToMoveRangeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.dragToMoveRangeToolStripMenuItem.Name = "dragToMoveRangeToolStripMenuItem";
-			this.dragToMoveRangeToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+			this.dragToMoveRangeToolStripMenuItem.Size = new System.Drawing.Size(303, 30);
 			this.dragToMoveRangeToolStripMenuItem.Text = "Drag to Move Content";
 			// 
 			// dragToFillSerialToolStripMenuItem
 			// 
 			this.dragToFillSerialToolStripMenuItem.CheckOnClick = true;
 			this.dragToFillSerialToolStripMenuItem.Name = "dragToFillSerialToolStripMenuItem";
-			this.dragToFillSerialToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+			this.dragToFillSerialToolStripMenuItem.Size = new System.Drawing.Size(303, 30);
 			this.dragToFillSerialToolStripMenuItem.Text = "Drag to Fill Serial";
 			// 
 			// toolStripMenuItem36
 			// 
 			this.toolStripMenuItem36.Name = "toolStripMenuItem36";
-			this.toolStripMenuItem36.Size = new System.Drawing.Size(209, 6);
+			this.toolStripMenuItem36.Size = new System.Drawing.Size(300, 6);
 			// 
 			// selectionStyleToolStripMenuItem
 			// 
@@ -2231,28 +2244,28 @@ namespace unvell.ReoGrid.Editor
             this.selStyleDefaultToolStripMenuItem,
             this.selStyleFocusRectToolStripMenuItem});
 			this.selectionStyleToolStripMenuItem.Name = "selectionStyleToolStripMenuItem";
-			this.selectionStyleToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+			this.selectionStyleToolStripMenuItem.Size = new System.Drawing.Size(303, 30);
 			this.selectionStyleToolStripMenuItem.Text = "Selection Style";
 			// 
 			// selStyleNoneToolStripMenuItem
 			// 
 			this.selStyleNoneToolStripMenuItem.CheckOnClick = true;
 			this.selStyleNoneToolStripMenuItem.Name = "selStyleNoneToolStripMenuItem";
-			this.selStyleNoneToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+			this.selStyleNoneToolStripMenuItem.Size = new System.Drawing.Size(373, 30);
 			this.selStyleNoneToolStripMenuItem.Text = "None";
 			// 
 			// selStyleDefaultToolStripMenuItem
 			// 
 			this.selStyleDefaultToolStripMenuItem.CheckOnClick = true;
 			this.selStyleDefaultToolStripMenuItem.Name = "selStyleDefaultToolStripMenuItem";
-			this.selStyleDefaultToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+			this.selStyleDefaultToolStripMenuItem.Size = new System.Drawing.Size(373, 30);
 			this.selStyleDefaultToolStripMenuItem.Text = "Default (Solid Rectangle)";
 			// 
 			// selStyleFocusRectToolStripMenuItem
 			// 
 			this.selStyleFocusRectToolStripMenuItem.CheckOnClick = true;
 			this.selStyleFocusRectToolStripMenuItem.Name = "selStyleFocusRectToolStripMenuItem";
-			this.selStyleFocusRectToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
+			this.selStyleFocusRectToolStripMenuItem.Size = new System.Drawing.Size(373, 30);
 			this.selStyleFocusRectToolStripMenuItem.Text = "Windows Focus (Dotted Rectangle)";
 			// 
 			// selectionModeToolStripMenuItem
@@ -2264,39 +2277,39 @@ namespace unvell.ReoGrid.Editor
             this.selModeRowToolStripMenuItem,
             this.selModeColumnToolStripMenuItem});
 			this.selectionModeToolStripMenuItem.Name = "selectionModeToolStripMenuItem";
-			this.selectionModeToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+			this.selectionModeToolStripMenuItem.Size = new System.Drawing.Size(303, 30);
 			this.selectionModeToolStripMenuItem.Text = "Selection Mode";
 			// 
 			// selModeNoneToolStripMenuItem
 			// 
 			this.selModeNoneToolStripMenuItem.Name = "selModeNoneToolStripMenuItem";
-			this.selModeNoneToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.selModeNoneToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
 			this.selModeNoneToolStripMenuItem.Text = "None";
 			// 
 			// selModeCellToolStripMenuItem
 			// 
 			this.selModeCellToolStripMenuItem.CheckOnClick = true;
 			this.selModeCellToolStripMenuItem.Name = "selModeCellToolStripMenuItem";
-			this.selModeCellToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.selModeCellToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
 			this.selModeCellToolStripMenuItem.Text = "Single Cell";
 			// 
 			// selModeRangeToolStripMenuItem
 			// 
 			this.selModeRangeToolStripMenuItem.CheckOnClick = true;
 			this.selModeRangeToolStripMenuItem.Name = "selModeRangeToolStripMenuItem";
-			this.selModeRangeToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.selModeRangeToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
 			this.selModeRangeToolStripMenuItem.Text = "Range (Default)";
 			// 
 			// selModeRowToolStripMenuItem
 			// 
 			this.selModeRowToolStripMenuItem.Name = "selModeRowToolStripMenuItem";
-			this.selModeRowToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.selModeRowToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
 			this.selModeRowToolStripMenuItem.Text = "Entire Row";
 			// 
 			// selModeColumnToolStripMenuItem
 			// 
 			this.selModeColumnToolStripMenuItem.Name = "selModeColumnToolStripMenuItem";
-			this.selModeColumnToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+			this.selModeColumnToolStripMenuItem.Size = new System.Drawing.Size(218, 30);
 			this.selModeColumnToolStripMenuItem.Text = "Entire Column";
 			// 
 			// selectionMoveDirectionToolStripMenuItem
@@ -2305,26 +2318,26 @@ namespace unvell.ReoGrid.Editor
             this.selDirRightToolStripMenuItem,
             this.selDirDownToolStripMenuItem});
 			this.selectionMoveDirectionToolStripMenuItem.Name = "selectionMoveDirectionToolStripMenuItem";
-			this.selectionMoveDirectionToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+			this.selectionMoveDirectionToolStripMenuItem.Size = new System.Drawing.Size(303, 30);
 			this.selectionMoveDirectionToolStripMenuItem.Text = "Moving Forward Direction";
 			// 
 			// selDirRightToolStripMenuItem
 			// 
 			this.selDirRightToolStripMenuItem.Name = "selDirRightToolStripMenuItem";
-			this.selDirRightToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+			this.selDirRightToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
 			this.selDirRightToolStripMenuItem.Text = "Right (Default)";
 			// 
 			// selDirDownToolStripMenuItem
 			// 
 			this.selDirDownToolStripMenuItem.Name = "selDirDownToolStripMenuItem";
-			this.selDirDownToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+			this.selDirDownToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
 			this.selDirDownToolStripMenuItem.Text = "Down";
 			// 
 			// selectAllToolStripMenuItem
 			// 
 			this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
 			this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+			this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(273, 30);
 			this.selectAllToolStripMenuItem.Text = "Select All";
 			this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
 			// 
@@ -2340,7 +2353,7 @@ namespace unvell.ReoGrid.Editor
             this.freezeToSpecifiedEdgeToolStripMenuItem,
             this.unfreezeToolStripMenuItem});
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.viewToolStripMenuItem.Size = new System.Drawing.Size(61, 29);
 			this.viewToolStripMenuItem.Text = "&View";
 			// 
 			// componentsToolStripMenuItem
@@ -2350,7 +2363,7 @@ namespace unvell.ReoGrid.Editor
             this.formulaBarToolStripMenuItem,
             this.statusBarToolStripMenuItem});
 			this.componentsToolStripMenuItem.Name = "componentsToolStripMenuItem";
-			this.componentsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+			this.componentsToolStripMenuItem.Size = new System.Drawing.Size(262, 30);
 			this.componentsToolStripMenuItem.Text = "Components";
 			// 
 			// toolbarToolStripMenuItem
@@ -2359,7 +2372,7 @@ namespace unvell.ReoGrid.Editor
 			this.toolbarToolStripMenuItem.CheckOnClick = true;
 			this.toolbarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolbarToolStripMenuItem.Name = "toolbarToolStripMenuItem";
-			this.toolbarToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.toolbarToolStripMenuItem.Size = new System.Drawing.Size(191, 30);
 			this.toolbarToolStripMenuItem.Text = "&Toolbar";
 			// 
 			// formulaBarToolStripMenuItem
@@ -2368,7 +2381,7 @@ namespace unvell.ReoGrid.Editor
 			this.formulaBarToolStripMenuItem.CheckOnClick = true;
 			this.formulaBarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.formulaBarToolStripMenuItem.Name = "formulaBarToolStripMenuItem";
-			this.formulaBarToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.formulaBarToolStripMenuItem.Size = new System.Drawing.Size(191, 30);
 			this.formulaBarToolStripMenuItem.Text = "Formula Bar";
 			// 
 			// statusBarToolStripMenuItem
@@ -2377,7 +2390,7 @@ namespace unvell.ReoGrid.Editor
 			this.statusBarToolStripMenuItem.CheckOnClick = true;
 			this.statusBarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.statusBarToolStripMenuItem.Name = "statusBarToolStripMenuItem";
-			this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(191, 30);
 			this.statusBarToolStripMenuItem.Text = "Status Bar";
 			// 
 			// visibleToolStripMenuItem
@@ -2397,7 +2410,7 @@ namespace unvell.ReoGrid.Editor
             this.showRowOutlineToolStripMenuItem,
             this.showColumnOutlineToolStripMenuItem});
 			this.visibleToolStripMenuItem.Name = "visibleToolStripMenuItem";
-			this.visibleToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+			this.visibleToolStripMenuItem.Size = new System.Drawing.Size(262, 30);
 			this.visibleToolStripMenuItem.Text = "Visible";
 			// 
 			// showGridLinesToolStripMenuItem
@@ -2407,14 +2420,14 @@ namespace unvell.ReoGrid.Editor
 			this.showGridLinesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showGridLinesToolStripMenuItem.Name = "showGridLinesToolStripMenuItem";
 			this.showGridLinesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.showGridLinesToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showGridLinesToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showGridLinesToolStripMenuItem.Text = "Grid Lines";
 			// 
 			// showPageBreakToolStripMenuItem
 			// 
 			this.showPageBreakToolStripMenuItem.CheckOnClick = true;
 			this.showPageBreakToolStripMenuItem.Name = "showPageBreakToolStripMenuItem";
-			this.showPageBreakToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showPageBreakToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showPageBreakToolStripMenuItem.Text = "Page Breaks";
 			// 
 			// showFrozenLineToolStripMenuItem
@@ -2423,7 +2436,7 @@ namespace unvell.ReoGrid.Editor
 			this.showFrozenLineToolStripMenuItem.CheckOnClick = true;
 			this.showFrozenLineToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showFrozenLineToolStripMenuItem.Name = "showFrozenLineToolStripMenuItem";
-			this.showFrozenLineToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showFrozenLineToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showFrozenLineToolStripMenuItem.Text = "Frozen Line";
 			// 
 			// sheetSwitcherToolStripMenuItem
@@ -2432,13 +2445,13 @@ namespace unvell.ReoGrid.Editor
 			this.sheetSwitcherToolStripMenuItem.CheckOnClick = true;
 			this.sheetSwitcherToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.sheetSwitcherToolStripMenuItem.Name = "sheetSwitcherToolStripMenuItem";
-			this.sheetSwitcherToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.sheetSwitcherToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.sheetSwitcherToolStripMenuItem.Text = "Sheet Switcher";
 			// 
 			// toolStripMenuItem31
 			// 
 			this.toolStripMenuItem31.Name = "toolStripMenuItem31";
-			this.toolStripMenuItem31.Size = new System.Drawing.Size(226, 6);
+			this.toolStripMenuItem31.Size = new System.Drawing.Size(320, 6);
 			// 
 			// showHorizontaScrolllToolStripMenuItem
 			// 
@@ -2446,7 +2459,7 @@ namespace unvell.ReoGrid.Editor
 			this.showHorizontaScrolllToolStripMenuItem.CheckOnClick = true;
 			this.showHorizontaScrolllToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showHorizontaScrolllToolStripMenuItem.Name = "showHorizontaScrolllToolStripMenuItem";
-			this.showHorizontaScrolllToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showHorizontaScrolllToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showHorizontaScrolllToolStripMenuItem.Text = "Horizontal Scrollbar";
 			// 
 			// showVerticalScrollbarToolStripMenuItem
@@ -2455,13 +2468,13 @@ namespace unvell.ReoGrid.Editor
 			this.showVerticalScrollbarToolStripMenuItem.CheckOnClick = true;
 			this.showVerticalScrollbarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showVerticalScrollbarToolStripMenuItem.Name = "showVerticalScrollbarToolStripMenuItem";
-			this.showVerticalScrollbarToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showVerticalScrollbarToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showVerticalScrollbarToolStripMenuItem.Text = "Vertical Scrollbar";
 			// 
 			// toolStripMenuItem30
 			// 
 			this.toolStripMenuItem30.Name = "toolStripMenuItem30";
-			this.toolStripMenuItem30.Size = new System.Drawing.Size(226, 6);
+			this.toolStripMenuItem30.Size = new System.Drawing.Size(320, 6);
 			// 
 			// showRowHeaderToolStripMenuItem
 			// 
@@ -2469,7 +2482,7 @@ namespace unvell.ReoGrid.Editor
 			this.showRowHeaderToolStripMenuItem.CheckOnClick = true;
 			this.showRowHeaderToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showRowHeaderToolStripMenuItem.Name = "showRowHeaderToolStripMenuItem";
-			this.showRowHeaderToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showRowHeaderToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showRowHeaderToolStripMenuItem.Text = "Row Header";
 			// 
 			// showColumnHeaderToolStripMenuItem
@@ -2478,13 +2491,13 @@ namespace unvell.ReoGrid.Editor
 			this.showColumnHeaderToolStripMenuItem.CheckOnClick = true;
 			this.showColumnHeaderToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showColumnHeaderToolStripMenuItem.Name = "showColumnHeaderToolStripMenuItem";
-			this.showColumnHeaderToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showColumnHeaderToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showColumnHeaderToolStripMenuItem.Text = "Column Header";
 			// 
 			// toolStripMenuItem18
 			// 
 			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-			this.toolStripMenuItem18.Size = new System.Drawing.Size(226, 6);
+			this.toolStripMenuItem18.Size = new System.Drawing.Size(320, 6);
 			// 
 			// showRowOutlineToolStripMenuItem
 			// 
@@ -2492,7 +2505,7 @@ namespace unvell.ReoGrid.Editor
 			this.showRowOutlineToolStripMenuItem.CheckOnClick = true;
 			this.showRowOutlineToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showRowOutlineToolStripMenuItem.Name = "showRowOutlineToolStripMenuItem";
-			this.showRowOutlineToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showRowOutlineToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showRowOutlineToolStripMenuItem.Text = "Enable Row Outline Panel";
 			// 
 			// showColumnOutlineToolStripMenuItem
@@ -2501,29 +2514,29 @@ namespace unvell.ReoGrid.Editor
 			this.showColumnOutlineToolStripMenuItem.CheckOnClick = true;
 			this.showColumnOutlineToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showColumnOutlineToolStripMenuItem.Name = "showColumnOutlineToolStripMenuItem";
-			this.showColumnOutlineToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showColumnOutlineToolStripMenuItem.Size = new System.Drawing.Size(323, 30);
 			this.showColumnOutlineToolStripMenuItem.Text = "Enable Column Outline Panel";
 			// 
 			// toolStripMenuItem29
 			// 
 			this.toolStripMenuItem29.Name = "toolStripMenuItem29";
-			this.toolStripMenuItem29.Size = new System.Drawing.Size(182, 6);
+			this.toolStripMenuItem29.Size = new System.Drawing.Size(259, 6);
 			// 
 			// resetAllPageBreaksToolStripMenuItem
 			// 
 			this.resetAllPageBreaksToolStripMenuItem.Name = "resetAllPageBreaksToolStripMenuItem";
-			this.resetAllPageBreaksToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+			this.resetAllPageBreaksToolStripMenuItem.Size = new System.Drawing.Size(262, 30);
 			this.resetAllPageBreaksToolStripMenuItem.Text = "Reset &All Page Breaks";
 			// 
 			// toolStripMenuItem8
 			// 
 			this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-			this.toolStripMenuItem8.Size = new System.Drawing.Size(182, 6);
+			this.toolStripMenuItem8.Size = new System.Drawing.Size(259, 6);
 			// 
 			// freezeToCellToolStripMenuItem
 			// 
 			this.freezeToCellToolStripMenuItem.Name = "freezeToCellToolStripMenuItem";
-			this.freezeToCellToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+			this.freezeToCellToolStripMenuItem.Size = new System.Drawing.Size(262, 30);
 			this.freezeToCellToolStripMenuItem.Text = "&Freeze To Cell";
 			// 
 			// freezeToSpecifiedEdgeToolStripMenuItem
@@ -2539,66 +2552,66 @@ namespace unvell.ReoGrid.Editor
             this.freezeToRightTopToolStripMenuItem,
             this.freezeToRightBottomToolStripMenuItem});
 			this.freezeToSpecifiedEdgeToolStripMenuItem.Name = "freezeToSpecifiedEdgeToolStripMenuItem";
-			this.freezeToSpecifiedEdgeToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+			this.freezeToSpecifiedEdgeToolStripMenuItem.Size = new System.Drawing.Size(262, 30);
 			this.freezeToSpecifiedEdgeToolStripMenuItem.Text = "Freeze To &Edges";
 			// 
 			// freezeToLeftToolStripMenuItem
 			// 
 			this.freezeToLeftToolStripMenuItem.Name = "freezeToLeftToolStripMenuItem";
-			this.freezeToLeftToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.freezeToLeftToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.freezeToLeftToolStripMenuItem.Text = "Left";
 			// 
 			// freezeToRightToolStripMenuItem
 			// 
 			this.freezeToRightToolStripMenuItem.Name = "freezeToRightToolStripMenuItem";
-			this.freezeToRightToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.freezeToRightToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.freezeToRightToolStripMenuItem.Text = "Right";
 			// 
 			// freezeToTopToolStripMenuItem
 			// 
 			this.freezeToTopToolStripMenuItem.Name = "freezeToTopToolStripMenuItem";
-			this.freezeToTopToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.freezeToTopToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.freezeToTopToolStripMenuItem.Text = "Top";
 			// 
 			// freezeToBottomToolStripMenuItem
 			// 
 			this.freezeToBottomToolStripMenuItem.Name = "freezeToBottomToolStripMenuItem";
-			this.freezeToBottomToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.freezeToBottomToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.freezeToBottomToolStripMenuItem.Text = "Bottom";
 			// 
 			// toolStripMenuItem24
 			// 
 			this.toolStripMenuItem24.Name = "toolStripMenuItem24";
-			this.toolStripMenuItem24.Size = new System.Drawing.Size(162, 6);
+			this.toolStripMenuItem24.Size = new System.Drawing.Size(228, 6);
 			// 
 			// freezeToLeftTopToolStripMenuItem
 			// 
 			this.freezeToLeftTopToolStripMenuItem.Name = "freezeToLeftTopToolStripMenuItem";
-			this.freezeToLeftTopToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.freezeToLeftTopToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.freezeToLeftTopToolStripMenuItem.Text = "Left Top (Default)";
 			// 
 			// freezeToLeftBottomToolStripMenuItem
 			// 
 			this.freezeToLeftBottomToolStripMenuItem.Name = "freezeToLeftBottomToolStripMenuItem";
-			this.freezeToLeftBottomToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.freezeToLeftBottomToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.freezeToLeftBottomToolStripMenuItem.Text = "Left Bottom";
 			// 
 			// freezeToRightTopToolStripMenuItem
 			// 
 			this.freezeToRightTopToolStripMenuItem.Name = "freezeToRightTopToolStripMenuItem";
-			this.freezeToRightTopToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.freezeToRightTopToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.freezeToRightTopToolStripMenuItem.Text = "Right Top";
 			// 
 			// freezeToRightBottomToolStripMenuItem
 			// 
 			this.freezeToRightBottomToolStripMenuItem.Name = "freezeToRightBottomToolStripMenuItem";
-			this.freezeToRightBottomToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+			this.freezeToRightBottomToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.freezeToRightBottomToolStripMenuItem.Text = "Right Bottom";
 			// 
 			// unfreezeToolStripMenuItem
 			// 
 			this.unfreezeToolStripMenuItem.Name = "unfreezeToolStripMenuItem";
-			this.unfreezeToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+			this.unfreezeToolStripMenuItem.Size = new System.Drawing.Size(262, 30);
 			this.unfreezeToolStripMenuItem.Text = "Unfreeze";
 			this.unfreezeToolStripMenuItem.Click += new System.EventHandler(this.unfreezeToolStripMenuItem_Click);
 			// 
@@ -2612,7 +2625,7 @@ namespace unvell.ReoGrid.Editor
             this.toolStripMenuItem19,
             this.formatCellsToolStripMenuItem});
 			this.cellsToolStripMenuItem.Name = "cellsToolStripMenuItem";
-			this.cellsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.cellsToolStripMenuItem.Size = new System.Drawing.Size(60, 29);
 			this.cellsToolStripMenuItem.Text = "Cells";
 			// 
 			// mergeCellsToolStripMenuItem
@@ -2620,7 +2633,7 @@ namespace unvell.ReoGrid.Editor
 			this.mergeCellsToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.cell_merge;
 			this.mergeCellsToolStripMenuItem.Name = "mergeCellsToolStripMenuItem";
 			this.mergeCellsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-			this.mergeCellsToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.mergeCellsToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.mergeCellsToolStripMenuItem.Text = "&Merge Cells";
 			// 
 			// unmergeCellsToolStripMenuItem
@@ -2629,30 +2642,30 @@ namespace unvell.ReoGrid.Editor
 			this.unmergeCellsToolStripMenuItem.Name = "unmergeCellsToolStripMenuItem";
 			this.unmergeCellsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.M)));
-			this.unmergeCellsToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.unmergeCellsToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.unmergeCellsToolStripMenuItem.Text = "Unmerge Cells";
 			// 
 			// toolStripMenuItem12
 			// 
 			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
-			this.toolStripMenuItem12.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem12.Size = new System.Drawing.Size(322, 6);
 			// 
 			// changeCellsTypeToolStripMenuItem
 			// 
 			this.changeCellsTypeToolStripMenuItem.Name = "changeCellsTypeToolStripMenuItem";
-			this.changeCellsTypeToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.changeCellsTypeToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.changeCellsTypeToolStripMenuItem.Text = "Change Cells Type";
 			// 
 			// toolStripMenuItem19
 			// 
 			this.toolStripMenuItem19.Name = "toolStripMenuItem19";
-			this.toolStripMenuItem19.Size = new System.Drawing.Size(225, 6);
+			this.toolStripMenuItem19.Size = new System.Drawing.Size(322, 6);
 			// 
 			// formatCellsToolStripMenuItem
 			// 
 			this.formatCellsToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.PropertiesHS;
 			this.formatCellsToolStripMenuItem.Name = "formatCellsToolStripMenuItem";
-			this.formatCellsToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
+			this.formatCellsToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.formatCellsToolStripMenuItem.Text = "Format Cells...";
 			// 
 			// sheetToolStripMenuItem
@@ -2668,7 +2681,7 @@ namespace unvell.ReoGrid.Editor
             this.resizeToolStripMenuItem,
             this.sheetReadonlyToolStripMenuItem});
 			this.sheetToolStripMenuItem.Name = "sheetToolStripMenuItem";
-			this.sheetToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+			this.sheetToolStripMenuItem.Size = new System.Drawing.Size(68, 29);
 			this.sheetToolStripMenuItem.Text = "Sheet";
 			// 
 			// filterToolStripMenuItem
@@ -2676,19 +2689,19 @@ namespace unvell.ReoGrid.Editor
 			this.filterToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.Filter2HS;
 			this.filterToolStripMenuItem.Name = "filterToolStripMenuItem";
 			this.filterToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.filterToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.filterToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
 			this.filterToolStripMenuItem.Text = "Filter";
 			// 
 			// clearFilterToolStripMenuItem
 			// 
 			this.clearFilterToolStripMenuItem.Name = "clearFilterToolStripMenuItem";
-			this.clearFilterToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.clearFilterToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
 			this.clearFilterToolStripMenuItem.Text = "Clear Filter";
 			// 
 			// toolStripMenuItem34
 			// 
 			this.toolStripMenuItem34.Name = "toolStripMenuItem34";
-			this.toolStripMenuItem34.Size = new System.Drawing.Size(137, 6);
+			this.toolStripMenuItem34.Size = new System.Drawing.Size(191, 6);
 			// 
 			// groupToolStripMenuItem
 			// 
@@ -2696,19 +2709,19 @@ namespace unvell.ReoGrid.Editor
             this.groupRowsToolStripMenuItem,
             this.groupColumnsToolStripMenuItem});
 			this.groupToolStripMenuItem.Name = "groupToolStripMenuItem";
-			this.groupToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.groupToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
 			this.groupToolStripMenuItem.Text = "Group";
 			// 
 			// groupRowsToolStripMenuItem
 			// 
 			this.groupRowsToolStripMenuItem.Name = "groupRowsToolStripMenuItem";
-			this.groupRowsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+			this.groupRowsToolStripMenuItem.Size = new System.Drawing.Size(166, 30);
 			this.groupRowsToolStripMenuItem.Text = "Rows";
 			// 
 			// groupColumnsToolStripMenuItem
 			// 
 			this.groupColumnsToolStripMenuItem.Name = "groupColumnsToolStripMenuItem";
-			this.groupColumnsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+			this.groupColumnsToolStripMenuItem.Size = new System.Drawing.Size(166, 30);
 			this.groupColumnsToolStripMenuItem.Text = "Columns";
 			// 
 			// ungroupToolStripMenuItem
@@ -2720,42 +2733,42 @@ namespace unvell.ReoGrid.Editor
             this.ungroupAllRowsToolStripMenuItem1,
             this.ungroupAllColumnsToolStripMenuItem1});
 			this.ungroupToolStripMenuItem.Name = "ungroupToolStripMenuItem";
-			this.ungroupToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.ungroupToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
 			this.ungroupToolStripMenuItem.Text = "Ungroup";
 			// 
 			// ungroupRowsToolStripMenuItem
 			// 
 			this.ungroupRowsToolStripMenuItem.Name = "ungroupRowsToolStripMenuItem";
-			this.ungroupRowsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.ungroupRowsToolStripMenuItem.Size = new System.Drawing.Size(237, 30);
 			this.ungroupRowsToolStripMenuItem.Text = "Selected Rows";
 			// 
 			// ungroupColumnsToolStripMenuItem
 			// 
 			this.ungroupColumnsToolStripMenuItem.Name = "ungroupColumnsToolStripMenuItem";
-			this.ungroupColumnsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+			this.ungroupColumnsToolStripMenuItem.Size = new System.Drawing.Size(237, 30);
 			this.ungroupColumnsToolStripMenuItem.Text = "Selected Columns";
 			// 
 			// toolStripMenuItem22
 			// 
 			this.toolStripMenuItem22.Name = "toolStripMenuItem22";
-			this.toolStripMenuItem22.Size = new System.Drawing.Size(166, 6);
+			this.toolStripMenuItem22.Size = new System.Drawing.Size(234, 6);
 			// 
 			// ungroupAllRowsToolStripMenuItem1
 			// 
 			this.ungroupAllRowsToolStripMenuItem1.Name = "ungroupAllRowsToolStripMenuItem1";
-			this.ungroupAllRowsToolStripMenuItem1.Size = new System.Drawing.Size(169, 22);
+			this.ungroupAllRowsToolStripMenuItem1.Size = new System.Drawing.Size(237, 30);
 			this.ungroupAllRowsToolStripMenuItem1.Text = "All Rows";
 			// 
 			// ungroupAllColumnsToolStripMenuItem1
 			// 
 			this.ungroupAllColumnsToolStripMenuItem1.Name = "ungroupAllColumnsToolStripMenuItem1";
-			this.ungroupAllColumnsToolStripMenuItem1.Size = new System.Drawing.Size(169, 22);
+			this.ungroupAllColumnsToolStripMenuItem1.Size = new System.Drawing.Size(237, 30);
 			this.ungroupAllColumnsToolStripMenuItem1.Text = "All Columns";
 			// 
 			// toolStripMenuItem15
 			// 
 			this.toolStripMenuItem15.Name = "toolStripMenuItem15";
-			this.toolStripMenuItem15.Size = new System.Drawing.Size(137, 6);
+			this.toolStripMenuItem15.Size = new System.Drawing.Size(191, 6);
 			// 
 			// insertToolStripMenuItem
 			// 
@@ -2764,37 +2777,37 @@ namespace unvell.ReoGrid.Editor
             this.toolStripMenuItem40,
             this.rectangleToolStripMenuItem});
 			this.insertToolStripMenuItem.Name = "insertToolStripMenuItem";
-			this.insertToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.insertToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
 			this.insertToolStripMenuItem.Text = "Insert";
 			// 
 			// chartToolStripMenuItem
 			// 
 			this.chartToolStripMenuItem.Name = "chartToolStripMenuItem";
-			this.chartToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.chartToolStripMenuItem.Size = new System.Drawing.Size(172, 30);
 			this.chartToolStripMenuItem.Text = "Chart";
 			// 
 			// toolStripMenuItem40
 			// 
 			this.toolStripMenuItem40.Name = "toolStripMenuItem40";
-			this.toolStripMenuItem40.Size = new System.Drawing.Size(123, 6);
+			this.toolStripMenuItem40.Size = new System.Drawing.Size(169, 6);
 			// 
 			// rectangleToolStripMenuItem
 			// 
 			this.rectangleToolStripMenuItem.Name = "rectangleToolStripMenuItem";
-			this.rectangleToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+			this.rectangleToolStripMenuItem.Size = new System.Drawing.Size(172, 30);
 			this.rectangleToolStripMenuItem.Text = "Rectangle";
 			// 
 			// resizeToolStripMenuItem
 			// 
 			this.resizeToolStripMenuItem.Name = "resizeToolStripMenuItem";
-			this.resizeToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.resizeToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
 			this.resizeToolStripMenuItem.Text = "Resize...";
 			// 
 			// sheetReadonlyToolStripMenuItem
 			// 
 			this.sheetReadonlyToolStripMenuItem.CheckOnClick = true;
 			this.sheetReadonlyToolStripMenuItem.Name = "sheetReadonlyToolStripMenuItem";
-			this.sheetReadonlyToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.sheetReadonlyToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
 			this.sheetReadonlyToolStripMenuItem.Text = "Read-only";
 			// 
 			// formulaToolStripMenuItem
@@ -2812,7 +2825,7 @@ namespace unvell.ReoGrid.Editor
             this.suspendReferenceUpdatingToolStripMenuItem,
             this.recalculateWorksheetToolStripMenuItem});
 			this.formulaToolStripMenuItem.Name = "formulaToolStripMenuItem";
-			this.formulaToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+			this.formulaToolStripMenuItem.Size = new System.Drawing.Size(89, 29);
 			this.formulaToolStripMenuItem.Text = "Formula";
 			// 
 			// autoFunctionToolStripMenuItem
@@ -2824,71 +2837,71 @@ namespace unvell.ReoGrid.Editor
             this.AutoFunctionMaxToolStripMenuItem,
             this.AutoFunctionMinToolStripMenuItem});
 			this.autoFunctionToolStripMenuItem.Name = "autoFunctionToolStripMenuItem";
-			this.autoFunctionToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.autoFunctionToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.autoFunctionToolStripMenuItem.Text = "Auto Function";
 			// 
 			// AutoFunctionSumToolStripMenuItem
 			// 
 			this.AutoFunctionSumToolStripMenuItem.Name = "AutoFunctionSumToolStripMenuItem";
-			this.AutoFunctionSumToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+			this.AutoFunctionSumToolStripMenuItem.Size = new System.Drawing.Size(171, 30);
 			this.AutoFunctionSumToolStripMenuItem.Text = "SUM";
 			// 
 			// AutoFunctionAverageToolStripMenuItem
 			// 
 			this.AutoFunctionAverageToolStripMenuItem.Name = "AutoFunctionAverageToolStripMenuItem";
-			this.AutoFunctionAverageToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+			this.AutoFunctionAverageToolStripMenuItem.Size = new System.Drawing.Size(171, 30);
 			this.AutoFunctionAverageToolStripMenuItem.Text = "AVERAGE";
 			// 
 			// AutoFunctionCountToolStripMenuItem
 			// 
 			this.AutoFunctionCountToolStripMenuItem.Name = "AutoFunctionCountToolStripMenuItem";
-			this.AutoFunctionCountToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+			this.AutoFunctionCountToolStripMenuItem.Size = new System.Drawing.Size(171, 30);
 			this.AutoFunctionCountToolStripMenuItem.Text = "COUNT";
 			// 
 			// AutoFunctionMaxToolStripMenuItem
 			// 
 			this.AutoFunctionMaxToolStripMenuItem.Name = "AutoFunctionMaxToolStripMenuItem";
-			this.AutoFunctionMaxToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+			this.AutoFunctionMaxToolStripMenuItem.Size = new System.Drawing.Size(171, 30);
 			this.AutoFunctionMaxToolStripMenuItem.Text = "MAX";
 			// 
 			// AutoFunctionMinToolStripMenuItem
 			// 
 			this.AutoFunctionMinToolStripMenuItem.Name = "AutoFunctionMinToolStripMenuItem";
-			this.AutoFunctionMinToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+			this.AutoFunctionMinToolStripMenuItem.Size = new System.Drawing.Size(171, 30);
 			this.AutoFunctionMinToolStripMenuItem.Text = "MIN";
 			// 
 			// toolStripMenuItem37
 			// 
 			this.toolStripMenuItem37.Name = "toolStripMenuItem37";
-			this.toolStripMenuItem37.Size = new System.Drawing.Size(223, 6);
+			this.toolStripMenuItem37.Size = new System.Drawing.Size(322, 6);
 			// 
 			// defineNamedRangeToolStripMenuItem
 			// 
 			this.defineNamedRangeToolStripMenuItem.Name = "defineNamedRangeToolStripMenuItem";
-			this.defineNamedRangeToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.defineNamedRangeToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.defineNamedRangeToolStripMenuItem.Text = "Define Named Range...";
 			// 
 			// nameManagerToolStripMenuItem
 			// 
 			this.nameManagerToolStripMenuItem.Name = "nameManagerToolStripMenuItem";
-			this.nameManagerToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.nameManagerToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.nameManagerToolStripMenuItem.Text = "Name Manager...";
 			// 
 			// toolStripMenuItem39
 			// 
 			this.toolStripMenuItem39.Name = "toolStripMenuItem39";
-			this.toolStripMenuItem39.Size = new System.Drawing.Size(223, 6);
+			this.toolStripMenuItem39.Size = new System.Drawing.Size(322, 6);
 			// 
 			// tracePrecedentsToolStripMenuItem
 			// 
 			this.tracePrecedentsToolStripMenuItem.Name = "tracePrecedentsToolStripMenuItem";
-			this.tracePrecedentsToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.tracePrecedentsToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.tracePrecedentsToolStripMenuItem.Text = "Trace Precedents";
 			// 
 			// traceDependentsToolStripMenuItem
 			// 
 			this.traceDependentsToolStripMenuItem.Name = "traceDependentsToolStripMenuItem";
-			this.traceDependentsToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.traceDependentsToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.traceDependentsToolStripMenuItem.Text = "Trace Dependents";
 			// 
 			// removeArrowsToolStripMenuItem
@@ -2899,48 +2912,48 @@ namespace unvell.ReoGrid.Editor
             this.removePrecedentArrowsToolStripMenuItem,
             this.removeDependentArrowsToolStripMenuItem});
 			this.removeArrowsToolStripMenuItem.Name = "removeArrowsToolStripMenuItem";
-			this.removeArrowsToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.removeArrowsToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.removeArrowsToolStripMenuItem.Text = "Remove Arrows";
 			// 
 			// removeAllArrowsToolStripMenuItem
 			// 
 			this.removeAllArrowsToolStripMenuItem.Name = "removeAllArrowsToolStripMenuItem";
-			this.removeAllArrowsToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+			this.removeAllArrowsToolStripMenuItem.Size = new System.Drawing.Size(314, 30);
 			this.removeAllArrowsToolStripMenuItem.Text = "Remove All Arrows";
 			// 
 			// toolStripMenuItem25
 			// 
 			this.toolStripMenuItem25.Name = "toolStripMenuItem25";
-			this.toolStripMenuItem25.Size = new System.Drawing.Size(215, 6);
+			this.toolStripMenuItem25.Size = new System.Drawing.Size(311, 6);
 			// 
 			// removePrecedentArrowsToolStripMenuItem
 			// 
 			this.removePrecedentArrowsToolStripMenuItem.Name = "removePrecedentArrowsToolStripMenuItem";
-			this.removePrecedentArrowsToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+			this.removePrecedentArrowsToolStripMenuItem.Size = new System.Drawing.Size(314, 30);
 			this.removePrecedentArrowsToolStripMenuItem.Text = "Remove Precedent Arrows";
 			// 
 			// removeDependentArrowsToolStripMenuItem
 			// 
 			this.removeDependentArrowsToolStripMenuItem.Name = "removeDependentArrowsToolStripMenuItem";
-			this.removeDependentArrowsToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+			this.removeDependentArrowsToolStripMenuItem.Size = new System.Drawing.Size(314, 30);
 			this.removeDependentArrowsToolStripMenuItem.Text = "Remove Dependent Arrows";
 			// 
 			// toolStripMenuItem23
 			// 
 			this.toolStripMenuItem23.Name = "toolStripMenuItem23";
-			this.toolStripMenuItem23.Size = new System.Drawing.Size(223, 6);
+			this.toolStripMenuItem23.Size = new System.Drawing.Size(322, 6);
 			// 
 			// suspendReferenceUpdatingToolStripMenuItem
 			// 
 			this.suspendReferenceUpdatingToolStripMenuItem.CheckOnClick = true;
 			this.suspendReferenceUpdatingToolStripMenuItem.Name = "suspendReferenceUpdatingToolStripMenuItem";
-			this.suspendReferenceUpdatingToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.suspendReferenceUpdatingToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.suspendReferenceUpdatingToolStripMenuItem.Text = "Suspend Reference Updating";
 			// 
 			// recalculateWorksheetToolStripMenuItem
 			// 
 			this.recalculateWorksheetToolStripMenuItem.Name = "recalculateWorksheetToolStripMenuItem";
-			this.recalculateWorksheetToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+			this.recalculateWorksheetToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
 			this.recalculateWorksheetToolStripMenuItem.Text = "Recalculate Worksheet";
 			// 
 			// scriptToolStripMenuItem
@@ -2950,7 +2963,7 @@ namespace unvell.ReoGrid.Editor
             this.toolStripMenuItem16,
             this.runFunctionToolStripMenuItem});
 			this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
-			this.scriptToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+			this.scriptToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
 			this.scriptToolStripMenuItem.Text = "&Script";
 			// 
 			// scriptEditorToolStripMenuItem
@@ -2958,19 +2971,19 @@ namespace unvell.ReoGrid.Editor
 			this.scriptEditorToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.VSProject_script;
 			this.scriptEditorToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Fuchsia;
 			this.scriptEditorToolStripMenuItem.Name = "scriptEditorToolStripMenuItem";
-			this.scriptEditorToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+			this.scriptEditorToolStripMenuItem.Size = new System.Drawing.Size(212, 30);
 			this.scriptEditorToolStripMenuItem.Text = "Script &Editor...";
 			// 
 			// toolStripMenuItem16
 			// 
 			this.toolStripMenuItem16.Name = "toolStripMenuItem16";
-			this.toolStripMenuItem16.Size = new System.Drawing.Size(151, 6);
+			this.toolStripMenuItem16.Size = new System.Drawing.Size(209, 6);
 			// 
 			// runFunctionToolStripMenuItem
 			// 
 			this.runFunctionToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.FunctionHS;
 			this.runFunctionToolStripMenuItem.Name = "runFunctionToolStripMenuItem";
-			this.runFunctionToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+			this.runFunctionToolStripMenuItem.Size = new System.Drawing.Size(212, 30);
 			this.runFunctionToolStripMenuItem.Text = "&Run Function...";
 			// 
 			// toolsToolStripMenuItem
@@ -2981,14 +2994,14 @@ namespace unvell.ReoGrid.Editor
             this.toolStripMenuItem13,
             this.debugToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(65, 29);
 			this.toolsToolStripMenuItem.Text = "&Tools";
 			// 
 			// controlStyleToolStripMenuItem
 			// 
 			this.controlStyleToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.ColorHS;
 			this.controlStyleToolStripMenuItem.Name = "controlStyleToolStripMenuItem";
-			this.controlStyleToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+			this.controlStyleToolStripMenuItem.Size = new System.Drawing.Size(266, 30);
 			this.controlStyleToolStripMenuItem.Text = "Control &Appearance...";
 			this.controlStyleToolStripMenuItem.Click += new System.EventHandler(this.styleEditorToolStripMenuItem_Click);
 			// 
@@ -2999,34 +3012,34 @@ namespace unvell.ReoGrid.Editor
             this.japanesejpJPToolStripMenuItem,
             this.simplifiedChinesezhCNToolStripMenuItem});
 			this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-			this.languageToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+			this.languageToolStripMenuItem.Size = new System.Drawing.Size(266, 30);
 			this.languageToolStripMenuItem.Text = "&Language";
 			// 
 			// englishenUSToolStripMenuItem
 			// 
 			this.englishenUSToolStripMenuItem.Name = "englishenUSToolStripMenuItem";
-			this.englishenUSToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+			this.englishenUSToolStripMenuItem.Size = new System.Drawing.Size(305, 30);
 			this.englishenUSToolStripMenuItem.Text = "English (en-US)";
 			this.englishenUSToolStripMenuItem.Click += new System.EventHandler(this.englishenUSToolStripMenuItem_Click);
 			// 
 			// japanesejpJPToolStripMenuItem
 			// 
 			this.japanesejpJPToolStripMenuItem.Name = "japanesejpJPToolStripMenuItem";
-			this.japanesejpJPToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+			this.japanesejpJPToolStripMenuItem.Size = new System.Drawing.Size(305, 30);
 			this.japanesejpJPToolStripMenuItem.Text = "&Japanese (jp-JP)";
 			this.japanesejpJPToolStripMenuItem.Click += new System.EventHandler(this.japanesejpJPToolStripMenuItem_Click);
 			// 
 			// simplifiedChinesezhCNToolStripMenuItem
 			// 
 			this.simplifiedChinesezhCNToolStripMenuItem.Name = "simplifiedChinesezhCNToolStripMenuItem";
-			this.simplifiedChinesezhCNToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+			this.simplifiedChinesezhCNToolStripMenuItem.Size = new System.Drawing.Size(305, 30);
 			this.simplifiedChinesezhCNToolStripMenuItem.Text = "Simplified &Chinese (zh-CN)";
 			this.simplifiedChinesezhCNToolStripMenuItem.Click += new System.EventHandler(this.simplifiedChinesezhCNToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem13
 			// 
 			this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-			this.toolStripMenuItem13.Size = new System.Drawing.Size(186, 6);
+			this.toolStripMenuItem13.Size = new System.Drawing.Size(263, 6);
 			// 
 			// debugToolStripMenuItem
 			// 
@@ -3037,38 +3050,38 @@ namespace unvell.ReoGrid.Editor
             this.toolStripMenuItem14,
             this.showDebugInfoToolStripMenuItem});
 			this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-			this.debugToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+			this.debugToolStripMenuItem.Size = new System.Drawing.Size(266, 30);
 			this.debugToolStripMenuItem.Text = "Debug";
 			// 
 			// validateMergedRangeToolStripMenuItem
 			// 
 			this.validateMergedRangeToolStripMenuItem.Name = "validateMergedRangeToolStripMenuItem";
-			this.validateMergedRangeToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+			this.validateMergedRangeToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.validateMergedRangeToolStripMenuItem.Text = "Validate Merged Range";
 			// 
 			// validateBorderSpanToolStripMenuItem
 			// 
 			this.validateBorderSpanToolStripMenuItem.Name = "validateBorderSpanToolStripMenuItem";
-			this.validateBorderSpanToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+			this.validateBorderSpanToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.validateBorderSpanToolStripMenuItem.Text = "Validate Border Span";
 			// 
 			// validateAllToolStripMenuItem
 			// 
 			this.validateAllToolStripMenuItem.Name = "validateAllToolStripMenuItem";
 			this.validateAllToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
-			this.validateAllToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+			this.validateAllToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.validateAllToolStripMenuItem.Text = "Validate All";
 			// 
 			// toolStripMenuItem14
 			// 
 			this.toolStripMenuItem14.Name = "toolStripMenuItem14";
-			this.toolStripMenuItem14.Size = new System.Drawing.Size(192, 6);
+			this.toolStripMenuItem14.Size = new System.Drawing.Size(277, 6);
 			// 
 			// showDebugInfoToolStripMenuItem
 			// 
 			this.showDebugInfoToolStripMenuItem.Name = "showDebugInfoToolStripMenuItem";
 			this.showDebugInfoToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7;
-			this.showDebugInfoToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+			this.showDebugInfoToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
 			this.showDebugInfoToolStripMenuItem.Text = "Show Debug Info";
 			// 
 			// helpToolStripMenuItem
@@ -3079,49 +3092,51 @@ namespace unvell.ReoGrid.Editor
             this.toolStripMenuItem28,
             this.aboutToolStripMenuItem});
 			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(61, 29);
 			this.helpToolStripMenuItem.Text = "&Help";
 			// 
 			// homepageToolStripMenuItem
 			// 
 			this.homepageToolStripMenuItem.Name = "homepageToolStripMenuItem";
-			this.homepageToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.homepageToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.homepageToolStripMenuItem.Text = "Homepage...";
 			// 
 			// documentationToolStripMenuItem
 			// 
 			this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-			this.documentationToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.documentationToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.documentationToolStripMenuItem.Text = "Documentation...";
 			// 
 			// toolStripMenuItem28
 			// 
 			this.toolStripMenuItem28.Name = "toolStripMenuItem28";
-			this.toolStripMenuItem28.Size = new System.Drawing.Size(163, 6);
+			this.toolStripMenuItem28.Size = new System.Drawing.Size(228, 6);
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Image = global::unvell.ReoGrid.Editor.Properties.Resources.toolbar_get_info;
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(231, 30);
 			this.aboutToolStripMenuItem.Text = "&About...";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
 			// statusStrip1
 			// 
+			this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusToolStripStatusLabel,
             this.rangeInfoToolStripStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 678);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 1055);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(1002, 22);
+			this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
+			this.statusStrip1.Size = new System.Drawing.Size(1503, 22);
 			this.statusStrip1.TabIndex = 5;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
 			// statusToolStripStatusLabel
 			// 
 			this.statusToolStripStatusLabel.Name = "statusToolStripStatusLabel";
-			this.statusToolStripStatusLabel.Size = new System.Drawing.Size(727, 17);
+			this.statusToolStripStatusLabel.Size = new System.Drawing.Size(1220, 17);
 			this.statusToolStripStatusLabel.Spring = true;
 			this.statusToolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -3139,29 +3154,31 @@ namespace unvell.ReoGrid.Editor
 			this.grid.ContextMenuStrip = this.cellContextMenuStrip;
 			this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grid.LeadHeaderContextMenuStrip = this.leadHeaderContextMenuStrip;
-			this.grid.Location = new System.Drawing.Point(0, 102);
+			this.grid.Location = new System.Drawing.Point(0, 142);
+			this.grid.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.grid.Name = "grid";
 			this.grid.RowHeaderContextMenuStrip = this.rowContextMenuStrip;
 			this.grid.Script = null;
 			this.grid.SheetTabContextMenuStrip = null;
 			this.grid.SheetTabNewButtonVisible = true;
 			this.grid.SheetTabVisible = true;
-			this.grid.SheetTabWidth = 400;
+			this.grid.SheetTabWidth = 600;
 			this.grid.ShowScrollEndSpacing = true;
-			this.grid.Size = new System.Drawing.Size(1002, 576);
+			this.grid.Size = new System.Drawing.Size(1503, 913);
 			this.grid.TabIndex = 0;
 			// 
 			// leadHeaderContextMenuStrip
 			// 
+			this.leadHeaderContextMenuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.leadHeaderContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.resetAllPageBreaksToolStripMenuItem1});
 			this.leadHeaderContextMenuStrip.Name = "leadHeaderContextMenuStrip";
-			this.leadHeaderContextMenuStrip.Size = new System.Drawing.Size(186, 26);
+			this.leadHeaderContextMenuStrip.Size = new System.Drawing.Size(251, 34);
 			// 
 			// resetAllPageBreaksToolStripMenuItem1
 			// 
 			this.resetAllPageBreaksToolStripMenuItem1.Name = "resetAllPageBreaksToolStripMenuItem1";
-			this.resetAllPageBreaksToolStripMenuItem1.Size = new System.Drawing.Size(185, 22);
+			this.resetAllPageBreaksToolStripMenuItem1.Size = new System.Drawing.Size(250, 30);
 			this.resetAllPageBreaksToolStripMenuItem1.Text = "Reset All Page Breaks";
 			// 
 			// formulaBar
@@ -3170,15 +3187,27 @@ namespace unvell.ReoGrid.Editor
 			this.formulaBar.Dock = System.Windows.Forms.DockStyle.Top;
 			this.formulaBar.FocusToGridAfterInputValue = true;
 			this.formulaBar.GridControl = this.grid;
-			this.formulaBar.Location = new System.Drawing.Point(0, 74);
+			this.formulaBar.Location = new System.Drawing.Point(0, 99);
+			this.formulaBar.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
 			this.formulaBar.Name = "formulaBar";
-			this.formulaBar.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-			this.formulaBar.Size = new System.Drawing.Size(1002, 28);
+			this.formulaBar.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+			this.formulaBar.Size = new System.Drawing.Size(1503, 43);
 			this.formulaBar.TabIndex = 6;
+			// 
+			// toolStripSeparator15
+			// 
+			this.toolStripSeparator15.Name = "toolStripSeparator15";
+			this.toolStripSeparator15.Size = new System.Drawing.Size(277, 6);
+			// 
+			// editCellToolStripMenuItem
+			// 
+			this.editCellToolStripMenuItem.Name = "editCellToolStripMenuItem";
+			this.editCellToolStripMenuItem.Size = new System.Drawing.Size(280, 30);
+			this.editCellToolStripMenuItem.Text = "Edit Cell";
 			// 
 			// ReoGridEditorControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.grid);
 			this.Controls.Add(this.formulaBar);
@@ -3187,8 +3216,9 @@ namespace unvell.ReoGrid.Editor
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.menuStrip1);
 			this.Location = new System.Drawing.Point(200, 10);
+			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.Name = "ReoGridEditorControl";
-			this.Size = new System.Drawing.Size(1002, 700);
+			this.Size = new System.Drawing.Size(1503, 1077);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.columnContextMenuStrip.ResumeLayout(false);
@@ -3541,6 +3571,8 @@ namespace unvell.ReoGrid.Editor
 		private ToolStripEx toolStrip1;
 		private ToolStripEx fontToolStrip;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
+		private System.Windows.Forms.ToolStripMenuItem editCellToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
 	}
 }
 
