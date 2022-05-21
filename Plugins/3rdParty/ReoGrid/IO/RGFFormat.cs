@@ -1503,11 +1503,15 @@ namespace unvell.ReoGrid
 										 if (cell.body is CellTypes.ImageCell)
 										 {
 											 var imageBody = (CellTypes.ImageCell)cell.body;
-											 using (var ms = new MemoryStream(4096))
-											 {
-												 imageBody.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
-												 xmlCell.data = "image/png," + Convert.ToBase64String(ms.ToArray());
+											 if (imageBody.Image != null)
+											 {
+												 using (var ms = new MemoryStream(4096))
+												 {
+													 imageBody.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+													 xmlCell.data = "image/png," + Convert.ToBase64String(ms.ToArray());
+												 }
 											 }
 										 }
 
