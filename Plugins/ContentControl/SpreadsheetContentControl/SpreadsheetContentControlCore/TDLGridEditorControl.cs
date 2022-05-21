@@ -5,7 +5,9 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Resources;
 using System.IO;
+using System.Net;
 
 using unvell.ReoGrid;
 using unvell.ReoGrid.Events;
@@ -443,14 +445,7 @@ namespace SpreadsheetContentControl
 				{
 					string newData = GridControl.CurrentWorksheet.GetCellText(row, col);
 
-					if (IsValidHref(newData))
-					{
-						GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(newData));
-					}
-					else
-					{
-						// TODO
-					}
+					HandleCellTextUpdate(row, col, newData);
 				}
 			}
 		}
@@ -465,6 +460,63 @@ namespace SpreadsheetContentControl
 			return (parser.GetUrlCount(href) == 1);
 		}
 
+		private void HandleCellTextUpdate(int row, int col, string newData)
+		{
+			if (IsValidHref(newData))
+			{
+				Image image = null;
+
+				using (var client = new WebClient())
+				{
+					using (var stream = client.OpenRead(newData))
+					{
+						try
+						{
+							image = new Bitmap(stream);
+
+							//GridControl.CurrentWorksheet.SetCellData(row, col, "");
+							GridControl.CurrentWorksheet.SetCellBody(row, col, new ImageCell(image, ImageCellViewMode.Clip));
+						}
+						catch (Exception e)
+						{
+							image = null;
+						}
+					}
+				}
+
+				if (image == null)
+				{
+					GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(newData));
+				}
+			}
+			else if (File.Exists(newData))
+			{
+				Image image = null;
+
+				try
+				{
+					image = new Bitmap(newData);
+
+					//GridControl.CurrentWorksheet.SetCellData(row, col, "");
+					GridControl.CurrentWorksheet.SetCellBody(row, col, new ImageCell(image, ImageCellViewMode.Clip));
+				}
+				catch (Exception e)
+				{
+					image = null;
+				}
+
+				if (image == null)
+				{
+					var uri = new Uri(newData);
+					GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(uri.AbsoluteUri));
+				}
+			}
+			else
+			{
+				// TODO
+			}
+		}
+
 		private void OnAfterCellEdit(object sender, CellAfterEditEventArgs e)
 		{
 			if (e.EndReason == EndEditReason.NormalFinish)
@@ -474,14 +526,7 @@ namespace SpreadsheetContentControl
 
 				if ((oldData != null) && (newData != null) && !string.IsNullOrEmpty(newData) && !newData.Equals(oldData))
 				{
-					if (IsValidHref(newData))
-					{
-						e.Cell.Body = new HyperlinkCell(newData);
-					}
-					else
-					{
-						// TODO
-					}
+					HandleCellTextUpdate(e.Cell.Row, e.Cell.Column, newData);
 				}
 			}
 		}

@@ -272,18 +272,16 @@ namespace unvell.ReoGrid
 
 					PartialGrid partialGrid = null;
 					string clipboardText = null;
+					System.Drawing.Image image = null;
 
 					DataObject data = Clipboard.GetDataObject() as DataObject;
+
 					if (data != null)
 					{
 						partialGrid = data.GetData(ClipBoardDataFormatIdentify) as PartialGrid;
-
-						if (data.ContainsText())
-						{
-							clipboardText = data.GetText();
-						}
+						clipboardText = data.GetText();
+						image = data.GetImage();
 					}
-
 
 					if (partialGrid != null)
 					{
@@ -401,6 +399,10 @@ namespace unvell.ReoGrid
 						}
 
 						#endregion // Partial Grid Pasting
+					}
+					else if (image != null)
+					{
+						int breakpoint = 0;
 					}
 					else if (!string.IsNullOrEmpty(clipboardText))
 					{
