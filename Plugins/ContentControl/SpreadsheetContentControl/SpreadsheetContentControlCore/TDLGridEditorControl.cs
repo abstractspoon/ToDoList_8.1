@@ -8,7 +8,9 @@ using System.Windows.Forms;
 using System.IO;
 
 using unvell.ReoGrid;
+using unvell.ReoGrid.Events;
 using unvell.ReoGrid.Editor;
+using unvell.ReoGrid.CellTypes;
 
 using Abstractspoon.Tdl.PluginHelpers;
 using Abstractspoon.Tdl.PluginHelpers.ColorUtil;
@@ -57,6 +59,19 @@ namespace SpreadsheetContentControl
 			m_Trans.Translate(CellContextMenu.Items);
 			m_Trans.Translate(HeaderContextMenu.Items);
 			m_Trans.Translate(ColumnContextMenu.Items);
+
+			GridControl.WorksheetInserted += (s, e) =>
+			{
+				e.Worksheet.AfterPaste += new EventHandler<RangeEventArgs>(OnAfterPaste);
+				e.Worksheet.AfterCellEdit += new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
+			};
+
+			GridControl.WorksheetRemoved += (s, e) =>
+			{
+				e.Worksheet.AfterPaste -= new EventHandler<RangeEventArgs>(OnAfterPaste);
+				e.Worksheet.AfterCellEdit -= new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
+			};
+
 		}
 
 		public Byte[] GetContent()
@@ -147,11 +162,18 @@ namespace SpreadsheetContentControl
 			if (selection == null)
 				return false;
 
-			for (int row = selection.StartPos.Row; row <= selection.EndPos.Row; row++)
+			if (GridControl.CurrentWorksheet.IsEditing)
 			{
-				for (int col = selection.StartPos.Col; col <= selection.EndPos.Col; col++)
+				GridControl.CurrentWorksheet.Paste(content);
+			}
+			else
+			{
+				for (int row = selection.StartPos.Row; row <= selection.EndPos.Row; row++)
 				{
-					GridControl.CurrentWorksheet.PasteFromString(new CellPosition(row, col), content);
+					for (int col = selection.StartPos.Col; col <= selection.EndPos.Col; col++)
+					{
+						GridControl.CurrentWorksheet.PasteFromString(new CellPosition(row, col), content);
+					}
 				}
 			}
 
@@ -410,6 +432,58 @@ namespace SpreadsheetContentControl
 			CommandHandling.RemoveCommand("slashRightSolidToolStripButton", this.ToolBar.Items);
 
 			CommandHandling.RemoveCommand("zoomToolStripDropDownButton", this.FontBar.Items);
+
+		}
+
+		private void OnAfterPaste(object sender, RangeEventArgs e)
+		{
+			for (int row = e.Range.Row; row <= e.Range.EndRow; row++)
+			{
+				for (int col = e.Range.Col; col <= e.Range.EndCol; col++)
+				{
+					string newData = GridControl.CurrentWorksheet.GetCellText(row, col);
+
+					if (IsValidHref(newData))
+					{
+						GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(newData));
+					}
+					else
+					{
+						// TODO
+					}
+				}
+			}
+		}
+
+		private bool IsValidHref(string href)
+		{
+			if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
+				return true;
+
+			var parser = new UrlParser();
+
+			return (parser.GetUrlCount(href) == 1);
+		}
+
+		private void OnAfterCellEdit(object sender, CellAfterEditEventArgs e)
+		{
+			if (e.EndReason == EndEditReason.NormalFinish)
+			{
+				string oldData = (e.Cell.Data as string);
+				string newData = (e.NewData as string);
+
+				if ((oldData != null) && (newData != null) && !string.IsNullOrEmpty(newData) && !newData.Equals(oldData))
+				{
+					if (IsValidHref(newData))
+					{
+						e.Cell.Body = new HyperlinkCell(newData);
+					}
+					else
+					{
+						// TODO
+					}
+				}
+			}
 		}
 
 		public void SetUITheme(UITheme theme)

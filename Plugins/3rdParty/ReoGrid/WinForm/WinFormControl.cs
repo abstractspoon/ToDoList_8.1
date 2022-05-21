@@ -548,6 +548,11 @@ namespace unvell.ReoGrid
 				return editTextbox.Text;
 			}
 
+			public void EditControlPaste(string text)
+			{
+				this.editTextbox.Paste(text);
+			}
+
 			public void EditControlSelectAll()
 			{
 				this.editTextbox.SelectAll();
