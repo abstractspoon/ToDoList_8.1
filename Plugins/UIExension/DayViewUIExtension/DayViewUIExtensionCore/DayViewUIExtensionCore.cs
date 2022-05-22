@@ -394,40 +394,41 @@ namespace DayViewUIExtension
 			m_Toolbar.Items.Add(btn1);
 
 			m_Toolbar.Items.Add(new ToolStripSeparator());
+			string format = m_Trans.Translate("{0} Day View");
 
 			var btn2 = new ToolStripButton();
 			btn2.Name = "Show1DayView";
 			btn2.ImageIndex = 1;
 			btn2.Click += new EventHandler(OnShow1DayView);
-			btn2.ToolTipText = m_Trans.Translate("1 Day View");
+			btn2.ToolTipText = string.Format(format, 1);
 			m_Toolbar.Items.Add(btn2);
 
 			var btn3 = new ToolStripButton();
 			btn3.Name = "Show3DayView";
 			btn3.ImageIndex = 2;
 			btn3.Click += new EventHandler(OnShow3DayView);
-			btn3.ToolTipText = m_Trans.Translate("3 Day View");
+			btn3.ToolTipText = string.Format(format, 3);
 			m_Toolbar.Items.Add(btn3);
 
 			var btn4 = new ToolStripButton();
 			btn4.Name = "Show7DayView";
 			btn4.ImageIndex = 3;
 			btn4.Click += new EventHandler(OnShow7DayView);
-			btn4.ToolTipText = m_Trans.Translate("7 Day View");
+			btn4.ToolTipText = string.Format(format, 7);
 			m_Toolbar.Items.Add(btn4);
 
 			var btn5 = new ToolStripButton();
 			btn5.Name = "Show14DayView";
 			btn5.ImageIndex = 4;
 			btn5.Click += new EventHandler(OnShow14DayView);
-			btn5.ToolTipText = m_Trans.Translate("14 Day View");
+			btn5.ToolTipText = string.Format(format, 14);
 			m_Toolbar.Items.Add(btn5);
 
 			var btn6 = new ToolStripButton();
 			btn6.Name = "Show28DayView";
 			btn6.ImageIndex = 5;
 			btn6.Click += new EventHandler(OnShow28DayView);
-			btn6.ToolTipText = m_Trans.Translate("28 Day View");
+			btn6.ToolTipText = string.Format(format, 28);
 			m_Toolbar.Items.Add(btn6);
 
 			m_Toolbar.Items.Add(new ToolStripSeparator());
@@ -489,8 +490,8 @@ namespace DayViewUIExtension
 			m_DayView.DaysShowing = numDays;
             m_WeekLabel.NumDays = numDays;
 
-            String tooltip = String.Format("Next/Previous {0} days", numDays);
-			m_DayView.HScrollTooltipText = m_Trans.Translate(tooltip);
+			string format = m_Trans.Translate("Next/Previous {0} days");
+			m_DayView.HScrollTooltipText = String.Format(format, numDays);
 
 			UpdateToolbarButtonStates();
             UpdatedSelectedTaskDatesPosition();

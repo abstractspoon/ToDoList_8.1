@@ -32,6 +32,7 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.m_DisplayContinuous = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.m_ShowFutureOcurrences = new System.Windows.Forms.CheckBox();
 			this.m_HideParentTasks = new System.Windows.Forms.CheckBox();
 			this.m_HideTasksSpanningDays = new System.Windows.Forms.CheckBox();
 			this.m_HideTasksSpanningWeekends = new System.Windows.Forms.CheckBox();
@@ -42,7 +43,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.BtnCancel = new System.Windows.Forms.Button();
 			this.BtnOK = new System.Windows.Forms.Button();
-			this.m_ShowFutureOcurrences = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -74,9 +74,10 @@
 			this.m_DisplayContinuous.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.m_DisplayContinuous.Location = new System.Drawing.Point(13, 63);
 			this.m_DisplayContinuous.Name = "m_DisplayContinuous";
-			this.m_DisplayContinuous.Size = new System.Drawing.Size(330, 17);
+			this.m_DisplayContinuous.Size = new System.Drawing.Size(407, 17);
 			this.m_DisplayContinuous.TabIndex = 4;
-			this.m_DisplayContinuous.Text = "&Display tasks as continuous between their \'Start\' and \'Due\' dates";
+			this.m_DisplayContinuous.Text = "&Display tasks as continuous between their \'Start\' and \'Due\' (or \'Completion\') da" +
+    "tes";
 			this.m_DisplayContinuous.UseVisualStyleBackColor = true;
 			// 
 			// groupBox1
@@ -92,6 +93,18 @@
 			this.groupBox1.TabIndex = 5;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Task Visibility";
+			// 
+			// m_ShowFutureOcurrences
+			// 
+			this.m_ShowFutureOcurrences.AutoSize = true;
+			this.m_ShowFutureOcurrences.Checked = true;
+			this.m_ShowFutureOcurrences.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.m_ShowFutureOcurrences.Location = new System.Drawing.Point(10, 111);
+			this.m_ShowFutureOcurrences.Name = "m_ShowFutureOcurrences";
+			this.m_ShowFutureOcurrences.Size = new System.Drawing.Size(236, 17);
+			this.m_ShowFutureOcurrences.TabIndex = 4;
+			this.m_ShowFutureOcurrences.Text = "Display &future occurrences of recurring tasks";
+			this.m_ShowFutureOcurrences.UseVisualStyleBackColor = true;
 			// 
 			// m_HideParentTasks
 			// 
@@ -197,18 +210,6 @@
 			this.BtnOK.TabIndex = 0;
 			this.BtnOK.Text = "OK";
 			this.BtnOK.UseVisualStyleBackColor = true;
-			// 
-			// m_ShowFutureOcurrences
-			// 
-			this.m_ShowFutureOcurrences.AutoSize = true;
-			this.m_ShowFutureOcurrences.Checked = true;
-			this.m_ShowFutureOcurrences.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.m_ShowFutureOcurrences.Location = new System.Drawing.Point(10, 111);
-			this.m_ShowFutureOcurrences.Name = "m_ShowFutureOcurrences";
-			this.m_ShowFutureOcurrences.Size = new System.Drawing.Size(236, 17);
-			this.m_ShowFutureOcurrences.TabIndex = 4;
-			this.m_ShowFutureOcurrences.Text = "Display &future occurrences of recurring tasks";
-			this.m_ShowFutureOcurrences.UseVisualStyleBackColor = true;
 			// 
 			// DayViewPreferencesDlg
 			// 
