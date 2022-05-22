@@ -507,7 +507,6 @@ namespace unvell.ReoGrid
 			{
 				var rect = new WFRect((int)Math.Round(bounds.Left), (int)Math.Round(bounds.Top),
 					(int)Math.Round(bounds.Width), (int)Math.Round(bounds.Height));
-				//rect.Inflate(-2, -2); // To make caret clearly visible
 
 				editTextbox.SuspendLayout();
 				editTextbox.Bounds = rect;
