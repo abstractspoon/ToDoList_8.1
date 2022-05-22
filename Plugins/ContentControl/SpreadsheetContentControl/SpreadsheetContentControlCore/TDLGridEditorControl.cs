@@ -165,19 +165,9 @@ namespace SpreadsheetContentControl
 				return false;
 
 			if (GridControl.CurrentWorksheet.IsEditing)
-			{
 				GridControl.CurrentWorksheet.Paste(content);
-			}
 			else
-			{
-				for (int row = selection.StartPos.Row; row <= selection.EndPos.Row; row++)
-				{
-					for (int col = selection.StartPos.Col; col <= selection.EndPos.Col; col++)
-					{
-						GridControl.CurrentWorksheet.PasteFromString(new CellPosition(row, col), content);
-					}
-				}
-			}
+				GridControl.CurrentWorksheet.PasteFromString(selection.StartPos, content);
 
 			NotifyParentContentChange();
 			return true;
@@ -462,6 +452,7 @@ namespace SpreadsheetContentControl
 
 		private void HandleCellTextUpdate(int row, int col, string newData)
 		{
+			// Start with URL
 			if (IsValidHref(newData))
 			{
 				Image image = null;
@@ -473,8 +464,6 @@ namespace SpreadsheetContentControl
 						try
 						{
 							image = new Bitmap(stream);
-
-							//GridControl.CurrentWorksheet.SetCellData(row, col, "");
 							GridControl.CurrentWorksheet.SetCellBody(row, col, new ImageCell(image, ImageCellViewMode.Clip));
 						}
 						catch (Exception e)
@@ -488,33 +477,42 @@ namespace SpreadsheetContentControl
 				{
 					GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(newData));
 				}
+
+				return;
 			}
-			else if (File.Exists(newData))
+
+			// Then try file path
+			try
 			{
-				Image image = null;
-
-				try
+				if (File.Exists(newData))
 				{
-					image = new Bitmap(newData);
+					Image image = null;
 
-					//GridControl.CurrentWorksheet.SetCellData(row, col, "");
-					GridControl.CurrentWorksheet.SetCellBody(row, col, new ImageCell(image, ImageCellViewMode.Clip));
-				}
-				catch (Exception e)
-				{
-					image = null;
-				}
+					try
+					{
+						image = new Bitmap(newData);
+						GridControl.CurrentWorksheet.SetCellBody(row, col, new ImageCell(image, ImageCellViewMode.Clip));
+					}
+					catch (Exception e)
+					{
+						image = null;
+					}
 
-				if (image == null)
-				{
-					var uri = new Uri(newData);
-					GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(uri.AbsoluteUri));
+					if (image == null)
+					{
+						var uri = new Uri(newData);
+						GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(uri.AbsoluteUri));
+					}
+
+					return;
 				}
 			}
-			else
+			catch (Exception e)
 			{
-				// TODO
 			}
+
+			// Then other 'things'
+			// TODO
 		}
 
 		private void OnAfterCellEdit(object sender, CellAfterEditEventArgs e)
