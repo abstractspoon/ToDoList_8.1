@@ -360,6 +360,11 @@ namespace unvell.ReoGrid.PropertyPages
 				// force format sample cell
 				labSample.Text = DataFormatterManager.Instance.DataFormatters[sampleCell.DataFormat].FormatCell(sampleCell);
 
+				// If that produced no text and the cell does have content
+				// then assume the content is 'bad' and just display it as-is
+				if (string.IsNullOrEmpty(labSample.Text))
+					labSample.Text = sampleCell.DisplayText;
+
 				var renderColor = sampleCell.RenderColor;
 				labSample.ForeColor = renderColor.IsTransparent ? Color.Black : (Color)renderColor;
 			}
