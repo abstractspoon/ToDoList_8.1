@@ -470,9 +470,12 @@ namespace unvell.ReoGrid.PropertyPages
 						break;
 
 					case CellDataFormatFlag.Percent:
-						var pargs = (NumberDataFormatter.NumberFormatArgs)sampleCell.DataFormatArgs;
-						percentDecimalPlaces.Value = pargs.DecimalPlaces;
-						backupFormatArgs = pargs;
+						if (sampleCell.DataFormatArgs != null)
+						{
+							var pargs = (NumberDataFormatter.NumberFormatArgs)sampleCell.DataFormatArgs;
+							percentDecimalPlaces.Value = pargs.DecimalPlaces;
+							backupFormatArgs = pargs;
+						}
 						break;
 				}
 
