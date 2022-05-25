@@ -174,7 +174,7 @@ namespace SpreadsheetContentControl
 			return formatType;
 		}
 
-		void UpdateCellFormat(Cell cell, DateTime date, CellDataFormatFlag prevFormatType, string prevFormatStr)
+		bool UpdateCellFormat(Cell cell, DateTime date, CellDataFormatFlag prevFormatType, string prevFormatStr)
 		{
 			// Post-processing of dates/times to pragmatically match Excel's rules
 			switch (prevFormatType)
@@ -199,9 +199,8 @@ namespace SpreadsheetContentControl
 						CultureName = Thread.CurrentThread.CurrentCulture.Name,
 						Format = GetDateFormat(date, ""),
 					};
-					cell.Data = date;
 				}
-				break;
+				return true;
 
 			case CellDataFormatFlag.Number:
 			case CellDataFormatFlag.Text:
@@ -222,10 +221,11 @@ namespace SpreadsheetContentControl
 						CultureName = Thread.CurrentThread.CurrentCulture.Name,
 						Format = GetDateFormat(date, prevFormatStr),
 					};
-					cell.Data = date;
 				}
-				break;
+				return true;
 			}
+
+			return false;
 		}
 
 		public bool InsertTextContent(String content, bool bAtEnd)
@@ -240,6 +240,9 @@ namespace SpreadsheetContentControl
 			if (GridControl.CurrentWorksheet.IsEditing)
 				return GridControl.CurrentWorksheet.Paste(content);
 
+			if (FormulaBar.ContainsFocus)
+				return FormulaBar.EditControlPaste(content);
+
 			// else insert into spreadsheet
 
 			// Cache current cell properties to help with post-processing of dates/times
@@ -250,14 +253,21 @@ namespace SpreadsheetContentControl
 
 			string prevFormatStr;
 			var prevFormatType = GetCellFormat(cell, out prevFormatStr);
-			
-			var resultRange = GridControl.CurrentWorksheet.PasteFromString(selection.StartPos, content);
 
-			if (contentIsDateTime && resultRange.IsSingleCell)
+			if (GridControl.CurrentWorksheet.Paste(content))
 			{
-				cell = GridControl.CurrentWorksheet.GetCell(resultRange.StartPos);
+				if (contentIsDateTime)
+				{
+					cell = GridControl.CurrentWorksheet.GetCell(selection.StartPos);
 
-				UpdateCellFormat(cell, contentDate, prevFormatType, prevFormatStr);
+					if (UpdateCellFormat(cell, contentDate, prevFormatType, prevFormatStr))
+					{
+						cell.Data = contentDate;
+						cell.Formula = null;
+					}
+				}
+
+				FormulaBar.RefreshCurrentFormula();
 			}
 
 			NotifyParentContentChange();
