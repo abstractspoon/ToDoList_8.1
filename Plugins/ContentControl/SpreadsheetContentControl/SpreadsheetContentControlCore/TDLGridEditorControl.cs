@@ -627,11 +627,14 @@ namespace SpreadsheetContentControl
 
 		private void HandleCellTextUpdate(int row, int col, string newData)
 		{
+			newData = newData.Trim();
+
 			// Start with URL
 			if (IsValidHref(newData))
 			{
 				Image image = null;
 
+/*
 				using (var client = new WebClient())
 				{
 					using (var stream = client.OpenRead(newData))
@@ -641,12 +644,13 @@ namespace SpreadsheetContentControl
 							image = new Bitmap(stream);
 							GridControl.CurrentWorksheet.SetCellBody(row, col, new ImageCell(image, ImageCellViewMode.Clip));
 						}
-						catch (Exception /*e*/)
+						catch (Exception / *e* /)
 						{
 							image = null;
 						}
 					}
 				}
+*/
 
 				if (image == null)
 				{
@@ -663,15 +667,17 @@ namespace SpreadsheetContentControl
 				{
 					Image image = null;
 
+/*
 					try
 					{
 						image = new Bitmap(newData);
 						GridControl.CurrentWorksheet.SetCellBody(row, col, new ImageCell(image, ImageCellViewMode.Clip));
 					}
-					catch (Exception /*e*/)
+					catch (Exception / *e* /)
 					{
 						image = null;
 					}
+*/
 
 					if (image == null)
 					{
