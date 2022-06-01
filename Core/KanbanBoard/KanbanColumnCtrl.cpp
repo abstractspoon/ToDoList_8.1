@@ -206,6 +206,8 @@ void CKanbanColumnCtrl::OnKillFocus(CWnd* pNewWnd)
 
 BOOL CKanbanColumnCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
+	m_tooltip.Pop();
+
 	// Two bugs in Windows 7
 	if ((COSVersion() < OSV_WIN8) && (GetStyle() & WS_VSCROLL))
 	{
