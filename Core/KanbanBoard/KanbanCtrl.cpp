@@ -3296,7 +3296,10 @@ void CKanbanCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 
 					// Resort before fixing up selection
 					if ((m_nSortBy != TDCA_NONE) || HasOption(KBCF_SORTSUBTASTASKSBELOWPARENTS))
+					{	
 						pDestCol->Sort(m_nSortBy, m_bSortAscending);
+						pSrcCol->Sort(m_nSortBy, m_bSortAscending);
+					}
 
 					SelectColumn(pDestCol, FALSE);
 					SelectTasks(aTaskIDs); 

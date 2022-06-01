@@ -201,14 +201,17 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////
 
+class CKanbanColumnCtrl;
+
 struct KANBANSORT
 {
-	KANBANSORT(const CKanbanItemMap& map);
+	KANBANSORT(const CKanbanItemMap& map, const CKanbanColumnCtrl& col);
 
 	BOOL IsParent(DWORD dwTaskID, const KANBANITEM* pKIChild) const;
-	const KANBANITEM* GetParent(const KANBANITEM* pKIChild) const;
 
 	const CKanbanItemMap& data;
+	const CKanbanColumnCtrl& ctrl;
+
 	TDC_ATTRIBUTE nBy;
 	CString sAttribID;
 	BOOL bAscending;

@@ -1072,9 +1072,10 @@ BOOL CKanbanColumnArray::MatchesAll(const CKanbanColumnArray& other, BOOL bIncDi
 
 //////////////////////////////////////////////////////////////////////
 
-KANBANSORT::KANBANSORT(const CKanbanItemMap& map)
+KANBANSORT::KANBANSORT(const CKanbanItemMap& map, const CKanbanColumnCtrl& col)
 	:
 	data(map),
+	ctrl(col),
 	nBy(TDCA_NONE),
 	bAscending(TRUE),
 	dwOptions(0)
@@ -1091,16 +1092,7 @@ BOOL KANBANSORT::IsParent(DWORD dwTaskID, const KANBANITEM* pKIChild) const
 	if (pKIChild->dwParentID == 0)
 		return FALSE;
 
-	return IsParent(dwTaskID, GetParent(pKIChild));
-}
-
-const KANBANITEM* KANBANSORT::GetParent(const KANBANITEM* pKIChild) const
-{
-	if (pKIChild->dwParentID == 0)
-		return NULL;
-
-	// else
-	return data.GetItem(pKIChild->dwParentID);
+	return IsParent(dwTaskID, data.GetItem(pKIChild->dwParentID));
 }
 
 //////////////////////////////////////////////////////////////////////
