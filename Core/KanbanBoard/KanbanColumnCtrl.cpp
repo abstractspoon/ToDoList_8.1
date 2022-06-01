@@ -1421,9 +1421,9 @@ void CKanbanColumnCtrl::ScrollToSelection()
 
 		// else just scroll to the first
 		HTREEITEM hti = (htiPartial ? htiPartial : FindItem(m_aSelTaskIDs[0]));
-		ASSERT(hti);
-
-		TCH().EnsureItemVisible(hti, FALSE);
+		
+		if (hti)
+			TCH().EnsureItemVisible(hti, FALSE);
 	}
 }
 
