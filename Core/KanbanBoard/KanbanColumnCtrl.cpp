@@ -1399,21 +1399,23 @@ void CKanbanColumnCtrl::ScrollToSelection()
 		while (nID--)
 		{
 			HTREEITEM hti = FindItem(m_aSelTaskIDs[nID]);
-			ASSERT(hti);
-
-			CRect rItem;
-			CTreeCtrl::GetItemRect(hti, rItem, FALSE);
-
-			if ((rItem.top >= rClient.top) && (rItem.bottom <= rClient.bottom))
-				return;
-
-			// Keep track of any partially visible item
-			if (htiPartial == NULL)
+			
+			if (hti)
 			{
-				BOOL bNotVisible = ((rItem.bottom <= rClient.top) || (rItem.top >= rClient.bottom));
+				CRect rItem;
+				CTreeCtrl::GetItemRect(hti, rItem, FALSE);
 
-				if (!bNotVisible)
-					htiPartial = hti;
+				if ((rItem.top >= rClient.top) && (rItem.bottom <= rClient.bottom))
+					return;
+
+				// Keep track of any partially visible item
+				if (htiPartial == NULL)
+				{
+					BOOL bNotVisible = ((rItem.bottom <= rClient.top) || (rItem.top >= rClient.bottom));
+
+					if (!bNotVisible)
+						htiPartial = hti;
+				}
 			}
 		}
 
