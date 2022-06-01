@@ -732,6 +732,16 @@ KANBANITEM* CKanbanItemMap::GetItem(DWORD dwTaskID) const
 	return pKI;
 }
 
+KANBANITEM* CKanbanItemMap::GetParentItem(DWORD dwTaskID) const
+{
+	KANBANITEM* pKI = GetItem(dwTaskID);
+
+	if (pKI)
+		pKI = GetItem(pKI->dwParentID);
+
+	return pKI;
+}
+
 CString CKanbanItemMap::GetItemTitle(DWORD dwTaskID) const
 {
 	const KANBANITEM* pKI = GetItem(dwTaskID);
@@ -757,6 +767,13 @@ BOOL CKanbanItemMap::IsFlagged(DWORD dwTaskID) const
 	const KANBANITEM* pKI = GetItem(dwTaskID);
 
 	return (pKI && pKI->bFlagged);
+}
+
+BOOL CKanbanItemMap::IsPinned(DWORD dwTaskID) const
+{
+	const KANBANITEM* pKI = GetItem(dwTaskID);
+
+	return (pKI && pKI->bPinned);
 }
 
 BOOL CKanbanItemMap::IsDone(DWORD dwTaskID, BOOL bIncGoodAsDone) const

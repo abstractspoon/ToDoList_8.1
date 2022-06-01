@@ -142,11 +142,13 @@ public:
 	BOOL HasItem(DWORD dwTaskID) const;
 	BOOL IsLocked(DWORD dwTaskID) const;
 	BOOL IsFlagged(DWORD dwTaskID) const;
+	BOOL IsPinned(DWORD dwTaskID) const;
 	BOOL IsDone(DWORD dwTaskID, BOOL bIncGoodAsDone = FALSE) const;
 
 	CString GetItemTitle(DWORD dwTaskID) const;
 
 	KANBANITEM* GetItem(DWORD dwTaskID) const;
+	KANBANITEM* GetParentItem(DWORD dwTaskID) const;
 	KANBANITEM* NewItem(DWORD dwTaskID, const CString& sTitle);
 
 	void RemoveDeletedItems(const CDWordSet& mapCurIDs);
