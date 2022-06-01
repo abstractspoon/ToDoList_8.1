@@ -1619,13 +1619,13 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 				pKIParent1 = pSort->data.GetItem(pKIParent1->dwParentID);
 
 			while (pKIParent2->nLevel > pKIParent1->nLevel)
-				pKIParent2 = pSort->data.GetItem(pKI2->dwParentID);
+				pKIParent2 = pSort->data.GetItem(pKIParent2->dwParentID);
 
 			// Then we raise them to have the same parent
 			while (pKIParent1->dwParentID != pKIParent2->dwParentID)
 			{
 				pKIParent1 = pSort->data.GetItem(pKIParent1->dwParentID);
-				pKIParent2 = pSort->data.GetItem(pKI2->dwParentID);
+				pKIParent2 = pSort->data.GetItem(pKIParent2->dwParentID);
 			}
 
 			// And both parents must exist in this tree
