@@ -2933,7 +2933,9 @@ BOOL CKanbanCtrl::SelectColumn(CKanbanColumnCtrl* pCol, BOOL bNotifyParent)
 		}
 		else
 		{
-			pPrevSelCol->SetSelected(FALSE);
+			if (pPrevSelCol)
+				pPrevSelCol->SetSelected(FALSE);
+
 			m_pSelectedColumn->SetSelected(TRUE);
 		}
 
