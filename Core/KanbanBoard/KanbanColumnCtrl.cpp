@@ -1583,170 +1583,173 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 	const KANBANITEM* pKI1 = pSort->data.GetItem(lParam1);
 	const KANBANITEM* pKI2 = pSort->data.GetItem(lParam2);
 
-	int nCompare = 0;
-	
-	if (pKI1 && pKI2)
-	{
-		// Pinned tasks always at the top
-		if (pKI1->bPinned && !pKI2->bPinned)
-			return -1;
+	if (!pKI1 || !pKI2)
+		return 0;
 
-		if (!pKI1->bPinned && pKI2->bPinned)
+	if (pSort->HasOption(KBCF_SORTSUBTASTASKSBELOWPARENTS) &&
+		!pSort->HasOption(KBCF_HIDEPARENTTASKS) &&
+		(pKI1->dwParentID != pKI2->dwParentID))
+	{
+		// If one is the parent of another always sort below
+		if (pSort->IsParent(lParam2, pKI1))
 			return 1;
 
-		// Sorting by 'none' means sort by 'full' position
-		if (pSort->nBy == TDCA_NONE)
+		if (pSort->IsParent(lParam1, pKI2))
+			return -1;
+
+		// We can't sort items that are not in the same 
+		// branch of the tree ie. they need to have the same parent
+		const KANBANITEM* pKIParent1 = pKI1;
+		const KANBANITEM* pKIParent2 = pKI2;
+
+		// First we raise the items to the same level
+		while (pKIParent1->nLevel > pKIParent2->nLevel)
+			pKIParent1 = pSort->data.GetItem(pKIParent1->dwParentID);
+
+		while (pKIParent2->nLevel > pKIParent1->nLevel)
+			pKIParent2 = pSort->data.GetItem(pKIParent2->dwParentID);
+
+		// Then we raise them to have the same parent
+		while (pKIParent1->dwParentID != pKIParent2->dwParentID)
 		{
-			return Misc::NaturalCompare(pKI1->sFullPosition, pKI2->sFullPosition);
+			pKIParent1 = pSort->data.GetItem(pKIParent1->dwParentID);
+			pKIParent2 = pSort->data.GetItem(pKIParent2->dwParentID);
 		}
 
-		if ((pSort->dwOptions & KBCF_SORTSUBTASTASKSBELOWPARENTS) && (pKI1->dwParentID != pKI2->dwParentID))
+		// And both parents must exist in this tree
+		if (pSort->items.HasItem(pKIParent1->dwTaskID) &&
+			pSort->items.HasItem(pKIParent2->dwTaskID))
 		{
-			// If one is the parent of another always sort below
-			if (pSort->IsParent(lParam2, pKI1))
-				return 1;
-
-			if (pSort->IsParent(lParam1, pKI2))
-				return -1;
-
-			// We can't sort items that are not in the same 
-			// branch of the tree ie. they need to have the same parent
-			const KANBANITEM* pKIParent1 = pKI1;
-			const KANBANITEM* pKIParent2 = pKI2;
-
-			// First we raise the items to the same level
-			while (pKIParent1->nLevel > pKIParent2->nLevel)
-				pKIParent1 = pSort->data.GetItem(pKIParent1->dwParentID);
-
-			while (pKIParent2->nLevel > pKIParent1->nLevel)
-				pKIParent2 = pSort->data.GetItem(pKIParent2->dwParentID);
-
-			// Then we raise them to have the same parent
-			while (pKIParent1->dwParentID != pKIParent2->dwParentID)
-			{
-				pKIParent1 = pSort->data.GetItem(pKIParent1->dwParentID);
-				pKIParent2 = pSort->data.GetItem(pKIParent2->dwParentID);
-			}
-
-			// And both parents must exist in this tree
-			if (pSort->items.HasItem(pKIParent1->dwTaskID) &&
-				pSort->items.HasItem(pKIParent2->dwTaskID))
-			{
-				pKI1 = pKIParent1;
-				pKI2 = pKIParent2;
-			}
+			pKI1 = pKIParent1;
+			pKI2 = pKIParent2;
 		}
-	
-		switch (pSort->nBy)
+	}
+
+	// Pinned tasks always at the top
+	if (pKI1->bPinned && !pKI2->bPinned)
+		return -1;
+
+	if (!pKI1->bPinned && pKI2->bPinned)
+		return 1;
+
+	int nCompare = 0;
+
+	switch (pSort->nBy)
+	{
+	case TDCA_NONE:
+		return Misc::NaturalCompare(pKI1->sFullPosition, pKI2->sFullPosition);
+
+	case TDCA_TASKNAME:
+		nCompare = Misc::NaturalCompare(pKI1->sTitle, pKI2->sTitle);
+		break;
+
+	case TDCA_ALLOCBY:
+	case TDCA_ALLOCTO:
+	case TDCA_CATEGORY:
+	case TDCA_STATUS:
+	case TDCA_TAGS:
+	case TDCA_VERSION:
 		{
-		case TDCA_TASKNAME:
-			nCompare = Misc::NaturalCompare(pKI1->sTitle, pKI2->sTitle);
-			break;
-			
-		case TDCA_ALLOCBY:
-		case TDCA_ALLOCTO:
-		case TDCA_CATEGORY:
-		case TDCA_STATUS:
-		case TDCA_TAGS:
-		case TDCA_VERSION:
-			{
-				ASSERT(!pSort->sAttribID.IsEmpty());
+			ASSERT(!pSort->sAttribID.IsEmpty());
 
-				CString sValue1 = pKI1->GetAttributeDisplayValue(pSort->nBy);
-				CString sValue2 = pKI2->GetAttributeDisplayValue(pSort->nBy);
+			CString sValue1 = pKI1->GetAttributeDisplayValue(pSort->nBy);
+			CString sValue2 = pKI2->GetAttributeDisplayValue(pSort->nBy);
 
-				nCompare = Misc::NaturalCompare(sValue1, sValue2);
-			}
-			break;
+			nCompare = Misc::NaturalCompare(sValue1, sValue2);
+		}
+		break;
 
-		case TDCA_PRIORITY:
-			{
-				ASSERT(!pSort->sAttribID.IsEmpty());
+	case TDCA_PRIORITY:
+		{
+			ASSERT(!pSort->sAttribID.IsEmpty());
 
-				int nPriority1 = pKI1->GetPriority(pSort->dwOptions);
-				int nPriority2 = pKI2->GetPriority(pSort->dwOptions);
+			int nPriority1 = pKI1->GetPriority(pSort->dwOptions);
+			int nPriority2 = pKI2->GetPriority(pSort->dwOptions);
 
-				nCompare = Misc::CompareNumT(nPriority1, nPriority2);
-			}
-			break;
+			nCompare = Misc::CompareNumT(nPriority1, nPriority2);
+		}
+		break;
 
-		case TDCA_RISK:
-			{
-				ASSERT(!pSort->sAttribID.IsEmpty());
+	case TDCA_RISK:
+		{
+			ASSERT(!pSort->sAttribID.IsEmpty());
 
-				int nRisk1 = pKI1->GetRisk(pSort->dwOptions);
-				int nRisk2 = pKI2->GetRisk(pSort->dwOptions);
+			int nRisk1 = pKI1->GetRisk(pSort->dwOptions);
+			int nRisk2 = pKI2->GetRisk(pSort->dwOptions);
 
-				nCompare = Misc::CompareNumT(nRisk1, nRisk2);
-			}
-			break;
+			nCompare = Misc::CompareNumT(nRisk1, nRisk2);
+		}
+		break;
 
-		case TDCA_CUSTOMATTRIB:
-			// TODO
-			break;
+	case TDCA_CUSTOMATTRIB:
+		// TODO
+		break;
 
 		// Other display attributes
-		case TDCA_COST:
-			nCompare = Misc::CompareNumT(pKI1->dCost, pKI2->dCost);
-			break;
-			
-		case TDCA_CREATIONDATE:
-			nCompare = CDateHelper::Compare(pKI1->dtCreate, pKI2->dtCreate, DHC_COMPARETIME);
-			break;
-			
-		case TDCA_CREATEDBY:
-			nCompare = Misc::NaturalCompare(pKI1->sCreatedBy, pKI2->sCreatedBy);
-			break;
-			
-		case TDCA_DONEDATE:
-			nCompare = CDateHelper::Compare(pKI1->dtDone, pKI2->dtDone, (DHC_COMPARETIME | DHC_NOTIMEISENDOFDAY));
-			break;
-			
-		case TDCA_DUEDATE:
-			nCompare = CDateHelper::Compare(pKI1->dtDue, pKI2->dtDue, (DHC_COMPARETIME | DHC_NOTIMEISENDOFDAY));
-			break;
-			
-		case TDCA_EXTERNALID:
-			nCompare = Misc::NaturalCompare(pKI1->sExternalID, pKI2->sExternalID);
-			break;
-			
-		case TDCA_FLAG:
-			nCompare = Misc::CompareNumT(pKI1->bFlagged, pKI2->bFlagged);
-			break;
-			
-		case TDCA_LASTMODDATE:
-			nCompare = CDateHelper::Compare(pKI1->dtLastMod, pKI2->dtLastMod, DHC_COMPARETIME);
-			break;
-			
-		case TDCA_PERCENT:
-			nCompare = Misc::CompareNumT(pKI1->nPercent, pKI2->nPercent);
-			break;
-			
-		case TDCA_RECURRENCE:
-			nCompare = Misc::NaturalCompare(pKI1->sRecurrence, pKI2->sRecurrence);
-			break;
-			
-		case TDCA_STARTDATE:
-			nCompare = CDateHelper::Compare(pKI1->dtStart, pKI2->dtStart, DHC_COMPARETIME);
-			break;
-			
-		case TDCA_TIMEESTIMATE:
-			nCompare = CTimeHelper().Compare(pKI1->dTimeEst, MapUnitsToTHUnits(pKI1->nTimeEstUnits), 
-											pKI2->dTimeEst, MapUnitsToTHUnits(pKI2->nTimeEstUnits));
-			break;
-			
-		case TDCA_TIMESPENT:
-			nCompare = CTimeHelper().Compare(pKI1->dTimeSpent, MapUnitsToTHUnits(pKI1->nTimeSpentUnits), 
-											pKI2->dTimeSpent, MapUnitsToTHUnits(pKI2->nTimeSpentUnits));
-			break;
-		}
+	case TDCA_COST:
+		nCompare = Misc::CompareNumT(pKI1->dCost, pKI2->dCost);
+		break;
 
-		// In the absence of a result we sort by POSITION to ensure a stable sort, 
-		// but without reversing the sign. This also handles sorting by 'TDCA_NONE'
-		if ((nCompare == 0) && (pKI1->dwParentID == pKI2->dwParentID))
-		{
-			return Misc::CompareNumT(pKI1->nPosition, pKI2->nPosition);
-		}
+	case TDCA_CREATIONDATE:
+		nCompare = CDateHelper::Compare(pKI1->dtCreate, pKI2->dtCreate, DHC_COMPARETIME);
+		break;
+
+	case TDCA_CREATEDBY:
+		nCompare = Misc::NaturalCompare(pKI1->sCreatedBy, pKI2->sCreatedBy);
+		break;
+
+	case TDCA_DONEDATE:
+		nCompare = CDateHelper::Compare(pKI1->dtDone, pKI2->dtDone, (DHC_COMPARETIME | DHC_NOTIMEISENDOFDAY));
+		break;
+
+	case TDCA_DUEDATE:
+		nCompare = CDateHelper::Compare(pKI1->dtDue, pKI2->dtDue, (DHC_COMPARETIME | DHC_NOTIMEISENDOFDAY));
+		break;
+
+	case TDCA_EXTERNALID:
+		nCompare = Misc::NaturalCompare(pKI1->sExternalID, pKI2->sExternalID);
+		break;
+
+	case TDCA_FLAG:
+		nCompare = Misc::CompareNumT(pKI1->bFlagged, pKI2->bFlagged);
+		break;
+
+	case TDCA_LASTMODDATE:
+		nCompare = CDateHelper::Compare(pKI1->dtLastMod, pKI2->dtLastMod, DHC_COMPARETIME);
+		break;
+
+	case TDCA_PERCENT:
+		nCompare = Misc::CompareNumT(pKI1->nPercent, pKI2->nPercent);
+		break;
+
+	case TDCA_RECURRENCE:
+		nCompare = Misc::NaturalCompare(pKI1->sRecurrence, pKI2->sRecurrence);
+		break;
+
+	case TDCA_STARTDATE:
+		nCompare = CDateHelper::Compare(pKI1->dtStart, pKI2->dtStart, DHC_COMPARETIME);
+		break;
+
+	case TDCA_TIMEESTIMATE:
+		nCompare = CTimeHelper().Compare(pKI1->dTimeEst, MapUnitsToTHUnits(pKI1->nTimeEstUnits),
+										 pKI2->dTimeEst, MapUnitsToTHUnits(pKI2->nTimeEstUnits));
+		break;
+
+	case TDCA_TIMESPENT:
+		nCompare = CTimeHelper().Compare(pKI1->dTimeSpent, MapUnitsToTHUnits(pKI1->nTimeSpentUnits),
+										 pKI2->dTimeSpent, MapUnitsToTHUnits(pKI2->nTimeSpentUnits));
+		break;
+
+	default:
+		ASSERT(0);
+		break;
+	}
+
+	// In the absence of a result we sort by POSITION to ensure a stable sort, 
+	// but without reversing the sign. This also handles sorting by 'TDCA_NONE'
+	if ((nCompare == 0) && (pKI1->dwParentID == pKI2->dwParentID))
+	{
+		return Misc::CompareNumT(pKI1->nPosition, pKI2->nPosition);
 	}
 	
 	return (pSort->bAscending ? nCompare : -nCompare);
