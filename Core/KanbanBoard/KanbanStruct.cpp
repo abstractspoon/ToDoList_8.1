@@ -1072,10 +1072,10 @@ BOOL CKanbanColumnArray::MatchesAll(const CKanbanColumnArray& other, BOOL bIncDi
 
 //////////////////////////////////////////////////////////////////////
 
-KANBANSORT::KANBANSORT(const CKanbanItemMap& map, const CKanbanColumnCtrl& col)
+KANBANSORT::KANBANSORT(const CKanbanItemMap& map1, const CHTIMap& map2)
 	:
-	data(map),
-	ctrl(col),
+	data(map1),
+	items(map2),
 	nBy(TDCA_NONE),
 	bAscending(TRUE),
 	dwOptions(0)

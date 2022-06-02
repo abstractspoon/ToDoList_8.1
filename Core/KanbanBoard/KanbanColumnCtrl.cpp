@@ -1629,8 +1629,8 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 			}
 
 			// And both parents must exist in this tree
-			if (pSort->ctrl.FindItem(pKIParent1->dwTaskID) &&
-				pSort->ctrl.FindItem(pKIParent2->dwTaskID))
+			if (pSort->items.HasItem(pKIParent1->dwTaskID) &&
+				pSort->items.HasItem(pKIParent2->dwTaskID))
 			{
 				pKI1 = pKIParent1;
 				pKI2 = pKIParent2;
@@ -1758,7 +1758,7 @@ void CKanbanColumnCtrl::Sort(TDC_ATTRIBUTE nBy, BOOL bAscending)
 		return;
 
 	CHoldRedraw hr(*this);
-	KANBANSORT ks(m_data, *this);
+	KANBANSORT ks(m_data, m_mapHTItems);
 	
 	ks.nBy = nBy;
 	ks.bAscending = bAscending;
