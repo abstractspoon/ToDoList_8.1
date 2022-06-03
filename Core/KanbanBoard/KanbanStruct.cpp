@@ -1082,17 +1082,17 @@ KANBANSORT::KANBANSORT(const CKanbanItemMap& map1, const CHTIMap& map2)
 {
 }
 	
-BOOL KANBANSORT::IsParent(DWORD dwTaskID, const KANBANITEM* pKIChild) const
+BOOL KANBANSORT::IsParent(const KANBANITEM* pKIParent, const KANBANITEM* pKIChild) const
 {
-	ASSERT(dwTaskID);
+	ASSERT(pKIParent && pKIChild);
 
-	if (pKIChild->dwParentID == dwTaskID)
+	if (pKIChild->dwParentID == pKIParent->dwTaskID)
 		return TRUE;
 
 	if (pKIChild->dwParentID == 0)
 		return FALSE;
 
-	return IsParent(dwTaskID, data.GetItem(pKIChild->dwParentID));
+	return IsParent(pKIParent, data.GetItem(pKIChild->dwParentID));
 }
 
 //////////////////////////////////////////////////////////////////////

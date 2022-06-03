@@ -1576,6 +1576,38 @@ int CKanbanColumnCtrl::RemoveDeletedTasks(const CDWordSet& mapCurIDs)
 	return nNumDeleted;
 }
 
+void CKanbanColumnCtrl::Sort(TDC_ATTRIBUTE nBy, BOOL bAscending)
+{
+	if (GetCount() < 2)
+		return;
+
+	CHoldRedraw hr(*this);
+	KANBANSORT ks(m_data, m_mapHTItems);
+
+	ks.nBy = nBy;
+	ks.bAscending = bAscending;
+	ks.dwOptions = m_dwOptions;
+
+	switch (nBy)
+	{
+	case TDCA_STATUS:
+	case TDCA_ALLOCTO:
+	case TDCA_CATEGORY:
+	case TDCA_ALLOCBY:
+	case TDCA_TAGS:
+	case TDCA_RISK:
+	case TDCA_PRIORITY:
+	case TDCA_VERSION:
+		ks.sAttribID = KANBANITEM::GetAttributeID(nBy);
+		break;
+	}
+
+	TVSORTCB tvs = { NULL, SortProc, (LPARAM)&ks };
+
+	SortChildrenCB(&tvs);
+	ScrollToSelection();
+}
+
 int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	const KANBANSORT* pSort = (KANBANSORT*)lParamSort;
@@ -1591,10 +1623,10 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 		(pKI1->dwParentID != pKI2->dwParentID))
 	{
 		// If one is the parent of another always sort below
-		if (pSort->IsParent(lParam2, pKI1))
+		if (pSort->IsParent(pKI2, pKI1))
 			return 1;
 
-		if (pSort->IsParent(lParam1, pKI2))
+		if (pSort->IsParent(pKI1, pKI2))
 			return -1;
 
 		// We can't sort items that are not in the same 
@@ -1753,38 +1785,6 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 	}
 	
 	return (pSort->bAscending ? nCompare : -nCompare);
-}
-
-void CKanbanColumnCtrl::Sort(TDC_ATTRIBUTE nBy, BOOL bAscending)
-{
-	if (GetCount() < 2)
-		return;
-
-	CHoldRedraw hr(*this);
-	KANBANSORT ks(m_data, m_mapHTItems);
-	
-	ks.nBy = nBy;
-	ks.bAscending = bAscending;
-	ks.dwOptions = m_dwOptions;
-
-	switch (nBy)
-	{
-	case TDCA_STATUS:
-	case TDCA_ALLOCTO:
-	case TDCA_CATEGORY:
-	case TDCA_ALLOCBY:
-	case TDCA_TAGS:
-	case TDCA_RISK:
-	case TDCA_PRIORITY:
-	case TDCA_VERSION:
-		ks.sAttribID = KANBANITEM::GetAttributeID(nBy);
-		break;
-	}
-
-	TVSORTCB tvs = { NULL, SortProc, (LPARAM)&ks };
-
-	SortChildrenCB(&tvs);
-	ScrollToSelection();
 }
 
 void CKanbanColumnCtrl::OnRButtonDown(UINT nFlags, CPoint point)

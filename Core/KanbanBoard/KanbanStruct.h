@@ -207,7 +207,7 @@ struct KANBANSORT
 {
 	KANBANSORT(const CKanbanItemMap& map1, const CHTIMap& map2);
 
-	BOOL IsParent(DWORD dwTaskID, const KANBANITEM* pKIChild) const;
+	BOOL IsParent(const KANBANITEM* pKIParent, const KANBANITEM* pKIChild) const;
 	BOOL HasOption(DWORD dwOption) const { return (dwOptions & dwOption) == dwOption; }
 
 	const CKanbanItemMap& data;
