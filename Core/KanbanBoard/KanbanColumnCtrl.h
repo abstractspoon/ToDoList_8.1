@@ -225,6 +225,7 @@ protected:
 	void DrawItemImage(CDC* pDC, const CRect& rImage, KBC_IMAGETYPE nType, BOOL bSet, HIMAGELIST hIL = NULL, int nIndex = -1) const;
 
 	static int CALLBACK SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
+	static int CompareAttributeValues(const KANBANITEM* pKI1, const KANBANITEM* pKI2, const KANBANSORT& sort);
 	static UINT GetDisplayFormat(TDC_ATTRIBUTE nAttrib, BOOL bLong);
 
 };

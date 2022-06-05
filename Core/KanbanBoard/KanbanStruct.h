@@ -207,8 +207,11 @@ struct KANBANSORT
 {
 	KANBANSORT(const CKanbanItemMap& map1, const CHTIMap& map2);
 
+	const KANBANITEM* GetParent(const KANBANITEM* pKI) const;
 	BOOL IsParent(const KANBANITEM* pKIParent, const KANBANITEM* pKIChild) const;
 	BOOL HasOption(DWORD dwOption) const { return (dwOptions & dwOption) == dwOption; }
+	BOOL GetInheritedPinState(const KANBANITEM* pKI) const;
+	BOOL HasSameParent(const KANBANITEM* pKI1, const KANBANITEM* pKI2) const;
 
 	const CKanbanItemMap& data;
 	const CHTIMap& items;

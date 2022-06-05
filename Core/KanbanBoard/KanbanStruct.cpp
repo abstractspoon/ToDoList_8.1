@@ -1095,4 +1095,31 @@ BOOL KANBANSORT::IsParent(const KANBANITEM* pKIParent, const KANBANITEM* pKIChil
 	return IsParent(pKIParent, data.GetItem(pKIChild->dwParentID));
 }
 
+const KANBANITEM* KANBANSORT::GetParent(const KANBANITEM* pKI) const
+{
+	return pKI ? data.GetItem(pKI->dwParentID) : NULL;
+}
+
+BOOL KANBANSORT::GetInheritedPinState(const KANBANITEM* pKI) const
+{
+	BOOL bPinned = FALSE;
+
+	while (pKI) 
+	{
+		bPinned |= pKI->bPinned;
+		pKI = GetParent(pKI);
+	} 
+
+	return bPinned;
+}
+
+BOOL KANBANSORT::HasSameParent(const KANBANITEM* pKI1, const KANBANITEM* pKI2) const
+{
+	if (!pKI1 || !pKI2)
+		return FALSE;
+
+	// else
+	return (pKI1->dwParentID == pKI2->dwParentID);
+}
+
 //////////////////////////////////////////////////////////////////////

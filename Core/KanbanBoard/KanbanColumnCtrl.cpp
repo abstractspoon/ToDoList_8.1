@@ -93,6 +93,9 @@ const CString NOFILELINK;
 
 const COLORREF SHADOW_COLOR		= RGB(0xD8, 0xD8, 0xD8);
 
+const BOOL SORT_1ABOVE2 = -1;
+const BOOL SORT_2ABOVE1 = 1;
+
 /////////////////////////////////////////////////////////////////////////////
 // CKanbanListCtrlEx
 
@@ -1618,16 +1621,33 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 	if (!pKI1 || !pKI2)
 		return 0;
 
+	BOOL bPinned1 = pKI1->bPinned;
+	BOOL bPinned2 = pKI2->bPinned;
+
 	if (pSort->HasOption(KBCF_SORTSUBTASTASKSBELOWPARENTS) &&
 		!pSort->HasOption(KBCF_HIDEPARENTTASKS) &&
-		(pKI1->dwParentID != pKI2->dwParentID))
+		!pSort->HasSameParent(pKI1, pKI2))
 	{
+		BOOL bAggregatePinned1 = pSort->GetInheritedPinState(pKI1);
+		BOOL bAggregatePinned2 = pSort->GetInheritedPinState(pKI2);
+
 		// If one is the parent of another always sort below
+		// unless the child is pinned and the parent not
 		if (pSort->IsParent(pKI2, pKI1))
-			return 1;
+		{
+			if (bAggregatePinned1 && !bAggregatePinned2)
+				return SORT_1ABOVE2; // child above parent
+			else
+				return SORT_2ABOVE1; // parent above child
+		}
 
 		if (pSort->IsParent(pKI1, pKI2))
-			return -1;
+		{
+			if (bAggregatePinned2 && !bAggregatePinned1)
+				return SORT_2ABOVE1; // child above parent
+			else
+				return SORT_1ABOVE2; // parent above child
+		}
 
 		// We can't sort items that are not in the same 
 		// branch of the tree ie. they need to have the same parent
@@ -1635,17 +1655,22 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 		const KANBANITEM* pKIParent2 = pKI2;
 
 		// First we raise the items to the same level
-		while (pKIParent1->nLevel > pKIParent2->nLevel)
-			pKIParent1 = pSort->data.GetItem(pKIParent1->dwParentID);
-
-		while (pKIParent2->nLevel > pKIParent1->nLevel)
-			pKIParent2 = pSort->data.GetItem(pKIParent2->dwParentID);
+		if (pKIParent1->nLevel > pKIParent2->nLevel)
+		{
+			while (pKIParent1->nLevel > pKIParent2->nLevel)
+				pKIParent1 = pSort->GetParent(pKIParent1);
+		}
+		else if (pKIParent2->nLevel > pKIParent1->nLevel)
+		{
+			while (pKIParent2->nLevel > pKIParent1->nLevel)
+				pKIParent2 = pSort->GetParent(pKIParent2);
+		}
 
 		// Then we raise them to have the same parent
-		while (pKIParent1->dwParentID != pKIParent2->dwParentID)
+		while (!pSort->HasSameParent(pKIParent1, pKIParent2))
 		{
-			pKIParent1 = pSort->data.GetItem(pKIParent1->dwParentID);
-			pKIParent2 = pSort->data.GetItem(pKIParent2->dwParentID);
+			pKIParent1 = pSort->GetParent(pKIParent1);
+			pKIParent2 = pSort->GetParent(pKIParent2);
 		}
 
 		// And both parents must exist in this tree
@@ -1654,19 +1679,28 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 		{
 			pKI1 = pKIParent1;
 			pKI2 = pKIParent2;
+
+			bPinned1 = bAggregatePinned1;
+			bPinned2 = bAggregatePinned2;
 		}
 	}
 
-	// Pinned tasks always at the top
-	if (pKI1->bPinned && !pKI2->bPinned)
-		return -1;
+	// Pinned tasks always above unpinned
+	if (bPinned1 && !bPinned2)
+		return SORT_1ABOVE2;
 
-	if (!pKI1->bPinned && pKI2->bPinned)
-		return 1;
+	if (!bPinned1 && bPinned2)
+		return SORT_2ABOVE1;
 
+	// else
+	return CompareAttributeValues(pKI1, pKI2, *pSort);
+}
+
+int CKanbanColumnCtrl::CompareAttributeValues(const KANBANITEM* pKI1, const KANBANITEM* pKI2, const KANBANSORT& sort)
+{
 	int nCompare = 0;
 
-	switch (pSort->nBy)
+	switch (sort.nBy)
 	{
 	case TDCA_NONE:
 		return Misc::NaturalCompare(pKI1->sFullPosition, pKI2->sFullPosition);
@@ -1682,10 +1716,10 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 	case TDCA_TAGS:
 	case TDCA_VERSION:
 		{
-			ASSERT(!pSort->sAttribID.IsEmpty());
+			ASSERT(!sort.sAttribID.IsEmpty());
 
-			CString sValue1 = pKI1->GetAttributeDisplayValue(pSort->nBy);
-			CString sValue2 = pKI2->GetAttributeDisplayValue(pSort->nBy);
+			CString sValue1 = pKI1->GetAttributeDisplayValue(sort.nBy);
+			CString sValue2 = pKI2->GetAttributeDisplayValue(sort.nBy);
 
 			nCompare = Misc::NaturalCompare(sValue1, sValue2);
 		}
@@ -1693,10 +1727,10 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 
 	case TDCA_PRIORITY:
 		{
-			ASSERT(!pSort->sAttribID.IsEmpty());
+			ASSERT(!sort.sAttribID.IsEmpty());
 
-			int nPriority1 = pKI1->GetPriority(pSort->dwOptions);
-			int nPriority2 = pKI2->GetPriority(pSort->dwOptions);
+			int nPriority1 = pKI1->GetPriority(sort.dwOptions);
+			int nPriority2 = pKI2->GetPriority(sort.dwOptions);
 
 			nCompare = Misc::CompareNumT(nPriority1, nPriority2);
 		}
@@ -1704,10 +1738,10 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 
 	case TDCA_RISK:
 		{
-			ASSERT(!pSort->sAttribID.IsEmpty());
+			ASSERT(!sort.sAttribID.IsEmpty());
 
-			int nRisk1 = pKI1->GetRisk(pSort->dwOptions);
-			int nRisk2 = pKI2->GetRisk(pSort->dwOptions);
+			int nRisk1 = pKI1->GetRisk(sort.dwOptions);
+			int nRisk2 = pKI2->GetRisk(sort.dwOptions);
 
 			nCompare = Misc::CompareNumT(nRisk1, nRisk2);
 		}
@@ -1783,8 +1817,12 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 	{
 		return Misc::CompareNumT(pKI1->nPosition, pKI2->nPosition);
 	}
+
+	if (sort.bAscending)
+		return nCompare;
 	
-	return (pSort->bAscending ? nCompare : -nCompare);
+	// else
+	return -nCompare;
 }
 
 void CKanbanColumnCtrl::OnRButtonDown(UINT nFlags, CPoint point)
