@@ -199,7 +199,7 @@ protected:
 	int BuildSortedSelection(CHTIList& lstHTI) const;
 	BOOL HasOption(DWORD dwOption) const { return (m_dwOptions & dwOption); }
 	BOOL WantDisplayAttribute(TDC_ATTRIBUTE nAttrib, const KANBANITEM* pKI) const;
-	int CalculateIndentation(HTREEITEM hti) const;
+	int CalcIndentation(HTREEITEM hti) const;
 
 	BOOL GetItemLabelTextRect(HTREEITEM hti, CRect& rItem, BOOL bEdit = FALSE) const;
 	BOOL GetItemTooltipRect(HTREEITEM hti, CRect& rItem) const;

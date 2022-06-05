@@ -1064,11 +1064,11 @@ BOOL CKanbanColumnCtrl::GetItemRect(HTREEITEM hti, CRect& rItem) const
 	if (!GetItemBounds(hti, rItem))
 		return FALSE;
 
-	rItem.left += CalculateIndentation(hti);
+	rItem.left += CalcIndentation(hti);
 	return TRUE;
 }
 
-int CKanbanColumnCtrl::CalculateIndentation(HTREEITEM hti) const
+int CKanbanColumnCtrl::CalcIndentation(HTREEITEM hti) const
 {
 	if (HasOption(KBCF_INDENTSUBTASKS))
 	{
@@ -1086,7 +1086,7 @@ int CKanbanColumnCtrl::CalculateIndentation(HTREEITEM hti) const
 			HTREEITEM htiParent = FindItem(pKI->dwParentID);
 
 			if (htiParent)
-				return (CalculateIndentation(htiParent) + LEVEL_INDENT);
+				return (CalcIndentation(htiParent) + LEVEL_INDENT);
 
 			// else keep going
 			dwTaskID = pKI->dwParentID;
@@ -2337,7 +2337,7 @@ CSize CKanbanColumnCtrl::CalcRequiredSizeForImage() const
 
 		if (pKI)
 		{
-			int nItemIndent = nDefItemIndent + CalculateIndentation(hti);
+			int nItemIndent = nDefItemIndent + CalcIndentation(hti);
 
 			// Start with attributes
 			CFont* pOldFont = dc.SelectObject(m_fonts.GetFont(0));
