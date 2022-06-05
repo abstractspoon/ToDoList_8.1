@@ -736,10 +736,7 @@ KANBANITEM* CKanbanItemMap::GetParentItem(DWORD dwTaskID) const
 {
 	KANBANITEM* pKI = GetItem(dwTaskID);
 
-	if (pKI)
-		pKI = GetItem(pKI->dwParentID);
-
-	return pKI;
+	return GetParentItem(pKI);
 }
 
 CString CKanbanItemMap::GetItemTitle(DWORD dwTaskID) const
@@ -959,6 +956,46 @@ void CKanbanItemMap::TraceSummary(LPCTSTR szAttribID, DWORD dwOptions) const
 }
 #endif
 
+BOOL CKanbanItemMap::IsParent(const KANBANITEM* pKIParent, const KANBANITEM* pKIChild) const
+{
+	ASSERT(pKIParent && pKIChild);
+
+	if (pKIChild->dwParentID == pKIParent->dwTaskID)
+		return TRUE;
+
+	if (pKIChild->dwParentID == 0)
+		return FALSE;
+
+	return IsParent(pKIParent, GetParentItem(pKIChild));
+}
+
+KANBANITEM* CKanbanItemMap::GetParentItem(const KANBANITEM* pKI) const
+{
+	return pKI ? GetItem(pKI->dwParentID) : NULL;
+}
+
+BOOL CKanbanItemMap::CalcInheritedPinState(const KANBANITEM* pKI) const
+{
+	BOOL bPinned = FALSE;
+
+	while (pKI)
+	{
+		bPinned |= pKI->bPinned;
+		pKI = GetParentItem(pKI);
+	}
+
+	return bPinned;
+}
+
+BOOL CKanbanItemMap::HasSameParent(const KANBANITEM* pKI1, const KANBANITEM* pKI2) const
+{
+	if (!pKI1 || !pKI2)
+		return FALSE;
+
+	// else
+	return (pKI1->dwParentID == pKI2->dwParentID);
+}
+
 //////////////////////////////////////////////////////////////////////
 
 CKanbanItemArrayMap::~CKanbanItemArrayMap()
@@ -1082,44 +1119,4 @@ KANBANSORT::KANBANSORT(const CKanbanItemMap& map1, const CHTIMap& map2)
 {
 }
 	
-BOOL KANBANSORT::IsParent(const KANBANITEM* pKIParent, const KANBANITEM* pKIChild) const
-{
-	ASSERT(pKIParent && pKIChild);
-
-	if (pKIChild->dwParentID == pKIParent->dwTaskID)
-		return TRUE;
-
-	if (pKIChild->dwParentID == 0)
-		return FALSE;
-
-	return IsParent(pKIParent, data.GetItem(pKIChild->dwParentID));
-}
-
-const KANBANITEM* KANBANSORT::GetParent(const KANBANITEM* pKI) const
-{
-	return pKI ? data.GetItem(pKI->dwParentID) : NULL;
-}
-
-BOOL KANBANSORT::GetInheritedPinState(const KANBANITEM* pKI) const
-{
-	BOOL bPinned = FALSE;
-
-	while (pKI) 
-	{
-		bPinned |= pKI->bPinned;
-		pKI = GetParent(pKI);
-	} 
-
-	return bPinned;
-}
-
-BOOL KANBANSORT::HasSameParent(const KANBANITEM* pKI1, const KANBANITEM* pKI2) const
-{
-	if (!pKI1 || !pKI2)
-		return FALSE;
-
-	// else
-	return (pKI1->dwParentID == pKI2->dwParentID);
-}
-
 //////////////////////////////////////////////////////////////////////

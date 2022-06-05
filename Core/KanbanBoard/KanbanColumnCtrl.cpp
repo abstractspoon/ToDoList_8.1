@@ -787,12 +787,12 @@ void CKanbanColumnCtrl::DrawItemParents(CDC* pDC, const KANBANITEM* pKI, CRect& 
 	if (pKI->dwParentID)
 	{
 		CKanbanItemArray aParents;
-		const KANBANITEM* pKIParent = m_data.GetItem(pKI->dwParentID);
+		const KANBANITEM* pKIParent = m_data.GetParentItem(pKI);
 
 		while (pKIParent)
 		{
 			aParents.Add(pKIParent);
-			pKIParent = m_data.GetItem(pKIParent->dwParentID);
+			pKIParent = m_data.GetParentItem(pKIParent);
 		}
 
 		// Draw in reverse order
@@ -1626,14 +1626,14 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 
 	if (pSort->HasOption(KBCF_SORTSUBTASTASKSBELOWPARENTS) &&
 		!pSort->HasOption(KBCF_HIDEPARENTTASKS) &&
-		!pSort->HasSameParent(pKI1, pKI2))
+		!pSort->data.HasSameParent(pKI1, pKI2))
 	{
-		BOOL bAggregatePinned1 = pSort->GetInheritedPinState(pKI1);
-		BOOL bAggregatePinned2 = pSort->GetInheritedPinState(pKI2);
+		BOOL bAggregatePinned1 = pSort->data.CalcInheritedPinState(pKI1);
+		BOOL bAggregatePinned2 = pSort->data.CalcInheritedPinState(pKI2);
 
 		// If one is the parent of another always sort below
 		// unless the child is pinned and the parent not
-		if (pSort->IsParent(pKI2, pKI1))
+		if (pSort->data.IsParent(pKI2, pKI1))
 		{
 			if (bAggregatePinned1 && !bAggregatePinned2)
 				return SORT_1ABOVE2; // child above parent
@@ -1641,7 +1641,7 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 				return SORT_2ABOVE1; // parent above child
 		}
 
-		if (pSort->IsParent(pKI1, pKI2))
+		if (pSort->data.IsParent(pKI1, pKI2))
 		{
 			if (bAggregatePinned2 && !bAggregatePinned1)
 				return SORT_2ABOVE1; // child above parent
@@ -1651,34 +1651,36 @@ int CALLBACK CKanbanColumnCtrl::SortProc(LPARAM lParam1, LPARAM lParam2, LPARAM 
 
 		// We can't sort items that are not in the same 
 		// branch of the tree ie. they need to have the same parent
-		const KANBANITEM* pKIParent1 = pKI1;
-		const KANBANITEM* pKIParent2 = pKI2;
+		const KANBANITEM* pKITemp1 = pKI1;
+		const KANBANITEM* pKITemp2 = pKI2;
 
 		// First we raise the items to the same level
-		if (pKIParent1->nLevel > pKIParent2->nLevel)
+		if (pKI1->nLevel > pKI2->nLevel)
 		{
-			while (pKIParent1->nLevel > pKIParent2->nLevel)
-				pKIParent1 = pSort->GetParent(pKIParent1);
+			while (pKITemp1->nLevel > pKITemp2->nLevel)
+				pKITemp1 = pSort->data.GetParentItem(pKITemp1);
 		}
-		else if (pKIParent2->nLevel > pKIParent1->nLevel)
+		else if (pKI2->nLevel > pKI1->nLevel)
 		{
-			while (pKIParent2->nLevel > pKIParent1->nLevel)
-				pKIParent2 = pSort->GetParent(pKIParent2);
+			while (pKITemp2->nLevel > pKITemp1->nLevel)
+				pKITemp2 = pSort->data.GetParentItem(pKITemp2);
 		}
+		ASSERT(pKITemp1 && pKITemp2);
 
 		// Then we raise them to have the same parent
-		while (!pSort->HasSameParent(pKIParent1, pKIParent2))
+		while (!pSort->data.HasSameParent(pKITemp1, pKITemp2))
 		{
-			pKIParent1 = pSort->GetParent(pKIParent1);
-			pKIParent2 = pSort->GetParent(pKIParent2);
+			pKITemp1 = pSort->data.GetParentItem(pKITemp1);
+			pKITemp2 = pSort->data.GetParentItem(pKITemp2);
 		}
+		ASSERT(pKITemp1 && pKITemp2);
 
 		// And both parents must exist in this tree
-		if (pSort->items.HasItem(pKIParent1->dwTaskID) &&
-			pSort->items.HasItem(pKIParent2->dwTaskID))
+		if (pSort->items.HasItem(pKITemp1->dwTaskID) &&
+			pSort->items.HasItem(pKITemp2->dwTaskID))
 		{
-			pKI1 = pKIParent1;
-			pKI2 = pKIParent2;
+			pKI1 = pKITemp1;
+			pKI2 = pKITemp2;
 
 			bPinned1 = bAggregatePinned1;
 			bPinned2 = bAggregatePinned2;
@@ -1813,7 +1815,7 @@ int CKanbanColumnCtrl::CompareAttributeValues(const KANBANITEM* pKI1, const KANB
 
 	// In the absence of a result we sort by POSITION to ensure a stable sort, 
 	// but without reversing the sign. This also handles sorting by 'TDCA_NONE'
-	if ((nCompare == 0) && (pKI1->dwParentID == pKI2->dwParentID))
+	if ((nCompare == 0) && sort.data.HasSameParent(pKI1, pKI2))
 	{
 		return Misc::CompareNumT(pKI1->nPosition, pKI2->nPosition);
 	}
