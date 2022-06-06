@@ -976,15 +976,15 @@ KANBANITEM* CKanbanItemMap::GetParentItem(const KANBANITEM* pKI) const
 
 BOOL CKanbanItemMap::CalcInheritedPinState(const KANBANITEM* pKI) const
 {
-	BOOL bPinned = FALSE;
-
 	while (pKI)
 	{
-		bPinned |= pKI->bPinned;
+		if (pKI->bPinned)
+			return TRUE;
+
 		pKI = GetParentItem(pKI);
 	}
 
-	return bPinned;
+	return FALSE;
 }
 
 BOOL CKanbanItemMap::HasSameParent(const KANBANITEM* pKI1, const KANBANITEM* pKI2) const

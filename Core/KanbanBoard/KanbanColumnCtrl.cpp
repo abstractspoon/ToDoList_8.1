@@ -1070,27 +1070,68 @@ BOOL CKanbanColumnCtrl::GetItemRect(HTREEITEM hti, CRect& rItem) const
 
 int CKanbanColumnCtrl::CalcIndentation(HTREEITEM hti) const
 {
-	if (HasOption(KBCF_INDENTSUBTASKS))
+	if (HasOption(KBCF_INDENTSUBTASKS) && !HasOption(KBCF_HIDEPARENTTASKS))
 	{
 		ASSERT(hti);
 		ASSERT(HasOption(KBCF_SORTSUBTASTASKSBELOWPARENTS));
 
+		// If we assume that the sort state is correct then we simply look up
+		// the tree for the first parent having the same pin state as ourselves
+		const KANBANITEM* pKI = m_data.GetItem(GetTaskID(hti));
+		ASSERT(pKI);
+
+		if (pKI && pKI->dwParentID)
+		{
+			BOOL bInheritedPin = m_data.CalcInheritedPinState(pKI);
+			const KANBANITEM* pKIParent = m_data.GetParentItem(pKI);
+
+			HTREEITEM htiPrev = GetNextItem(hti, TVGN_PREVIOUS);
+
+			while (htiPrev)
+			{
+				const KANBANITEM* pKIPrev = m_data.GetItem(GetTaskID(htiPrev));
+				ASSERT(pKIPrev);
+
+				if (m_data.IsParent(pKIParent, pKI))
+				{
+					if (pKIParent->bPinned || !pKI->bPinned)
+					{
+						return (CalcIndentation(htiPrev) + LEVEL_INDENT);
+					}
+				}
+
+				htiPrev = GetNextItem(htiPrev, TVGN_PREVIOUS);
+			}
+		}
+
+/*
 		// Look for the first first parent/grandparent/etc elsewhere in the tree
+		// having the same aggregated pin value as the specified item.
 		// Any such task will necessarily be above us in the tree due to the sorting.
 		// Care is needed to handle pinned parents
-		DWORD dwTaskID = GetTaskID(hti);
+		const KANBANITEM* pKI = m_data.GetItem(GetTaskID(hti));
+		ASSERT(pKI);
 
-		while (dwTaskID)
+		if (pKI && pKI->dwParentID)
 		{
-			const KANBANITEM* pKI = m_data.GetItem(dwTaskID);
-			HTREEITEM htiParent = FindItem(pKI->dwParentID);
+			BOOL bPinned = m_data.CalcInheritedPinState(pKI->bPinned);
+			const KANBANITEM* pKIParent = m_data.GetParentItem(pKI);
 
-			if (htiParent)
-				return (CalcIndentation(htiParent) + LEVEL_INDENT);
+			while (pKIParent)
+			{
+				if (!Misc::StateChanged(bPinned, pKIParent->bPinned))
+				{
+					HTREEITEM htiParent = FindItem(pKI->dwParentID);
 
-			// else keep going
-			dwTaskID = pKI->dwParentID;
+					if (htiParent)
+						return (CalcIndentation(htiParent) + LEVEL_INDENT);
+				}
+
+				// else keep going
+				pKIParent = m_data.GetParentItem(pKIParent);
+			}
 		}
+*/
 	}
 
 	return 0; // no indentation, first item or no parent
