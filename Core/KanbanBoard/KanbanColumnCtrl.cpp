@@ -1083,7 +1083,6 @@ int CKanbanColumnCtrl::CalcIndentation(HTREEITEM hti) const
 		if (pKI && pKI->dwParentID)
 		{
 			BOOL bInheritedPin = m_data.CalcInheritedPinState(pKI);
-			const KANBANITEM* pKIParent = m_data.GetParentItem(pKI);
 
 			HTREEITEM htiPrev = GetNextItem(hti, TVGN_PREVIOUS);
 
@@ -1092,9 +1091,9 @@ int CKanbanColumnCtrl::CalcIndentation(HTREEITEM hti) const
 				const KANBANITEM* pKIPrev = m_data.GetItem(GetTaskID(htiPrev));
 				ASSERT(pKIPrev);
 
-				if (m_data.IsParent(pKIParent, pKI))
+				if (m_data.IsParent(pKIPrev, pKI))
 				{
-					if (pKIParent->bPinned || !pKI->bPinned)
+					if (pKIPrev->bPinned || !pKI->bPinned)
 					{
 						return (CalcIndentation(htiPrev) + LEVEL_INDENT);
 					}
@@ -1103,35 +1102,6 @@ int CKanbanColumnCtrl::CalcIndentation(HTREEITEM hti) const
 				htiPrev = GetNextItem(htiPrev, TVGN_PREVIOUS);
 			}
 		}
-
-/*
-		// Look for the first first parent/grandparent/etc elsewhere in the tree
-		// having the same aggregated pin value as the specified item.
-		// Any such task will necessarily be above us in the tree due to the sorting.
-		// Care is needed to handle pinned parents
-		const KANBANITEM* pKI = m_data.GetItem(GetTaskID(hti));
-		ASSERT(pKI);
-
-		if (pKI && pKI->dwParentID)
-		{
-			BOOL bPinned = m_data.CalcInheritedPinState(pKI->bPinned);
-			const KANBANITEM* pKIParent = m_data.GetParentItem(pKI);
-
-			while (pKIParent)
-			{
-				if (!Misc::StateChanged(bPinned, pKIParent->bPinned))
-				{
-					HTREEITEM htiParent = FindItem(pKI->dwParentID);
-
-					if (htiParent)
-						return (CalcIndentation(htiParent) + LEVEL_INDENT);
-				}
-
-				// else keep going
-				pKIParent = m_data.GetParentItem(pKIParent);
-			}
-		}
-*/
 	}
 
 	return 0; // no indentation, first item or no parent
