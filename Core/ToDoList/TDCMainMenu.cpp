@@ -505,13 +505,12 @@ void CTDCMainMenu::PrepareEditMenu(CMenu* pMenu, const CFilteredToDoCtrl& tdc, c
 	if (!pMenu)
 		return;
 
-	if (!prefs.GetShowEditMenuAsColumns())
-		return;
-
-	int nCountLastSep = 0;
 	BOOL bHasSelection = tdc.GetSelectedTaskCount();
 
-	for (int nItem = 0; nItem < (int)pMenu->GetMenuItemCount(); nItem++)
+	if ((!bContextMenu || bHasSelection) && !prefs.GetShowEditMenuAsColumns())
+		return;
+
+	for (int nItem = 0, nCountLastSep = 0; nItem < (int)pMenu->GetMenuItemCount(); nItem++)
 	{
 		BOOL bDelete = FALSE;
 		BOOL bIsSeparator = FALSE;
