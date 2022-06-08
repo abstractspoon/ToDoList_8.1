@@ -32,11 +32,12 @@ namespace SpreadsheetContentControl
 
 			m_EditorControl.ContentChanged += new System.EventHandler(OnContentChanged);
             m_EditorControl.LostFocus += new System.EventHandler(OnGridControlLostFocus);
-        }
+			m_EditorControl.LinkNavigation += new EventHandler<TDLGridEditorControl.LinkEventArgs>(OnGridControlLinkNavigation);
+		}
 
-        // ITDLContentControl -------------------------------------------------
+		// ITDLContentControl -------------------------------------------------
 
-        public Byte[] GetContent()
+		public Byte[] GetContent()
         {
 			return m_EditorControl.GetContent();
         }
@@ -171,5 +172,10 @@ namespace SpreadsheetContentControl
 			m_EditorControl.Focus();
 		}
 
+		private void OnGridControlLinkNavigation(object sender, TDLGridEditorControl.LinkEventArgs e)
+		{
+			// Pass everything back to our parent for consistent handling
+			ContentControlWnd.GoToLink(e.LinkUrl, m_HwndParent, Handle);
+		}
 	}
 }

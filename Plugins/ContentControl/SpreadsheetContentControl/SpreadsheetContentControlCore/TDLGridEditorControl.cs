@@ -38,7 +38,16 @@ namespace SpreadsheetContentControl
 		// --------------------------------------------
 
 		public event EventHandler ContentChanged;
-		public new EventHandler LostFocus;
+		public event EventHandler<LinkEventArgs> LinkNavigation;
+
+		public new event EventHandler LostFocus; // replaces base class event
+
+		// --------------------------------------------
+
+		public class LinkEventArgs : EventArgs
+		{
+			public string LinkUrl;
+		}
 
 		// --------------------------------------------
 
@@ -69,12 +78,14 @@ namespace SpreadsheetContentControl
 			{
 				e.Worksheet.AfterPaste += new EventHandler<RangeEventArgs>(OnAfterPaste);
 				e.Worksheet.AfterCellEdit += new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
+				e.Worksheet.CellMouseUp += new EventHandler<CellMouseEventArgs>(OnCellMouseUp);
 			};
 
 			GridControl.WorksheetRemoved += (s, e) =>
 			{
 				e.Worksheet.AfterPaste -= new EventHandler<RangeEventArgs>(OnAfterPaste);
 				e.Worksheet.AfterCellEdit -= new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
+				e.Worksheet.CellMouseUp -= new EventHandler<CellMouseEventArgs>(OnCellMouseUp);
 			};
 
 		}
@@ -615,14 +626,26 @@ namespace SpreadsheetContentControl
 			}
 		}
 
-		private bool IsValidHref(string href)
+		private bool IsValidHref(ref string href)
 		{
-			if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
-				return true;
-
 			var parser = new UrlParser();
 
-			return (parser.GetUrlCount(href) == 1);
+			if (parser.GetUrlCount(href) == 1)
+			{
+				if (Uri.IsWellFormedUriString(href, UriKind.Absolute))
+					return true;
+
+				// try appending https://
+				string fixedHref = ("https://" + href);
+
+				if (Uri.IsWellFormedUriString(fixedHref, UriKind.Absolute))
+				{
+					href = fixedHref;
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private void HandleCellTextUpdate(int row, int col, string newData)
@@ -630,7 +653,7 @@ namespace SpreadsheetContentControl
 			newData = newData.Trim();
 
 			// Start with URL
-			if (IsValidHref(newData))
+			if (IsValidHref(ref newData))
 			{
 				Image image = null;
 
@@ -654,7 +677,9 @@ namespace SpreadsheetContentControl
 
 				if (image == null)
 				{
-					GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(newData));
+					var link = new HyperlinkCell(newData, (LinkNavigation == null));
+
+					GridControl.CurrentWorksheet.SetCellBody(row, col, link);
 				}
 
 				return;
@@ -682,7 +707,9 @@ namespace SpreadsheetContentControl
 					if (image == null)
 					{
 						var uri = new Uri(newData);
-						GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(uri.AbsoluteUri));
+						var link = new HyperlinkCell(uri.AbsoluteUri, (LinkNavigation == null));
+
+						GridControl.CurrentWorksheet.SetCellBody(row, col, link);
 					}
 
 					return;
@@ -710,6 +737,17 @@ namespace SpreadsheetContentControl
 			}
 		}
 
+		private void OnCellMouseUp(object sender, CellMouseEventArgs e)
+		{
+			if ((e.Cell != null) && (e.Cell.Body != null) && (e.Cell.Body is HyperlinkCell))
+			{
+				var link = e.Cell.Body as HyperlinkCell;
+
+				if (!link.AutoNavigate)
+					LinkNavigation?.Invoke(this, new LinkEventArgs() { LinkUrl = link.LinkURL });
+			}
+		}
+		
 		public void SetUITheme(UITheme theme)
 		{
 			m_toolbarRenderer.SetUITheme(theme);

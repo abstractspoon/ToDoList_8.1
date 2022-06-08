@@ -174,15 +174,21 @@ namespace unvell.ReoGrid.CellTypes
 			var cursorPos = System.Drawing.Point.Round(e.Worksheet.controlAdapter.PointToClient(Cursor.Position));
 			cursorPos.Offset(16, 16);
 
-			e.Worksheet.controlAdapter.ShowTooltip(cursorPos, "'CTRL + click' to follow link");
+			if (!String.IsNullOrWhiteSpace(LinkURL))
+			{
+				e.Worksheet.controlAdapter.ShowTooltip(cursorPos, "'CTRL + click' to follow link");
+			}
 
 			return false;
 		}
 
 		public override bool OnMouseMove(CellMouseEventArgs e)
 		{
-			if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+			if (!String.IsNullOrWhiteSpace(LinkURL) &&
+				((Control.ModifierKeys & Keys.Control) == Keys.Control))
+			{
 				e.Worksheet.controlAdapter.ChangeSelectionCursor(CursorStyle.Hand);
+			}
 
 			return false;
 		}
@@ -263,9 +269,11 @@ namespace unvell.ReoGrid.CellTypes
 			{
 				try
 				{
-					RGUtility.OpenFileOrLink(LinkURL);
+					return (RGUtility.OpenFileOrLink(LinkURL) != null);
 				}
-				catch { }
+				catch
+				{
+				}
 			}
 
 			Click?.Invoke(this, null);
