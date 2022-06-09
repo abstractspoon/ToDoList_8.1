@@ -269,7 +269,7 @@ namespace unvell.ReoGrid.CellTypes
 			{
 				try
 				{
-					return (RGUtility.OpenFileOrLink(LinkURL) != null);
+					RGUtility.OpenFileOrLink(LinkURL);
 				}
 				catch
 				{

@@ -78,14 +78,14 @@ namespace SpreadsheetContentControl
 			{
 				e.Worksheet.AfterPaste += new EventHandler<RangeEventArgs>(OnAfterPaste);
 				e.Worksheet.AfterCellEdit += new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
-				e.Worksheet.CellMouseUp += new EventHandler<CellMouseEventArgs>(OnCellMouseUp);
+				e.Worksheet.CellBodyChanged += new EventHandler<CellEventArgs>(OnCellBodyChanged);
 			};
 
 			GridControl.WorksheetRemoved += (s, e) =>
 			{
 				e.Worksheet.AfterPaste -= new EventHandler<RangeEventArgs>(OnAfterPaste);
 				e.Worksheet.AfterCellEdit -= new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
-				e.Worksheet.CellMouseUp -= new EventHandler<CellMouseEventArgs>(OnCellMouseUp);
+				e.Worksheet.CellBodyChanged -= new EventHandler<CellEventArgs>(OnCellBodyChanged);
 			};
 
 		}
@@ -677,9 +677,7 @@ namespace SpreadsheetContentControl
 
 				if (image == null)
 				{
-					var link = new HyperlinkCell(newData, (LinkNavigation == null));
-
-					GridControl.CurrentWorksheet.SetCellBody(row, col, link);
+					GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(newData, (LinkNavigation == null)));
 				}
 
 				return;
@@ -707,9 +705,7 @@ namespace SpreadsheetContentControl
 					if (image == null)
 					{
 						var uri = new Uri(newData);
-						var link = new HyperlinkCell(uri.AbsoluteUri, (LinkNavigation == null));
-
-						GridControl.CurrentWorksheet.SetCellBody(row, col, link);
+						GridControl.CurrentWorksheet.SetCellBody(row, col, new HyperlinkCell(uri.AbsoluteUri));
 					}
 
 					return;
@@ -737,17 +733,24 @@ namespace SpreadsheetContentControl
 			}
 		}
 
-		private void OnCellMouseUp(object sender, CellMouseEventArgs e)
+		private void OnCellBodyChanged(object sender, CellEventArgs e)
 		{
 			if ((e.Cell != null) && (e.Cell.Body != null) && (e.Cell.Body is HyperlinkCell))
 			{
 				var link = e.Cell.Body as HyperlinkCell;
 
-				if (!link.AutoNavigate)
-					LinkNavigation?.Invoke(this, new LinkEventArgs() { LinkUrl = link.LinkURL });
+				link.AutoNavigate = false;
+				link.Click += new EventHandler(OnClickHyperlinkCell);
 			}
 		}
-		
+
+		private void OnClickHyperlinkCell(object sender, EventArgs e)
+		{
+			var link = (sender as HyperlinkCell);
+
+			LinkNavigation?.Invoke(this, new LinkEventArgs() { LinkUrl = link.LinkURL });
+		}
+
 		public void SetUITheme(UITheme theme)
 		{
 			m_toolbarRenderer.SetUITheme(theme);
