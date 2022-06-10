@@ -739,58 +739,67 @@ namespace SpreadsheetContentControl
 			}
 		}
 
-		bool IsHyperlinkCell(Cell cell)
+		HyperlinkCell AsHyperlinkCell(CellMouseEventArgs e)
 		{
-			return ((cell != null) && (cell.Body != null) && (cell.Body is HyperlinkCell));
+			if (e.Cell == null)
+				e.Cell = CurrentWorksheet.GetCell(e.CellPosition);
+
+			return AsHyperlinkCell(e.Cell);
+		}
+
+		HyperlinkCell AsHyperlinkCell(Cell cell)
+		{
+			if (cell == null)
+				return null;
+
+			return (cell.Body as HyperlinkCell);
 		}
 
 		private void OnCellMouseEnter(object sender, CellMouseEventArgs e)
 		{
-			if (IsHyperlinkCell(e.Cell))
-			{
-				var link = e.Cell.Body as HyperlinkCell;
+			var link = AsHyperlinkCell(e);
 
-// 				var cursorPos = System.Drawing.Point.Round(e.Worksheet.ControlAdapter.PointToClient(Cursor.Position));
-// 				cursorPos.Offset(16, 16);
-// 
-// 				if (!String.IsNullOrWhiteSpace(LinkURL))
-// 				{
-// 					e.Worksheet.controlAdapter.ShowTooltip(cursorPos, "'CTRL + click' to follow link");
-// 				}
+			if (link != null)
+			{
+ 				if (!String.IsNullOrWhiteSpace(link.LinkURL))
+ 				{
+ 					GridControl.ShowTooltip(m_Trans.Translate("'CTRL + click' to follow link"));
+ 				}
 			}
 		}
 
 		private void OnCellMouseLeave(object sender, CellMouseEventArgs e)
 		{
-			if (IsHyperlinkCell(e.Cell))
-			{
-				var link = e.Cell.Body as HyperlinkCell;
+			var link = AsHyperlinkCell(e);
 
-// 				e.Worksheet.controlAdapter.HideTooltip();
-// 				e.Worksheet.ControlAdapter.ChangeSelectionCursor(CursorStyle.PlatformDefault);
+			if (link != null)
+			{
+				GridControl.HideTooltip();
+				GridControl.ChangeSelectionCursor(unvell.ReoGrid.Interaction.CursorStyle.PlatformDefault);
 			}
 		}
 
 		private void OnCellMouseMove(object sender, CellMouseEventArgs e)
 		{
-			if (IsHyperlinkCell(e.Cell))
-			{
-				var link = e.Cell.Body as HyperlinkCell;
+			var link = AsHyperlinkCell(e);
 
-// 				if (!String.IsNullOrWhiteSpace(LinkURL) &&
-// 					((Control.ModifierKeys & Keys.Control) == Keys.Control))
-// 				{
-// 					e.Worksheet.controlAdapter.ChangeSelectionCursor(CursorStyle.Hand);
-// 				}
+			if (link != null)
+			{
+				var cursor = unvell.ReoGrid.Interaction.CursorStyle.PlatformDefault;
+
+				if (link.HasLinkURL && (Control.ModifierKeys == Keys.Control))
+					cursor = unvell.ReoGrid.Interaction.CursorStyle.Hand;
+
+				GridControl.ChangeSelectionCursor(cursor);
 			}
 		}
 
 		private void OnCellBodyChanged(object sender, CellEventArgs e)
 		{
-			if (IsHyperlinkCell(e.Cell))
-			{
-				var link = e.Cell.Body as HyperlinkCell;
+			var link = AsHyperlinkCell(e.Cell);
 
+			if (link != null)
+			{
 				link.AutoNavigate = false;
 				link.Click += new EventHandler(OnClickHyperlinkCell);
 			}
