@@ -79,6 +79,9 @@ namespace SpreadsheetContentControl
 				e.Worksheet.AfterPaste += new EventHandler<RangeEventArgs>(OnAfterPaste);
 				e.Worksheet.AfterCellEdit += new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
 				e.Worksheet.CellBodyChanged += new EventHandler<CellEventArgs>(OnCellBodyChanged);
+				e.Worksheet.CellMouseEnter += new EventHandler<CellMouseEventArgs>(OnCellMouseEnter);
+				e.Worksheet.CellMouseLeave += new EventHandler<CellMouseEventArgs>(OnCellMouseLeave);
+				e.Worksheet.CellMouseMove += new EventHandler<CellMouseEventArgs>(OnCellMouseMove);
 			};
 
 			GridControl.WorksheetRemoved += (s, e) =>
@@ -86,6 +89,9 @@ namespace SpreadsheetContentControl
 				e.Worksheet.AfterPaste -= new EventHandler<RangeEventArgs>(OnAfterPaste);
 				e.Worksheet.AfterCellEdit -= new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
 				e.Worksheet.CellBodyChanged -= new EventHandler<CellEventArgs>(OnCellBodyChanged);
+				e.Worksheet.CellMouseEnter -= new EventHandler<CellMouseEventArgs>(OnCellMouseEnter);
+				e.Worksheet.CellMouseLeave -= new EventHandler<CellMouseEventArgs>(OnCellMouseLeave);
+				e.Worksheet.CellMouseMove -= new EventHandler<CellMouseEventArgs>(OnCellMouseMove);
 			};
 
 		}
@@ -733,9 +739,55 @@ namespace SpreadsheetContentControl
 			}
 		}
 
+		bool IsHyperlinkCell(Cell cell)
+		{
+			return ((cell != null) && (cell.Body != null) && (cell.Body is HyperlinkCell));
+		}
+
+		private void OnCellMouseEnter(object sender, CellMouseEventArgs e)
+		{
+			if (IsHyperlinkCell(e.Cell))
+			{
+				var link = e.Cell.Body as HyperlinkCell;
+
+// 				var cursorPos = System.Drawing.Point.Round(e.Worksheet.ControlAdapter.PointToClient(Cursor.Position));
+// 				cursorPos.Offset(16, 16);
+// 
+// 				if (!String.IsNullOrWhiteSpace(LinkURL))
+// 				{
+// 					e.Worksheet.controlAdapter.ShowTooltip(cursorPos, "'CTRL + click' to follow link");
+// 				}
+			}
+		}
+
+		private void OnCellMouseLeave(object sender, CellMouseEventArgs e)
+		{
+			if (IsHyperlinkCell(e.Cell))
+			{
+				var link = e.Cell.Body as HyperlinkCell;
+
+// 				e.Worksheet.controlAdapter.HideTooltip();
+// 				e.Worksheet.ControlAdapter.ChangeSelectionCursor(CursorStyle.PlatformDefault);
+			}
+		}
+
+		private void OnCellMouseMove(object sender, CellMouseEventArgs e)
+		{
+			if (IsHyperlinkCell(e.Cell))
+			{
+				var link = e.Cell.Body as HyperlinkCell;
+
+// 				if (!String.IsNullOrWhiteSpace(LinkURL) &&
+// 					((Control.ModifierKeys & Keys.Control) == Keys.Control))
+// 				{
+// 					e.Worksheet.controlAdapter.ChangeSelectionCursor(CursorStyle.Hand);
+// 				}
+			}
+		}
+
 		private void OnCellBodyChanged(object sender, CellEventArgs e)
 		{
-			if ((e.Cell != null) && (e.Cell.Body != null) && (e.Cell.Body is HyperlinkCell))
+			if (IsHyperlinkCell(e.Cell))
 			{
 				var link = e.Cell.Body as HyperlinkCell;
 
