@@ -41,6 +41,7 @@ public:
 	CString FormatTime(BOOL bUnits) const; 
 
 	void EnableNegativeTimes(BOOL bEnable);
+	void EnableUnitsChanges(BOOL bEnable);
 
 	static void SetUnits(TH_UNITS nUnits, LPCTSTR szLongUnits, LPCTSTR szAbbrevUnits);
 	static void SetDefaultButtonTip(LPCTSTR szUnits);
