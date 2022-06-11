@@ -33,6 +33,9 @@ namespace SpreadsheetContentControl
 			m_EditorControl.ContentChanged += new System.EventHandler(OnContentChanged);
             m_EditorControl.LostFocus += new System.EventHandler(OnGridControlLostFocus);
 			m_EditorControl.LinkNavigation += new EventHandler<TDLGridEditorControl.LinkEventArgs>(OnGridControlLinkNavigation);
+
+			m_EditorControl.NeedLinkTooltip += new NeedLinkTooltipEventHandler(OnNeedLinkTooltip);
+			m_EditorControl.NeedAttributeValues += new NeedAttributeValuesEventHandler(OnNeedAttributeList);
 		}
 
 		// ITDLContentControl -------------------------------------------------
@@ -176,6 +179,16 @@ namespace SpreadsheetContentControl
 		{
 			// Pass everything back to our parent for consistent handling
 			ContentControlWnd.GoToLink(e.LinkUrl, m_HwndParent, Handle);
+		}
+
+		private void OnNeedLinkTooltip(object sender, NeedLinkTooltipEventArgs e)
+		{
+			e.tooltip = ContentControlWnd.HandleNeedLinkTooltip(e.linkUri, m_HwndParent, Handle);
+		}
+
+		private void OnNeedAttributeList(object sender, NeedAttributeValuesEventArgs e)
+		{
+			e.values = ContentControlWnd.HandleNeedAttributeList(e.attrib, m_HwndParent, Handle);
 		}
 	}
 }

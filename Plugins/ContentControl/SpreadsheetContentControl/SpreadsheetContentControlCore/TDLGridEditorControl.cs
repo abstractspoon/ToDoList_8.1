@@ -38,11 +38,14 @@ namespace SpreadsheetContentControl
 		// --------------------------------------------
 
 		public event EventHandler ContentChanged;
-		public event EventHandler<LinkEventArgs> LinkNavigation;
-
 		public new event EventHandler LostFocus; // replaces base class event
 
+		public event NeedLinkTooltipEventHandler NeedLinkTooltip;
+		public event NeedAttributeValuesEventHandler NeedAttributeValues;
+
 		// --------------------------------------------
+
+		public event EventHandler<LinkEventArgs> LinkNavigation;
 
 		public class LinkEventArgs : EventArgs
 		{
@@ -763,7 +766,25 @@ namespace SpreadsheetContentControl
 			{
  				if (!String.IsNullOrWhiteSpace(link.LinkURL))
  				{
- 					GridControl.ShowTooltip(m_Trans.Translate("'CTRL + click' to follow link"));
+					string tooltip = link.LinkURL;
+
+					if (NeedLinkTooltip != null)
+					{
+						var args = new NeedLinkTooltipEventArgs(link.LinkURL);
+						NeedLinkTooltip(this, args);
+
+						if (!String.IsNullOrWhiteSpace(args.tooltip))
+							tooltip = args.tooltip;
+					}
+					
+					if (tooltip.Contains(link.LinkURL))
+						tooltip = String.Empty;
+					else
+						tooltip = tooltip + "\n";
+
+					tooltip = tooltip + m_Trans.Translate("'CTRL + click' to follow link");
+
+					GridControl.ShowTooltip(tooltip);
  				}
 			}
 		}
