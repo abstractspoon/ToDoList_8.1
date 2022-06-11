@@ -837,6 +837,7 @@ namespace SpreadsheetContentControl
 
 			if (link != null)
 			{
+				link.ActivateColor = link.LinkColor;
 				link.AutoNavigate = false;
 				link.Click += new EventHandler(OnClickHyperlinkCell);
 			}
