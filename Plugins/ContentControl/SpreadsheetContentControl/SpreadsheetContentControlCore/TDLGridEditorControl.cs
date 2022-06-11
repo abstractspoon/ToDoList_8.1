@@ -150,6 +150,22 @@ namespace SpreadsheetContentControl
 			CurrentWorksheet.FontName = Worksheet.DefaultFontName;
 			CurrentWorksheet.FontSize = Worksheet.DefaultFontSize;
 
+			// Initialise hyperlink cells
+			for (int row = 0; row <= CurrentWorksheet.MaxContentRow; row++)
+			{
+				for (int col = 0; col <= CurrentWorksheet.MaxContentCol; col++)
+				{
+					var link = AsHyperlinkCell(CurrentWorksheet.GetCell(row, col));
+
+					if (link != null)
+					{
+						link.ActivateColor = link.LinkColor;
+						link.AutoNavigate = false;
+						link.Click += new EventHandler(OnClickHyperlinkCell);
+					}
+				}
+			}
+
 			m_PrevContent = null;
 
 			return true;

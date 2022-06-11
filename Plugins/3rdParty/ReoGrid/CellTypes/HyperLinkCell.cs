@@ -148,6 +148,14 @@ namespace unvell.ReoGrid.CellTypes
 		/// <returns>True if event has been handled.</returns>
 		public override bool OnMouseUp(CellMouseEventArgs e)
 		{
+			if (this.IsPressed)
+			{
+				if (this.Bounds.Contains(e.RelativePosition))
+				{
+					this.PerformClick();
+				}
+			}
+
 			this.IsPressed = false;
 
 			e.Cell.Style.TextColor = VisitedColor;
