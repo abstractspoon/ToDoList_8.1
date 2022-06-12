@@ -12,7 +12,6 @@
 #include "enedit.h"
 #include "timehelper.h"
 
-
 //////////////////////////////////////////////////////////////////////
 
 const UINT WM_TEN_UNITSCHANGE = ::RegisterWindowMessage(_T("WM_TEN_UNITSCHANGE")); // wParam == <CtrlID>, lParam = <prev units>

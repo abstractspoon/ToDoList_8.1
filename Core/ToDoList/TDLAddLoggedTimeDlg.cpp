@@ -41,6 +41,10 @@ CTDLAddLoggedTimeDlg::CTDLAddLoggedTimeDlg(DWORD dwTaskID, LPCTSTR szTaskTitle, 
 		// Prevent changes to the time units and ensure positive times
 		m_eLoggedTime.EnableUnitsChanges(FALSE);
 		m_eLoggedTime.EnableNegativeTimes(FALSE);
+
+		// If the time is less than 1 hour convert to minutes
+		if (dHours < 1.0)
+			m_loggedTime.SetTHUnits(THU_MINS, TRUE);
 	}
 	else
 	{

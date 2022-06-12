@@ -105,10 +105,6 @@ const int INFOTIPOFFSET			= GraphicsMisc::ScaleByDPIFactor(16);
 
 /////////////////////////////////////////////////////////////////////////////
 
-const int DECIMALS = 4;
-
-/////////////////////////////////////////////////////////////////////////////
-
 const DWORD IDD_TODOCTRL_DIALOG = (DWORD)(LPCTSTR)_T("IDD_TODOCTRL_DIALOG");
 
 /////////////////////////////////////////////////////////////////////////////
@@ -294,11 +290,11 @@ void CToDoCtrl::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_PROJECTNAME, m_sProjectName);
 	DDX_ColourPicker(pDX, IDC_COLOUR, m_crColour);
 
-	CTDCDialogHelper::DDX_Text(pDX, IDC_COST, m_cost, DECIMALS);
+	CTDCDialogHelper::DDX_Text(pDX, IDC_COST, m_cost);
 	CTDCDialogHelper::DDX_Text(pDX, IDC_PERCENT, m_nPercentDone, m_spinPercent);
 
-	CTDCDialogHelper::DDX_Text(pDX, m_eTimeEstimate, m_timeEstimate, DECIMALS);
-	CTDCDialogHelper::DDX_Text(pDX, m_eTimeSpent, m_timeSpent, DECIMALS);
+	CTDCDialogHelper::DDX_Text(pDX, m_eTimeEstimate, m_timeEstimate);
+	CTDCDialogHelper::DDX_Text(pDX, m_eTimeSpent, m_timeSpent);
 
 	m_cbAllocBy.DDX(pDX, m_sAllocBy);
 	m_cbStatus.DDX(pDX, m_sStatus);
@@ -3195,7 +3191,7 @@ BOOL CToDoCtrl::SetSelectedTaskDate(TDC_DATE nDate, const COleDateTime& date, BO
 			TDCTIMEPERIOD time;
 
 			if (GetSelectedTaskTimeEstimate(time))
-				CTDCDialogHelper::UpdateDataEx(this, m_eTimeEstimate, time, FALSE, DECIMALS);
+				CTDCDialogHelper::UpdateDataEx(this, m_eTimeEstimate, time, FALSE);
 		}
 	}
 	
@@ -3918,7 +3914,7 @@ BOOL CToDoCtrl::SetSelectedTaskCost(const TDCCOST& cost, BOOL bOffset)
 		if (GetSelectedTaskCost(costSel) && (m_cost != costSel))
 		{
 			m_cost = costSel;
-			CTDCDialogHelper::UpdateDataEx(this, IDC_COST, m_cost, FALSE, DECIMALS);
+			CTDCDialogHelper::UpdateDataEx(this, IDC_COST, m_cost, FALSE);
 		}
 
 		SetModified(TDCA_COST, aModTaskIDs);
@@ -4029,7 +4025,7 @@ BOOL CToDoCtrl::SetSelectedTaskTimeEstimate(const TDCTIMEPERIOD& timeEst, BOOL b
 			// note: setting the time field changes m_timeEstimate.nUnits
 			// so we have to do them separately
 			m_timeEstimate = time;
-			CTDCDialogHelper::UpdateDataEx(this, m_eTimeEstimate, m_timeEstimate, FALSE, DECIMALS);
+			CTDCDialogHelper::UpdateDataEx(this, m_eTimeEstimate, m_timeEstimate, FALSE);
 		}
 
 		// Recalc other attributes if only one item selected
@@ -4115,7 +4111,7 @@ BOOL CToDoCtrl::SetSelectedTaskTimeSpent(const TDCTIMEPERIOD& timeSpent, BOOL bO
 			// note: setting the time field changes m_timeSpent.nUnits
 			// so we have to do them separately
 			m_timeSpent = time;
-			CTDCDialogHelper::UpdateDataEx(this, m_eTimeSpent, m_timeSpent, FALSE, DECIMALS);
+			CTDCDialogHelper::UpdateDataEx(this, m_eTimeSpent, m_timeSpent, FALSE);
 		}
 		
 		// update % complete?
@@ -4175,7 +4171,7 @@ BOOL CToDoCtrl::SetSelectedTaskTimeEstimateUnits(TDC_UNITS nUnits, BOOL bRecalcT
 			if (bRecalcTime)
 			{
 				VERIFY(GetSelectedTaskTimeEstimate(m_timeEstimate));
-				CTDCDialogHelper::UpdateDataEx(this, m_eTimeEstimate, m_timeEstimate, FALSE, DECIMALS);
+				CTDCDialogHelper::UpdateDataEx(this, m_eTimeEstimate, m_timeEstimate, FALSE);
 			}
 			// update % complete?
 			else if (HasStyle(TDCS_AUTOCALCPERCENTDONE))
@@ -4243,7 +4239,7 @@ BOOL CToDoCtrl::SetSelectedTaskTimeSpentUnits(TDC_UNITS nUnits, BOOL bRecalcTime
 			if (bRecalcTime)
 			{
 				VERIFY(GetSelectedTaskTimeSpent(m_timeSpent));
-				CTDCDialogHelper::UpdateDataEx(this, m_eTimeSpent, m_timeSpent, FALSE, DECIMALS);
+				CTDCDialogHelper::UpdateDataEx(this, m_eTimeSpent, m_timeSpent, FALSE);
 			}
 			// update % complete?
 			else if (HasStyle(TDCS_AUTOCALCPERCENTDONE))
