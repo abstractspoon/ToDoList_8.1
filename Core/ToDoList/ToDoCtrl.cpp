@@ -8217,6 +8217,7 @@ BOOL CToDoCtrl::PasteTasks(TDC_PASTE nWhere, BOOL bAsRef)
 	
 	BOOL bRebuildCustomUI = (tasks.GetCustomAttributeDefs(aPasteAttribDefs) &&
 								m_aCustomAttribDefs.Append(aPasteAttribDefs));
+	DWORD dwDestTaskID = GetTaskID(htiDest);
 	
 	IMPLEMENT_DATA_UNDO(m_data, TDCUAT_PASTE);
 	{
@@ -8234,7 +8235,7 @@ BOOL CToDoCtrl::PasteTasks(TDC_PASTE nWhere, BOOL bAsRef)
 		}
 	}
 
-	FixupParentCompletion(GetTaskID(htiDest));
+	FixupParentCompletion(dwDestTaskID);
 	
 	if (bRebuildCustomUI)
 	{
