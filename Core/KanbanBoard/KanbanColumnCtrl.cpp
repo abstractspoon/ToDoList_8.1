@@ -272,7 +272,6 @@ LRESULT CKanbanColumnCtrl::OnThemeChanged(WPARAM /*wp*/, LPARAM /*lp*/)
 
 void CKanbanColumnCtrl::RefreshBkgndColor()
 {
-	// Background colour
 	COLORREF crBack = GetSysColor(COLOR_WINDOW);
 
 	if (m_columnDef.crBackground != CLR_NONE)
