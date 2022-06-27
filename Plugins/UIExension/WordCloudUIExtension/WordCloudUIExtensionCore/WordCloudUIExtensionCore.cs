@@ -63,7 +63,7 @@ namespace WordCloudUIExtension
 
 		private Font m_ControlsFont;
 		private String m_UserIgnoreFilePath, m_LangIgnoreFilePath;
-		private Timer m_UpdateTimer;
+		private Timer m_CommentsTimer;
 
         // -------------------------------------------------------------
 
@@ -78,9 +78,9 @@ namespace WordCloudUIExtension
 
 			m_ControlsFont = new Font(FontName, 8, FontStyle.Regular);
 
-			m_UpdateTimer = new Timer();
-			m_UpdateTimer.Interval = 2000;
-			m_UpdateTimer.Tick += new EventHandler(OnUpdateTimer);
+			m_CommentsTimer = new Timer();
+			m_CommentsTimer.Interval = 2000;
+			m_CommentsTimer.Tick += new EventHandler(OnUpdateTimer);
 
 			m_Splitting = false;
 			m_InitialSplitPos = -1;
@@ -147,8 +147,8 @@ namespace WordCloudUIExtension
 
 		public void UpdateTasks(TaskList tasks, UIExtension.UpdateType type)
 		{
-			m_UpdateTimer.Stop();
-			m_UpdateTimer.Tag = null;
+			m_CommentsTimer.Stop();
+			m_CommentsTimer.Tag = null;
 
 			HashSet<UInt32> changedTaskIds = null;
 
@@ -172,19 +172,43 @@ namespace WordCloudUIExtension
 			while (task.IsValid() && ProcessTaskUpdate(task, type, changedTaskIds))
 				task = task.GetNextTask();
 
-			if (((changedTaskIds == null) || (changedTaskIds.Count > 0)) && tasks.IsAttributeAvailable(m_Attrib))
+			// Comments is the only attribute that gets delivered as a 
+			// 'stream of consciousness' as each character gets typed
+			// so to avoid excessive processing we use a timer to delay
+			// the update until there is a break in the typing
+			if (tasks.IsAttributeAvailable(m_Attrib))
 			{
-				m_UpdateTimer.Tag = changedTaskIds;
-				m_UpdateTimer.Start();
+				if (changedTaskIds == null)
+				{
+					UpdateDisplay(null); // immediate
+				}
+				else if (changedTaskIds.Count > 0)
+				{
+					if (m_Attrib != Task.Attribute.Comments)
+					{
+						UpdateDisplay(null); // immediate
+					}
+					else // comments
+					{
+						// Delayed update
+						m_CommentsTimer.Tag = changedTaskIds;
+						m_CommentsTimer.Start();
+					}
+				}
 			}
 		}
 
 		private void OnUpdateTimer(object sender, EventArgs e)
 		{
-			m_UpdateTimer.Stop();
+			m_CommentsTimer.Stop();
 
-			var changedTaskIds = (m_UpdateTimer.Tag as HashSet<UInt32>);
+			// Sanity check because tracked attrib could feasibly have changed
+			if (m_Attrib == Task.Attribute.Comments)
+				UpdateDisplay(m_CommentsTimer.Tag as HashSet<UInt32>);
+		}
 
+		private void UpdateDisplay(HashSet<UInt32> changedTaskIds)
+		{
 			UpdateWeightedWords(true);
 			UpdateMatchList(changedTaskIds);
 		}
