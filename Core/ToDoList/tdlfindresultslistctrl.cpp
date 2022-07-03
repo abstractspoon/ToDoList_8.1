@@ -473,6 +473,7 @@ CString CTDLFindResultsListCtrl::GetAttributeName(TDC_ATTRIBUTE nAttribID, const
 			if (attribDef.GetAttributeID() == nAttribID)
 			{
 				sAttrib = attribDef.sLabel;
+				break;
 			}
 		}
 	}
