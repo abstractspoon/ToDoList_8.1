@@ -305,6 +305,7 @@
 #define IDC_COPYALL                     1057
 #define IDC_MATCHANYTEXT                1057
 #define IDC_STYLE_PARA                  1057
+#define IDC_CLEARALL                    1057
 #define IDC_INDIVIDUALPRIORITYCOLORS    1058
 #define IDC_SELTASK                     1058
 #define IDC_ACTIVETASKLIST              1058
@@ -2447,7 +2448,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        325
 #define _APS_NEXT_COMMAND_VALUE         34747
-#define _APS_NEXT_CONTROL_VALUE         1553
+#define _APS_NEXT_CONTROL_VALUE         1554
 #define _APS_NEXT_SYMED_VALUE           108
 #endif
 #endif

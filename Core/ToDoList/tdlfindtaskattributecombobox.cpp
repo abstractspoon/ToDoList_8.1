@@ -216,30 +216,16 @@ CString CTDLFindTaskAttributeComboBox::GetAttributeName(const SEARCHPARAM& rule)
 					break;
 				}
 			}
-
 		}
 		else // default attribute
 		{
-			int nAttrib = ATTRIB_COUNT;
+			sName = ::GetAttributeName(attrib);
 
-			while (nAttrib--)
+			// handle relative dates
+			if (!sName.IsEmpty() && AttributeIsDate(attrib) && rule.IsRelativeDate())
 			{
-				if (ATTRIBUTES[nAttrib].nAttribID == attrib)
-				{
-					if (ATTRIBUTES[nAttrib].nAttribResID)
-					{
-						// handle relative dates
-						sName.LoadString(ATTRIBUTES[nAttrib].nAttribResID);
-
-						if (AttributeIsDate(attrib) && rule.IsRelativeDate())
-						{
-							sName += ' ';
-							sName += CEnString(IDS_TDLBC_RELATIVESUFFIX);
-						}
-						
-						break;
-					}
-				}
+				sName += ' ';
+				sName += CEnString(IDS_TDLBC_RELATIVESUFFIX);
 			}
 		}
 		break;

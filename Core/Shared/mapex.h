@@ -138,6 +138,19 @@ public:
 		return TRUE;
 	}
 
+	BOOL MatchAny(const CSetBase& other) const
+	{
+		POSITION pos = other.GetStartPosition();
+
+		while (pos)
+		{
+			if (Has(other.GetNext(pos)))
+				return TRUE;
+		}
+
+		return FALSE;
+	}
+
 	int GetDifferences(const CSetBase& other, CSetBase& diffs) const
 	{
 		diffs.RemoveAll();

@@ -19,7 +19,7 @@ class CEnColorDialog : public CColorDialog
 	DECLARE_DYNAMIC(CEnColorDialog)
 
 public:
-	CEnColorDialog(COLORREF clrInit = 0, DWORD dwFlags = 0, CWnd* pParentWnd = NULL);
+	CEnColorDialog(COLORREF clrInit = CLR_NONE, DWORD dwFlags = CC_FULLOPEN | CC_RGBINIT, CWnd* pParentWnd = NULL);
 	~CEnColorDialog();
 
 	int DoModal(IPreferences* pPrefs = NULL);
@@ -27,12 +27,6 @@ public:
 
 	void LoadPreferences(const IPreferences* pPrefs);
 	void SavePreferences(IPreferences* pPrefs) const;
-
-protected:
-	BOOL m_bHasPrefs;
-
-protected:
-	BOOL OnInitDialog();
 
 protected:
 	//{{AFX_MSG(CEnColorDialog)

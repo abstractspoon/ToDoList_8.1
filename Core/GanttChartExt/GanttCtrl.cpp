@@ -3,7 +3,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-//#include "resource.h"
 #include "GanttCtrl.h"
 #include "GanttMsg.h"
 #include "GanttStatic.h"
@@ -12,16 +11,12 @@
 #include "..\shared\DateHelper.h"
 #include "..\shared\holdredraw.h"
 #include "..\shared\graphicsMisc.h"
-//#include "..\shared\autoflag.h"
 #include "..\shared\misc.h"
 #include "..\shared\enstring.h"
 #include "..\shared\localizer.h"
 #include "..\shared\themed.h"
 #include "..\shared\enbitmap.h"
-//#include "..\shared\copywndcontents.h"
 #include "..\shared\WorkingWeek.h"
-
-//#include "..\3rdparty\shellicons.h"
 
 #include "..\Interfaces\UITheme.h"
 
@@ -712,7 +707,7 @@ BOOL CGanttCtrl::UpdateTask(const ITASKLISTBASE* pTasks, HTASKITEM hTask, IUI_UP
 		if (pTasks->IsAttributeAvailable(TDCA_SUBTASKDONE))
 		{
 			LPCWSTR szSubTaskDone = pTasks->GetTaskSubtaskCompletion(hTask);
-			pGI->bSomeSubtaskDone = !Misc::IsEmpty(szSubTaskDone);
+			pGI->bSomeSubtaskDone = (!Misc::IsEmpty(szSubTaskDone) && (szSubTaskDone[0] != '0'));
 		}
 
 		if (pTasks->IsAttributeAvailable(TDCA_TAGS))
@@ -933,7 +928,7 @@ void CGanttCtrl::BuildTreeItem(const ITASKLISTBASE* pTasks, HTASKITEM hTask,
 		pGI->bHasIcon = !Misc::IsEmpty(pTasks->GetTaskIcon(hTask));
 
 		LPCWSTR szSubTaskDone = pTasks->GetTaskSubtaskCompletion(hTask);
-		pGI->bSomeSubtaskDone = !Misc::IsEmpty(szSubTaskDone);
+		pGI->bSomeSubtaskDone = (!Misc::IsEmpty(szSubTaskDone) && (szSubTaskDone[0] != '0'));
 
 		time64_t tDate = 0;
 
