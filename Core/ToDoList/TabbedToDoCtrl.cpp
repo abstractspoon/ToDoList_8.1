@@ -1402,7 +1402,7 @@ LRESULT CTabbedToDoCtrl::OnUIExtSelectTask(WPARAM wParam, LPARAM lParam)
 			{
 				// Call base class directly so that we don't end
 				// up calling back into extension this came from
-				VERIFY(CToDoCtrl::SelectTask(dwTaskID, FALSE));
+				VERIFY(CToDoCtrl::SelectTask(dwTaskID));
 			}
 			else
 			{
@@ -1422,7 +1422,7 @@ LRESULT CTabbedToDoCtrl::OnUIExtSelectTask(WPARAM wParam, LPARAM lParam)
 
 		// Call base class directly so that we don't end
 		// up calling back into extension this came from
-		VERIFY(CToDoCtrl::SelectTasks(aTaskIDs, FALSE));
+		VERIFY(CToDoCtrl::SelectTasks(aTaskIDs));
 	}
 
 	if (bSelChange)
@@ -2479,8 +2479,8 @@ void CTabbedToDoCtrl::SelectAll()
 
 	case FTCV_TASKLIST:
 		{
-			int nNumItems = m_taskList.GetTaskCount();
-			BOOL bAllTasks = (CToDoCtrl::GetTaskCount() == (UINT)nNumItems);
+			int nNumItems = m_taskList.GetItemCount();
+			BOOL bAllTasks = (m_taskTree.GetItemCount() == nNumItems);
 
 			// select items in tree
 			if (bAllTasks)
@@ -2490,7 +2490,7 @@ void CTabbedToDoCtrl::SelectAll()
 			}
 			else
 			{
-				// save IDs only not showing all tasks
+				// save IDs only if not showing all tasks
 				CDWordArray aTaskIDs;
 
 				for (int nItem = 0; nItem < nNumItems; nItem++)
@@ -4308,7 +4308,7 @@ void CTabbedToDoCtrl::GetSortBy(TDSORTCOLUMNS& sort) const
 	sort = GetSort().multi;
 }
 
-BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID, BOOL bTrue)
+BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID)
 {	
 	// Note: We update the other views first else the call to 
 	// UpdateControls will not be properly synchronised
@@ -4319,13 +4319,12 @@ BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID, BOOL bTrue)
 	{
 	case FTCV_TASKTREE:
 	case FTCV_UNSET:
-		// Handled below
-		break;
+		break; // Handled at bottom
 
 	case FTCV_TASKLIST:
 		{
 			ASSERT(pVData);
-			pVData->bHasSelectedTask = m_taskList.SelectTask(dwTaskID, bTrue);
+			pVData->bHasSelectedTask = m_taskList.SelectTask(dwTaskID);
 		}
 		break;
 
@@ -4361,7 +4360,7 @@ BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID, BOOL bTrue)
 		ASSERT(0);
 	}
 
-	return CToDoCtrl::SelectTask(dwTaskID, bTrue);
+	return CToDoCtrl::SelectTask(dwTaskID);
 }
 
 int CTabbedToDoCtrl::CacheListSelection(TDCSELECTIONCACHE& cache, BOOL bIncBreadcrumbs) const
@@ -5171,8 +5170,10 @@ BOOL CTabbedToDoCtrl::MoveSelectedTask(TDC_MOVETASK nDirection)
 				return FALSE;
 			}
 
+			////////////////////////////////////////////////////////////////
 			CScopedLogTimer log(_T("CTabbedToDoCtrl::MoveSelectedTask"));
 			log.LogStart();
+			////////////////////////////////////////////////////////////////
 
 			DWORD dwSelTaskID = ((m_taskTree.GetSelectedCount() == 1) ? GetSelectedTaskID() : 0);
 			DWORD dwDestParentID = 0, dwDestPrevSiblingID = 0;
@@ -5180,19 +5181,23 @@ BOOL CTabbedToDoCtrl::MoveSelectedTask(TDC_MOVETASK nDirection)
 			if (!GetExtensionInsertLocation(nView, nDirection, dwDestParentID, dwDestPrevSiblingID))
 				return FALSE;
 
+			////////////////////////////////////////////////////////////////
 			log.LogTimeElapsed(_T("GetExtensionInsertLocation"));
+			////////////////////////////////////////////////////////////////
 
 			CUIExtensionAppCmdData data(dwSelTaskID, dwDestParentID, dwDestPrevSiblingID);
 
 			if (ExtensionDoAppCommand(nView, IUI_MOVETASK, data))
 			{
+				////////////////////////////////////////////////////////////////
 				log.LogTimeElapsed(_T("ExtensionDoAppCommand(IUI_MOVETASK)"));
+				////////////////////////////////////////////////////////////////
 
 				IMPLEMENT_DATA_UNDO(m_data, TDCUAT_MOVE);
 
 				// Update the underlying data
 				CDWordArray aSelTaskIDs;
-				m_taskTree.GetSelectedTaskIDs(aSelTaskIDs);
+				m_taskTree.GetSelectedTaskIDs(aSelTaskIDs, FALSE);
 
 				// Update the tree first because it relies on the current
 				// data structure to validate the move
@@ -5205,7 +5210,9 @@ BOOL CTabbedToDoCtrl::MoveSelectedTask(TDC_MOVETASK nDirection)
 					return FALSE;
 				}
 				
+				////////////////////////////////////////////////////////////////
 				log.LogTimeElapsed(_T("m_taskTree.MoveSelection"));
+				////////////////////////////////////////////////////////////////
 				
 				if (!m_data.MoveTasks(aSelTaskIDs, dwDestParentID, dwDestPrevSiblingID))
 				{
@@ -6227,14 +6234,9 @@ int CTabbedToDoCtrl::FindListTask(const CString& sPart, TDC_ATTRIBUTE nAttrib, i
 	return -1; // no match
 }
 
-BOOL CTabbedToDoCtrl::SelectTasks(const CDWordArray& aTasks)
+BOOL CTabbedToDoCtrl::SelectTasks(const CDWordArray& aTaskIDs)
 {
-	return SelectTasks(aTasks, FALSE);
-}
-
-BOOL CTabbedToDoCtrl::SelectTasks(const CDWordArray& aTasks, BOOL bTrue)
-{
-	BOOL bRes = CToDoCtrl::SelectTasks(aTasks, bTrue);
+	BOOL bRes = CToDoCtrl::SelectTasks(aTaskIDs);
 
 	// extra processing
 	if (bRes)
@@ -6245,13 +6247,13 @@ BOOL CTabbedToDoCtrl::SelectTasks(const CDWordArray& aTasks, BOOL bTrue)
 		// the new recurring tasks
 		if (m_bRecreatingRecurringTasks)
 		{
-			m_aRecreatedRecurringTasks.Copy(aTasks);
+			m_aRecreatedRecurringTasks.Copy(aTaskIDs);
 			return TRUE;
 		}
 
 		// else
 		ASSERT((m_aRecreatedRecurringTasks.GetSize() == 0) ||
-				(&m_aRecreatedRecurringTasks == &aTasks));
+				(&m_aRecreatedRecurringTasks == &aTaskIDs));
 
 		SyncActiveViewSelectionToTree();
 	}
@@ -6410,7 +6412,7 @@ void CTabbedToDoCtrl::SyncExtensionSelectionToTree(FTC_VIEW nView)
 			else
 				bSelChange = HasSingleSelectionChanged(cache.dwFocusedTaskID);
 
-			VERIFY(CToDoCtrl::SelectTask(cache.dwFocusedTaskID, FALSE));
+			VERIFY(CToDoCtrl::SelectTask(cache.dwFocusedTaskID));
 		}
 		else
 		{
