@@ -6,6 +6,8 @@
 #include "TreeDragDropHelper.h"
 #include "holdredraw.h"
 #include "misc.h"
+#include "AutoScrollHelper.h"
+#include "GraphicsMisc.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -98,9 +100,10 @@ enum
 {
 	DELAY_INTERVAL = 150, 
 	SCROLL_INTERVAL = 100, 
-	SCROLL_MARGIN = 20, 
 	EXPAND_INTERVAL = 500,
 };
+
+const int SCROLL_MARGIN = GraphicsMisc::ScaleByDPIFactor(20);
 
 const CPoint OUTERSPACE(-10000, -10000);
 
@@ -278,12 +281,9 @@ UINT CTreeDragDropHelper::OnDragOver(const DRAGDROPINFO* pDDI)
 		
 		// Set a timer if the cursor is at the top or bottom of the window,
 		// or if it's over a collapsed item.
-		CRect rect;
-		GetClientRect(pDDI->hwndTarget, rect);
+		CAutoScrollHelper ash(TRUE, SCROLL_MARGIN);
 
-		rect.DeflateRect(0, SCROLL_MARGIN);
-
-		if (!rect.PtInRect(pDDI->pt))
+		if (ash.HitTest(m_tree))
 		{
 			SetTimer(TIMER_SCROLL, DELAY_INTERVAL);
 		}
@@ -503,35 +503,27 @@ void CTreeDragDropHelper::OnTimer(UINT nIDEvent)
 		HTREEITEM hFirstVisible = m_tree.GetFirstVisibleItem();
 
 		// Scroll the window if the cursor is still near the top or bottom.
-		CPoint point(::GetMessagePos());
-		ScreenToClient(m_tree, &point);
-			
-		CRect rect;
-		m_tree.GetClientRect(rect);
+		CAutoScrollHelper ash(TRUE, SCROLL_MARGIN);
+		SCROLLZONE nZone = ASHZ_OUTSIDE;
 
-		if (rect.PtInRect(point))
+		if (ash.HitTest(m_tree, &nZone))
 		{
-			rect.DeflateRect(0, SCROLL_MARGIN);
+			m_ddMgr.DragShowNolock(FALSE);
+			m_tree.SelectDropTarget(NULL);
+			m_tree.SetInsertMark(NULL);
 
-			if (!rect.PtInRect(point))
+			switch (nZone)
 			{
-				m_ddMgr.DragShowNolock(FALSE);
+			case ASHZ_TOP:
+				m_tree.SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEUP, 0), NULL);
+				break;
 
-				if (point.y <= rect.top)
-				{
-					m_tree.SelectDropTarget(NULL);
-					m_tree.SetInsertMark(NULL);
-					m_tree.SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEUP, 0), NULL);
-				}
-				else if (point.y >= rect.bottom)
-				{
-					m_tree.SelectDropTarget(NULL);
-					m_tree.SetInsertMark(NULL);
-					m_tree.SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEDOWN, 0), NULL);
-				}
-
-				m_ddMgr.DragShowNolock(TRUE);
+			case ASHZ_BOTTOM:
+				m_tree.SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEDOWN, 0), NULL);
+				break;
 			}
+
+			m_ddMgr.DragShowNolock(TRUE);
 		}
 				
 		// Kill the timer if the window did not scroll

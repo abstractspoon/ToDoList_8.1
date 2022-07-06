@@ -17,6 +17,7 @@
 #include "..\shared\fontcache.h"
 #include "..\shared\CalendarCtrlEx.h"
 #include "..\shared\MidnightTimer.h"
+#include "..\shared\AutoScrollHelper.h"
 
 #include "..\Interfaces\IUIExtension.h"
 #include "..\Interfaces\ITaskList.h"
@@ -90,6 +91,7 @@ protected:
 	CScrollBar m_sbCellVScroll;
 	CToolTipCtrlEx m_tooltip;
 	CMidnightTimer m_timerMidnight;
+	CAutoScrollHelper m_autoScroll;
 
 	DWORD m_dwSelectedTaskID;
 	DWORD m_dwOptions;
@@ -135,6 +137,7 @@ protected:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnTimer(UINT nTimerID);
 	//}}AFX_MSG
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnSetFocus(CWnd* pFocus);

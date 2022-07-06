@@ -30,13 +30,23 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 
-const int TIP_PADDING = 3;
+enum
+{
+	DELAY_INTERVAL = 150,
+	SCROLL_INTERVAL = 100,
+};
+
 const int TEXT_PADDING = GraphicsMisc::ScaleByDPIFactor(2);
 const int HEADER_PADDING = GraphicsMisc::ScaleByDPIFactor(3);
 const int IMAGE_SIZE = GraphicsMisc::ScaleByDPIFactor(16);
+const int SCROLL_MARGIN = GraphicsMisc::ScaleByDPIFactor(20);
+
 const int DEF_TASK_HEIGHT = (IMAGE_SIZE + 3); // Effective height is 1 less
 const int MIN_TASK_HEIGHT = (DEF_TASK_HEIGHT - 6);
 const int OVERFLOWBTN_TIPID = INT_MAX;
+const int TIP_PADDING = 3;
+
+const UINT TIMER_SCROLL = 1;
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -75,7 +85,8 @@ CTaskCalendarCtrl::CTaskCalendarCtrl()
 	m_crWeekend(RGB(224, 224, 224)),
 	m_crToday(255),
 	m_crAltWeek(CLR_NONE),
-	m_nCellHeaderMonthStyle(TCCMS_LONG)
+	m_nCellHeaderMonthStyle(TCCMS_LONG),
+	m_autoScroll(TRUE, SCROLL_MARGIN)
 {
 	GraphicsMisc::CreateFont(m_DefaultFont, _T("Tahoma"));
 
@@ -110,6 +121,7 @@ BEGIN_MESSAGE_MAP(CTaskCalendarCtrl, CCalendarCtrlEx)
 	ON_WM_KEYDOWN()
 	ON_WM_RBUTTONDOWN()
 	ON_WM_CREATE()
+	ON_WM_TIMER()
 	//}}AFX_MSG_MAP
 	ON_WM_VSCROLL()
 	ON_WM_SETFOCUS()
@@ -2426,10 +2438,47 @@ void CTaskCalendarCtrl::OnMouseMove(UINT nFlags, CPoint point)
 	CCalendarCtrlEx::OnMouseMove(nFlags, point);
 }
 
+void CTaskCalendarCtrl::OnTimer(UINT nTimerID)
+{
+	if (nTimerID == TIMER_SCROLL)
+	{
+		SCROLLZONE nZone = ASHZ_OUTSIDE;
+
+		if (m_autoScroll.HitTest(*this, &nZone))
+		{
+			switch (nZone)
+			{
+			case ASHZ_TOP:
+				SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEUP, 0), NULL);
+				break;
+
+			case ASHZ_BOTTOM:
+				SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEDOWN, 0), NULL);
+				break;
+			}
+
+			SetTimer(TIMER_SCROLL, SCROLL_INTERVAL, NULL);
+		}
+		else
+		{
+			KillTimer(TIMER_SCROLL);
+		}
+	}
+}
+
 BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 {
 	if (IsDragging())
 	{
+		// Set a timer if the cursor is at the top or bottom of the window,
+		if (m_autoScroll.HitTest(*this))
+		{
+			SetTimer(TIMER_SCROLL, DELAY_INTERVAL, NULL);
+			return TRUE;
+		}
+
+		KillTimer(TIMER_SCROLL);
+
 		TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 		ASSERT(pTCI);
 			
@@ -2873,6 +2922,9 @@ void CTaskCalendarCtrl::CancelDrag(BOOL bReleaseCapture)
 
 	Invalidate(FALSE);
 	UpdateWindow();
+
+	KillTimer(DELAY_INTERVAL);
+	KillTimer(SCROLL_INTERVAL);
 
 	// keep parent informed
 	NotifyParentDragChange();

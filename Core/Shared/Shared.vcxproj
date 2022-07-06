@@ -645,6 +645,7 @@
     <ClInclude Include="AcceleratorString.h" />
     <ClInclude Include="autocombobox.h" />
     <ClInclude Include="AutoFlag.h" />
+    <ClInclude Include="AutoScrollHelper.h" />
     <ClInclude Include="BaseTabCtrl.h" />
     <ClInclude Include="BinaryData.h" />
     <ClInclude Include="browserdlg.h" />
