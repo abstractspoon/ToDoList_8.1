@@ -24,69 +24,15 @@ enum SCROLLZONE
 class CAutoScrollHelper
 {
 public:
-	CAutoScrollHelper(BOOL bVertical, int nZoneWidth)
-		:
-		m_bVertical(bVertical),
-		m_nZoneWidth(max(nZoneWidth, 0))
-	{
+	CAutoScrollHelper(BOOL bVertical, int nZoneWidth);
 
-	}
+	BOOL HitTest(HWND hwnd, SCROLLZONE* pZone = NULL) const;
+	BOOL HitTest(const CRect& rScreen, SCROLLZONE* pZone = NULL) const;
 
-	BOOL HitTest(HWND hwnd, SCROLLZONE* pZone = NULL) const
-	{
-		SCROLLZONE nZone = HitTestZone(hwnd);
+	SCROLLZONE HitTestZone(HWND hwnd) const;
+	SCROLLZONE HitTestZone(const CRect& rScreen) const;
 
-		if (pZone)
-			*pZone = nZone;
-
-		if (m_bVertical)
-			return (nZone == ASHZ_TOP) || (nZone == ASHZ_BOTTOM);
-
-		// else
-		return (nZone == ASHZ_LEFT) || (nZone == ASHZ_RIGHT);
-	}
-
-	SCROLLZONE HitTestZone(HWND hwnd) const
-	{
-		CPoint point(::GetMessagePos());
-		::ScreenToClient(hwnd, &point);
-
-		CRect rect;
-		::GetClientRect(hwnd, rect);
-
-		if (!rect.PtInRect(point))
-			return ASHZ_OUTSIDE;
-
-		if (m_nZoneWidth == 0)
-			return ASHZ_INSIDE;
-
-		if (m_bVertical)
-		{
-			rect.DeflateRect(0, m_nZoneWidth);
-
-			if (rect.PtInRect(point))
-				return ASHZ_INSIDE;
-
-			if (point.y <= rect.top)
-				return ASHZ_TOP;
-
-			// else
-			return ASHZ_BOTTOM;
-		}
-		else
-		{
-			rect.DeflateRect(m_nZoneWidth, 0);
-				
-			if (rect.PtInRect(point))
-				return ASHZ_INSIDE;
-
-			if (point.x <= rect.left)
-				return ASHZ_LEFT;
-
-			// else
-			return ASHZ_TOP;
-		}
-	}
+	static CRect GetClientScreenRect(HWND hwnd);
 
 protected:
 	BOOL m_bVertical;

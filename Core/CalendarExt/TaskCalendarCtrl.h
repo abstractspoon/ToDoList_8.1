@@ -193,6 +193,7 @@ protected:
 	void CalcOverflowBtnRect(const CRect& rCell, CRect& rOverflowBtn) const;
 	int CalcEffectiveCellContentItemCount(const CCalendarCell* pCell) const;
 	TCC_MONTHSTYLE CalcCellHeaderMonthStyle(CDC* pDC, CFont* pBoldFont) const;
+	CRect GetCellsScreenRect() const;
 
 	DWORD HitTestTask(const CPoint& ptClient, TCC_HITTEST& nHit, LPRECT pRect = NULL) const;
 	BOOL HitTestCellOverflowBtn(const CPoint& ptClient) const;

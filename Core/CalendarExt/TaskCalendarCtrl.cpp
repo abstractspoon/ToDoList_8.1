@@ -2432,8 +2432,21 @@ TCC_SNAPMODE CTaskCalendarCtrl::GetSnapMode() const
 
 void CTaskCalendarCtrl::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	if (!m_bReadOnly && UpdateDragging(point))
-		return;
+	if (!m_bReadOnly && IsDragging())
+	{
+		// Set a timer if the cursor is at the top or bottom of the window
+		if (m_autoScroll.HitTest(GetCellsScreenRect()))
+		{
+			SetTimer(TIMER_SCROLL, DELAY_INTERVAL, NULL);
+		}
+		else
+		{
+			KillTimer(TIMER_SCROLL);
+
+			if (UpdateDragging(point))
+				return;
+		}
+	}
 
 	CCalendarCtrlEx::OnMouseMove(nFlags, point);
 }
@@ -2444,7 +2457,7 @@ void CTaskCalendarCtrl::OnTimer(UINT nTimerID)
 	{
 		SCROLLZONE nZone = ASHZ_OUTSIDE;
 
-		if (m_autoScroll.HitTest(*this, &nZone))
+		if (m_autoScroll.HitTest(GetCellsScreenRect(), &nZone))
 		{
 			switch (nZone)
 			{
@@ -2457,6 +2470,11 @@ void CTaskCalendarCtrl::OnTimer(UINT nTimerID)
 				break;
 			}
 
+			CPoint ptCursor(::GetMessagePos());
+			ScreenToClient(&ptCursor);
+
+			UpdateDragging(ptCursor);
+
 			SetTimer(TIMER_SCROLL, SCROLL_INTERVAL, NULL);
 		}
 		else
@@ -2466,19 +2484,18 @@ void CTaskCalendarCtrl::OnTimer(UINT nTimerID)
 	}
 }
 
+CRect CTaskCalendarCtrl::GetCellsScreenRect() const
+{
+	CRect rect = CAutoScrollHelper::GetClientScreenRect(*this);
+	rect.top += m_nHeaderHeight;
+
+	return rect;
+}
+
 BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 {
 	if (IsDragging())
 	{
-		// Set a timer if the cursor is at the top or bottom of the window,
-		if (m_autoScroll.HitTest(*this))
-		{
-			SetTimer(TIMER_SCROLL, DELAY_INTERVAL, NULL);
-			return TRUE;
-		}
-
-		KillTimer(TIMER_SCROLL);
-
 		TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 		ASSERT(pTCI);
 			
