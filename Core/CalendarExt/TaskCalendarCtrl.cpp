@@ -32,8 +32,8 @@ static char THIS_FILE[] = __FILE__;
 
 enum
 {
-	DELAY_INTERVAL = 150,
-	SCROLL_INTERVAL = 100,
+	DRAGSCROLL_DELAYINTERVAL = 150,
+	DRAGSCROLL_SCROLLINTERVAL = 100,
 };
 
 const int TEXT_PADDING = GraphicsMisc::ScaleByDPIFactor(2);
@@ -46,7 +46,7 @@ const int MIN_TASK_HEIGHT = (DEF_TASK_HEIGHT - 6);
 const int OVERFLOWBTN_TIPID = INT_MAX;
 const int TIP_PADDING = 3;
 
-const UINT TIMER_SCROLL = 1;
+const UINT TIMER_DRAGSCROLL = 1;
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -2434,17 +2434,16 @@ void CTaskCalendarCtrl::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (!m_bReadOnly && IsDragging())
 	{
+		KillTimer(TIMER_DRAGSCROLL);
+
 		// Set a timer if the cursor is at the top or bottom of the window
 		if (m_autoScroll.HitTest(GetCellsScreenRect()))
 		{
-			SetTimer(TIMER_SCROLL, DELAY_INTERVAL, NULL);
+			SetTimer(TIMER_DRAGSCROLL, DRAGSCROLL_DELAYINTERVAL, NULL);
 		}
-		else
+		else if (UpdateDragging(point))
 		{
-			KillTimer(TIMER_SCROLL);
-
-			if (UpdateDragging(point))
-				return;
+			return;
 		}
 	}
 
@@ -2453,34 +2452,42 @@ void CTaskCalendarCtrl::OnMouseMove(UINT nFlags, CPoint point)
 
 void CTaskCalendarCtrl::OnTimer(UINT nTimerID)
 {
-	if (nTimerID == TIMER_SCROLL)
+	switch (nTimerID)
 	{
-		SCROLLZONE nZone = ASHZ_OUTSIDE;
-
-		if (m_autoScroll.HitTest(GetCellsScreenRect(), &nZone))
+	case TIMER_DRAGSCROLL:
 		{
-			switch (nZone)
+			KillTimer(TIMER_DRAGSCROLL);
+
+			if (IsDragging())
 			{
-			case ASHZ_TOP:
-				SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEUP, 0), NULL);
-				break;
+				SCROLLZONE nZone = ASHZ_OUTSIDE;
 
-			case ASHZ_BOTTOM:
-				SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEDOWN, 0), NULL);
-				break;
+				if (m_autoScroll.HitTest(GetCellsScreenRect(), &nZone))
+				{
+					switch (nZone)
+					{
+					case ASHZ_TOP:
+						SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEUP, 0), NULL);
+						break;
+
+					case ASHZ_BOTTOM:
+						SendMessage(WM_VSCROLL, MAKEWPARAM(SB_LINEDOWN, 0), NULL);
+						break;
+					}
+
+					CPoint ptCursor(::GetMessagePos());
+					ScreenToClient(&ptCursor);
+
+					UpdateDragging(ptCursor);
+
+					SetTimer(TIMER_DRAGSCROLL, DRAGSCROLL_SCROLLINTERVAL, NULL);
+				}
 			}
-
-			CPoint ptCursor(::GetMessagePos());
-			ScreenToClient(&ptCursor);
-
-			UpdateDragging(ptCursor);
-
-			SetTimer(TIMER_SCROLL, SCROLL_INTERVAL, NULL);
 		}
-		else
-		{
-			KillTimer(TIMER_SCROLL);
-		}
+		break;
+
+	default:
+		CCalendarCtrl::OnTimer(nTimerID);
 	}
 }
 
@@ -2606,6 +2613,8 @@ BOOL CTaskCalendarCtrl::EndDragging(const CPoint& ptCursor)
 {
 	if (IsDragging())
 	{
+		KillTimer(TIMER_DRAGSCROLL);
+
 		TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 		ASSERT(pTCI);
 
@@ -2927,6 +2936,8 @@ void CTaskCalendarCtrl::CancelDrag(BOOL bReleaseCapture)
 {
 	ASSERT(IsDragging());
 
+	KillTimer(TIMER_DRAGSCROLL);
+
 	// cancel drag, restoring original task dates
 	TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 	ASSERT(pTCI);
@@ -2937,11 +2948,8 @@ void CTaskCalendarCtrl::CancelDrag(BOOL bReleaseCapture)
 	if (bReleaseCapture)
 		ReleaseCapture();
 
-	Invalidate(FALSE);
-	UpdateWindow();
-
-	KillTimer(DELAY_INTERVAL);
-	KillTimer(SCROLL_INTERVAL);
+	RebuildCellTasks(FALSE);
+	EnsureSelectionVisible();
 
 	// keep parent informed
 	NotifyParentDragChange();
