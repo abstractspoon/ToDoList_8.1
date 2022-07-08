@@ -86,11 +86,17 @@ VIEWDATA::~VIEWDATA()
 
 BOOL VIEWDATA::WantAttribute(TDC_ATTRIBUTE nAttribID) const
 {
+	if ((nAttribID == TDCA_ALL) && !mapWantedAttrib.IsEmpty())
+		return TRUE;
+
 	return mapWantedAttrib.Has(nAttribID);
 }
 
 BOOL VIEWDATA::WantAnyAttribute(const CTDCAttributeMap& other) const
 {
+	if (other.HasOnly(TDCA_ALL) && !mapWantedAttrib.IsEmpty())
+		return TRUE;
+
 	return mapWantedAttrib.MatchAny(other);
 }
 
@@ -4312,6 +4318,13 @@ BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID)
 {	
 	// Note: We update the other views first else the call to 
 	// UpdateControls will not be properly synchronised
+	//
+	// As a result we need to preemptively process outstanding 
+	// comments in case this task will not be visible in the 
+	// active view, causing SetSelectedTaskComments (called by
+	// CToDoCtrl::SelectedTask) to later fail
+	HandleUnsavedComments();
+
 	FTC_VIEW nView = GetTaskView();
 	VIEWDATA* pVData = GetViewData(nView);
 	
