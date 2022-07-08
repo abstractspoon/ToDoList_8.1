@@ -4316,6 +4316,13 @@ void CTabbedToDoCtrl::GetSortBy(TDSORTCOLUMNS& sort) const
 
 BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID)
 {	
+	// Always preemptively handle unsaved comments because if
+	// the task being selected will not be visible in the 
+	// current view then VIEWDATA::bHasSelectedTask will be 
+	// false and SetSelectedTaskComments will fail, resulting
+	// in a loss of data
+	HandleUnsavedComments();
+	
 	// Note: We update the other views first else the call to 
 	// UpdateControls will not be properly synchronised
 	FTC_VIEW nView = GetTaskView();
