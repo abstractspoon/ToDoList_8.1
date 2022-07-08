@@ -4363,11 +4363,6 @@ BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID)
 
 			if (pExtWnd)
 			{
-				// Preemptively process outstanding comments in case
-				// this task will not be visible in the extension view,
-				// in which case SetSelectedTaskComments will later fail
-				HandleUnsavedComments();
-
 				ASSERT(pVData);
 				pVData->bHasSelectedTask = pExtWnd->SelectTask(dwTaskID);
 			}
