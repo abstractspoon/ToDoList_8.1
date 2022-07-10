@@ -97,6 +97,10 @@ SOURCE=.\autocombobox.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AutoScrollHelper.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\BaseTabCtrl.cpp
 # End Source File
 # Begin Source File
@@ -758,6 +762,10 @@ SOURCE=.\autocombobox.h
 # Begin Source File
 
 SOURCE=.\AutoFlag.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AutoScrollHelper.h
 # End Source File
 # Begin Source File
 
