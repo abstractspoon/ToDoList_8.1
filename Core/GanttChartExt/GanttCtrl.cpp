@@ -5546,15 +5546,6 @@ BOOL CGanttCtrl::StartDragging(const CPoint& ptCursor)
 	if (nHit == GTLCHT_NOWHERE)
 		return FALSE;
 
-	GTLC_DRAG nDrag = MapHitTestToDrag(nHit);
-	ASSERT(IsDragging(nDrag));
-
-	if (!CanDragTask(dwTaskID, nDrag))
-	{
-		MessageBeep(MB_ICONEXCLAMATION);
-		return FALSE;
-	}
-	
 	if (dwTaskID != GetSelectedTaskID())
 		SelectTask(dwTaskID);
 
@@ -5564,6 +5555,18 @@ BOOL CGanttCtrl::StartDragging(const CPoint& ptCursor)
 	if (!::DragDetect(m_list, ptScreen))
 		return FALSE;
 
+	// We save the check for drag-ability until
+	// after we detect that a drag has been started
+	// to avoid beeping on a simple click
+	GTLC_DRAG nDrag = MapHitTestToDrag(nHit);
+	ASSERT(IsDragging(nDrag));
+	
+	if (!CanDragTask(dwTaskID, nDrag))
+	{
+		MessageBeep(MB_ICONEXCLAMATION);
+		return FALSE;
+	}
+	
 	GANTTITEM* pGI = NULL;
 	GET_GI_RET(dwTaskID, pGI, FALSE);
 	
