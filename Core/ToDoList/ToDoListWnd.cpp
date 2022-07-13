@@ -5410,12 +5410,12 @@ BOOL CToDoListWnd::ProcessStartupOptions(const CTDCStartupOptions& startup, BOOL
 		TDC_INSERTWHERE nWhere = TDC::MapInsertIDToInsertWhere(GetNewTaskCmdID()); // default
 
 		// do we have a parent task ?
-		if (tdc.SelectTask(startup.GetParentTaskID()))
+		if (tdc.SelectTask(startup.GetParentTaskID(), TRUE))
 		{
 			nWhere = TDC_INSERTATBOTTOMOFSELTASK;
 		}
 		// or a sibling task ?
-		else if (tdc.SelectTask(startup.GetSiblingTaskID()))
+		else if (tdc.SelectTask(startup.GetSiblingTaskID(), TRUE))
 		{
 			nWhere = TDC_INSERTAFTERSELTASK;
 		}
@@ -5444,7 +5444,7 @@ BOOL CToDoListWnd::ProcessStartupOptions(const CTDCStartupOptions& startup, BOOL
 	}
 	else if (startup.GetTaskID())
 	{
-		if (!tdc.SelectTask(startup.GetTaskID()))
+		if (!tdc.SelectTask(startup.GetTaskID(), TRUE))
 			return FALSE;
 	}
 	else if (!startup.IsEmpty(TRUE))
@@ -10740,7 +10740,7 @@ LRESULT CToDoListWnd::OnFindSelectResult(WPARAM /*wp*/, LPARAM lp)
 	// we can't use pResult->pTDC because it's const
 	CFilteredToDoCtrl& tdc = GetToDoCtrl(nCtrl);
 
-	if (tdc.SelectTask(pResult->dwTaskID))
+	if (tdc.SelectTask(pResult->dwTaskID, TRUE))
 	{
 		tdc.SetFocusToTasks();
 
@@ -12231,7 +12231,7 @@ BOOL CToDoListWnd::DoTaskLink(const CString& sPath, DWORD dwTaskID, BOOL bStartu
 	{
 		ASSERT(dwTaskID);
 
-		bSelected = GetToDoCtrl().SelectTask(dwTaskID);
+		bSelected = GetToDoCtrl().SelectTask(dwTaskID, TRUE);
 		bHandled = TRUE; // handled regardless of result
 	}
 	else if (!PathIsRelative(sPath) && FileMisc::FileExists(sPath))
@@ -12248,7 +12248,7 @@ BOOL CToDoListWnd::DoTaskLink(const CString& sPath, DWORD dwTaskID, BOOL bStartu
 				bSelected = TRUE;
 
 				if (dwTaskID)
-					GetToDoCtrl().SelectTask(dwTaskID);
+					GetToDoCtrl().SelectTask(dwTaskID, TRUE);
 			}
 			else
 			{
@@ -12266,7 +12266,7 @@ BOOL CToDoListWnd::DoTaskLink(const CString& sPath, DWORD dwTaskID, BOOL bStartu
 				bSelected = TRUE;
 
 				if (dwTaskID)
-					GetToDoCtrl().SelectTask(dwTaskID);
+					GetToDoCtrl().SelectTask(dwTaskID, TRUE);
 			}
 			else
 			{
@@ -13678,7 +13678,7 @@ void CToDoListWnd::OnMoveGoToTask()
 	CTDLGoToTaskDlg dialog(tdc);
 
 	if (dialog.DoModal() == IDOK)
-		tdc.SelectTask(dialog.GetTaskID());
+		tdc.SelectTask(dialog.GetTaskID(), TRUE);
 }
 
 void CToDoListWnd::OnUpdateMoveGoToTask(CCmdUI* pCmdUI) 
