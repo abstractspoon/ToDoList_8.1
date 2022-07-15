@@ -5149,7 +5149,7 @@ BOOL CToDoCtrl::DeleteSelectedTask(BOOL bWarnUser, BOOL bResetSel)
 	
 	// set next selection
 	if (dwNextID)
-		SelectTask(dwNextID);
+		SelectTask(dwNextID, FALSE);
 	else
 		UpdateControls(FALSE); // don't update comments
 
@@ -5291,7 +5291,7 @@ LRESULT CToDoCtrl::OnLabelEditEnd(WPARAM /*wParam*/, LPARAM lParam)
 		CLockUpdates lu(m_taskTree);
 
 		if (GetSelectedTaskCount() == 0) // user clicked into space
-			SelectTask(m_dwEditTitleTaskID);
+			SelectTask(m_dwEditTitleTaskID, FALSE);
 
 		// end can occurs either when the user selected return
 		// or if the edit box loses the focus so we need to check
@@ -5358,7 +5358,7 @@ LRESULT CToDoCtrl::OnLabelEditCancel(WPARAM /*wParam*/, LPARAM lParam)
 {
 	if (GetSelectedTaskCount() == 0) // user clicked into space
 	{
-		SelectTask(m_dwEditTitleTaskID);
+		SelectTask(m_dwEditTitleTaskID, FALSE);
 	}
 	// user hit escape key so we may need to delete this task if newly created
 	else if (GetSelectedTaskID() == m_dwLastAddedID) 
@@ -8302,7 +8302,7 @@ BOOL CToDoCtrl::PasteTasksToTree(const CTaskFile& tasks, HTREEITEM htiDestParent
 	}
 	else if (dwSelID)
 	{
-		SelectTask(dwSelID);
+		SelectTask(dwSelID, FALSE);
 	}
 	else // select first task
 	{
@@ -8621,7 +8621,7 @@ BOOL CToDoCtrl::BeginTimeTracking(DWORD dwTaskID, BOOL bNotify)
 	if (!bTaskIsSelected && HasStyle(TDCS_TRACKSELECTEDTASKONLY))
 	{
 		bTaskIsSelected = TRUE;
-		VERIFY(SelectTask(dwTaskID));
+		VERIFY(SelectTask(dwTaskID, FALSE));
 	}
 
 	VERIFY(m_timeTracking.BeginTracking(dwTaskID));
@@ -8875,7 +8875,7 @@ void CToDoCtrl::OnTreeSelChange(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 	}
 }
 
-BOOL CToDoCtrl::SelectTask(DWORD dwTaskID) 
+BOOL CToDoCtrl::SelectTask(DWORD dwTaskID, BOOL /*bTaskLink*/)
 { 
 	HTREEITEM hti = m_taskTree.GetItem(dwTaskID);
 
@@ -9882,7 +9882,7 @@ LRESULT CToDoCtrl::OnDropObject(WPARAM wParam, LPARAM lParam)
 	if (pTarget == &m_taskTree.Tree())
 	{
 		if (pData->dwTaskID)
-			SelectTask(pData->dwTaskID);
+			SelectTask(pData->dwTaskID, FALSE);
 
 		if (aFiles.GetSize())
 		{
@@ -10195,13 +10195,13 @@ BOOL CToDoCtrl::HasLockedTasks() const
 }
 
 // External
-BOOL CToDoCtrl::SelectTask(const CString& sPart, TDC_SELECTTASK nSelect)
+BOOL CToDoCtrl::SelectNextTask(const CString& sPart, TDC_SELECTNEXTTASK nSelect)
 {
-	return SelectTask(sPart, nSelect, TDCA_ANYTEXTATTRIBUTE, FALSE, FALSE, FALSE);
+	return SelectNextTask(sPart, nSelect, TDCA_ANYTEXTATTRIBUTE, FALSE, FALSE, FALSE);
 }
 
 // Internal
-BOOL CToDoCtrl::SelectTask(const CString& sPart, TDC_SELECTTASK nSelect, TDC_ATTRIBUTE nAttrib, 
+BOOL CToDoCtrl::SelectNextTask(const CString& sPart, TDC_SELECTNEXTTASK nSelect, TDC_ATTRIBUTE nAttrib, 
 							BOOL bCaseSensitive, BOOL bWholeWord, BOOL /*bFindReplace*/)
 {
 	if (!SEARCHPARAM::GetAttribType(nAttrib, FALSE) == FT_STRING)
@@ -10258,7 +10258,7 @@ BOOL CToDoCtrl::SelectTask(const CString& sPart, TDC_SELECTTASK nSelect, TDC_ATT
 	if (!htiMatch)
 		return FALSE;
 
-	return SelectTask(GetTaskID(htiMatch));
+	return SelectTask(GetTaskID(htiMatch), FALSE);
 }
 
 void CToDoCtrl::OnLButtonDown(UINT nFlags, CPoint point) 
@@ -10732,8 +10732,8 @@ BOOL CToDoCtrl::CanDoFindReplace(TDC_ATTRIBUTE nAttrib) const
 
 LRESULT CToDoCtrl::OnFindReplaceSelectNextTask(WPARAM wParam, LPARAM /*lParam*/)
 {
-	return SelectTask(m_findReplace.GetSearchFor(), 
-						(TDC_SELECTTASK)wParam,
+	return SelectNextTask(m_findReplace.GetSearchFor(), 
+						(TDC_SELECTNEXTTASK)wParam,
 						m_findReplace.GetAttribute(),
 						m_findReplace.WantCaseSensitive(), 
 						m_findReplace.WantWholeWord(), TRUE);
@@ -10750,7 +10750,7 @@ LRESULT CToDoCtrl::OnFindReplaceAllTasks(WPARAM /*wParam*/, LPARAM /*lParam*/)
 	IMPLEMENT_DATA_UNDO_EDIT(m_data);
 
 	// Start at the beginning
-	if (SelectTask(m_findReplace.GetSearchFor(), 
+	if (SelectNextTask(m_findReplace.GetSearchFor(), 
 					TDC_SELECTFIRST, 
 					m_findReplace.GetAttribute(),
 					m_findReplace.WantCaseSensitive(), 
@@ -10764,7 +10764,7 @@ LRESULT CToDoCtrl::OnFindReplaceAllTasks(WPARAM /*wParam*/, LPARAM /*lParam*/)
 			if (!FindReplaceSelectedTaskAttribute())
 				break;
 		} 
-		while (SelectTask(m_findReplace.GetSearchFor(), 
+		while (SelectNextTask(m_findReplace.GetSearchFor(), 
 							TDC_SELECTNEXT, 
 							m_findReplace.GetAttribute(),
 							m_findReplace.WantCaseSensitive(), 
@@ -11480,7 +11480,7 @@ BOOL CToDoCtrl::ShowTaskLink(const CString& sLink, BOOL bURL)
 	}
 	else if (dwTaskID)
 	{
-		if (SelectTask(dwTaskID))
+		if (SelectTask(dwTaskID, TRUE))
 		{
 			SetFocusToTasks();
 			return TRUE;
@@ -11551,7 +11551,7 @@ LRESULT CToDoCtrl::OnRefreshPercentSpinVisibility(WPARAM /*wp*/, LPARAM /*lp*/)
 LRESULT CToDoCtrl::OnFixupPostDropSelection(WPARAM /*wp*/, LPARAM lp)
 {
 	if (lp)
-		SelectTask(lp);
+		SelectTask(lp, FALSE);
 
     return 0L;
 }

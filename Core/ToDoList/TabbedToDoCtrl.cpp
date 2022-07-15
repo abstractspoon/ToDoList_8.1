@@ -881,7 +881,7 @@ LRESULT CTabbedToDoCtrl::OnPreTabViewChange(WPARAM nOldTab, LPARAM nNewTab)
 			hti = m_taskTree.GetChildItem(NULL);
 		
 		if (hti)
-			CToDoCtrl::SelectTask(GetTaskID(hti));
+			CToDoCtrl::SelectTask(GetTaskID(hti), FALSE);
 	}
 
 	// take a note of what task is currently singly selected
@@ -1414,7 +1414,7 @@ LRESULT CTabbedToDoCtrl::OnUIExtSelectTask(WPARAM wParam, LPARAM lParam)
 			{
 				// Call base class directly so that we don't end
 				// up calling back into extension this came from
-				VERIFY(CToDoCtrl::SelectTask(dwTaskID));
+				VERIFY(CToDoCtrl::SelectTask(dwTaskID, FALSE));
 			}
 			else
 			{
@@ -3469,7 +3469,7 @@ void CTabbedToDoCtrl::SetModified(const CTDCAttributeMap& mapAttribIDs, const CD
 		else
 		{
 			// Ensure new task is selected for label editing
-			SelectTask(dwModTaskID);
+			SelectTask(dwModTaskID, FALSE);
 		}
 		break;
 
@@ -3502,7 +3502,7 @@ void CTabbedToDoCtrl::SetModified(const CTDCAttributeMap& mapAttribIDs, const CD
 		else
 		{
 			// Ensure new task is selected for label editing
-			SelectTask(dwModTaskID);
+			SelectTask(dwModTaskID, FALSE);
 		}
 		break;
 	}
@@ -4322,7 +4322,7 @@ void CTabbedToDoCtrl::GetSortBy(TDSORTCOLUMNS& sort) const
 	sort = GetSort().multi;
 }
 
-BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID)
+BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID, BOOL bTaskLink)
 {	
 	// Note: We update the other views first else the call to 
 	// UpdateControls will not be properly synchronised
@@ -4381,7 +4381,7 @@ BOOL CTabbedToDoCtrl::SelectTask(DWORD dwTaskID)
 		ASSERT(0);
 	}
 
-	return CToDoCtrl::SelectTask(dwTaskID);
+	return CToDoCtrl::SelectTask(dwTaskID, bTaskLink);
 }
 
 int CTabbedToDoCtrl::CacheListSelection(TDCSELECTIONCACHE& cache, BOOL bIncBreadcrumbs) const
@@ -5375,7 +5375,7 @@ BOOL CTabbedToDoCtrl::GotoNextTask(TDC_GOTO nDirection)
 			DWORD dwNextID = GetNextTaskID(dwTaskID, MapGotoToGetNext(nDirection, FALSE), FALSE);
 
 			if (dwNextID != dwTaskID)
-				return SelectTask(dwNextID);
+				return SelectTask(dwNextID, FALSE);
 		}
 		break;
 
@@ -5479,7 +5479,7 @@ BOOL CTabbedToDoCtrl::GotoNextTopLevelTask(TDC_GOTO nDirection)
 			DWORD dwNextID = GetNextTaskID(dwTaskID, MapGotoToGetNext(nDirection, TRUE), FALSE);
 			
 			if (dwNextID != dwTaskID)
-				return SelectTask(dwNextID);
+				return SelectTask(dwNextID, FALSE);
 		}
 		break;
 
@@ -6096,9 +6096,9 @@ int CTabbedToDoCtrl::FindTasks(const SEARCHPARAMS& params, CResultArray& aResult
 	return aResults.GetSize();
 }
 
-BOOL CTabbedToDoCtrl::SelectTask(CString sPart, TDC_SELECTTASK nSelect)
+BOOL CTabbedToDoCtrl::SelectNextTask(CString sPart, TDC_SELECTNEXTTASK nSelect)
 {
-	return CToDoCtrl::SelectTask(sPart, nSelect);
+	return CToDoCtrl::SelectNextTask(sPart, nSelect);
 }
 
 BOOL CTabbedToDoCtrl::CanDoFindReplace(TDC_ATTRIBUTE nAttrib) const
@@ -6140,7 +6140,7 @@ BOOL CTabbedToDoCtrl::CanDoFindReplace(TDC_ATTRIBUTE nAttrib) const
 	return FALSE;
 }
 
-BOOL CTabbedToDoCtrl::SelectTask(const CString& sPart, TDC_SELECTTASK nSelect, TDC_ATTRIBUTE nAttrib, 
+BOOL CTabbedToDoCtrl::SelectNextTask(const CString& sPart, TDC_SELECTNEXTTASK nSelect, TDC_ATTRIBUTE nAttrib, 
 									BOOL bCaseSensitive, BOOL bWholeWord, BOOL bFindReplace)
 {
 	FTC_VIEW nView = GetTaskView();
@@ -6149,7 +6149,7 @@ BOOL CTabbedToDoCtrl::SelectTask(const CString& sPart, TDC_SELECTTASK nSelect, T
 	{
 	case FTCV_TASKTREE:
 	case FTCV_UNSET:
-		return CToDoCtrl::SelectTask(sPart, nSelect, nAttrib, bCaseSensitive, bWholeWord, bFindReplace);
+		return CToDoCtrl::SelectNextTask(sPart, nSelect, nAttrib, bCaseSensitive, bWholeWord, bFindReplace);
 
 	case FTCV_TASKLIST:
 		{
@@ -6184,7 +6184,7 @@ BOOL CTabbedToDoCtrl::SelectTask(const CString& sPart, TDC_SELECTTASK nSelect, T
 			int nFind = FindListTask(sPart, nAttrib, nStart, bForwards, bCaseSensitive, bWholeWord);
 
 			if (nFind != -1)
-				return SelectTask(GetTaskID(nFind));
+				return SelectTask(GetTaskID(nFind), FALSE);
 		}
 		break;
 
@@ -6433,7 +6433,7 @@ void CTabbedToDoCtrl::SyncExtensionSelectionToTree(FTC_VIEW nView)
 			else
 				bSelChange = HasSingleSelectionChanged(cache.dwFocusedTaskID);
 
-			VERIFY(CToDoCtrl::SelectTask(cache.dwFocusedTaskID));
+			VERIFY(CToDoCtrl::SelectTask(cache.dwFocusedTaskID, FALSE));
 		}
 		else
 		{
@@ -7018,12 +7018,8 @@ LRESULT CTabbedToDoCtrl::OnRecreateRecurringTask(WPARAM wParam, LPARAM lParam)
 		CToDoCtrl::OnRecreateRecurringTask(wParam, lParam);
 	}
 
-	if (!InTreeView())
-	{
-		ASSERT(m_aRecreatedRecurringTasks.GetSize());
-		
+	if (!InTreeView() && m_aRecreatedRecurringTasks.GetSize())
 		SelectTasks(m_aRecreatedRecurringTasks);
-	}
 
 	// cleanup
 	m_aRecreatedRecurringTasks.RemoveAll();

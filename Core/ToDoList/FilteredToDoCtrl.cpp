@@ -98,17 +98,18 @@ BOOL CFilteredToDoCtrl::OnInitDialog()
 	return FALSE;
 }
 
-BOOL CFilteredToDoCtrl::SelectTask(DWORD dwTaskID)
+BOOL CFilteredToDoCtrl::SelectTask(DWORD dwTaskID, BOOL bTaskLink)
 {	
-	if (CTabbedToDoCtrl::SelectTask(dwTaskID))
+	if (CTabbedToDoCtrl::SelectTask(dwTaskID, bTaskLink))
 		return TRUE;
 	
-	// If the task is filtered out we toggle the filter and try again
-	if (HasAnyFilter() && HasTask(dwTaskID))
+	// If it's a task link AND the task is filtered out 
+	// we toggle the filter and try again
+	if (bTaskLink && HasAnyFilter() && HasTask(dwTaskID))
 	{
 		ToggleFilter(); // show all tasks
 		
-		if (CTabbedToDoCtrl::SelectTask(dwTaskID))
+		if (CTabbedToDoCtrl::SelectTask(dwTaskID, bTaskLink))
 		{
 			GetParent()->SendMessage(WM_TDCN_FILTERCHANGE, (WPARAM)GetSafeHwnd());
 			return TRUE;
@@ -122,9 +123,9 @@ BOOL CFilteredToDoCtrl::SelectTask(DWORD dwTaskID)
 	return FALSE;
 }
 
-BOOL CFilteredToDoCtrl::SelectTask(CString sPart, TDC_SELECTTASK nSelect)
+BOOL CFilteredToDoCtrl::SelectNextTask(CString sPart, TDC_SELECTNEXTTASK nSelect)
 {
-	return CTabbedToDoCtrl::SelectTask(sPart, nSelect); 
+	return CTabbedToDoCtrl::SelectNextTask(sPart, nSelect); 
 }
 
 BOOL CFilteredToDoCtrl::LoadTasks(const CTaskFile& tasks)
@@ -1383,9 +1384,12 @@ DWORD CFilteredToDoCtrl::MergeNewTaskIntoTree(const CTaskFile& tasks, HTASKITEM 
 
 DWORD CFilteredToDoCtrl::RecreateRecurringTaskInTree(const CTaskFile& task, const COleDateTime& dtNext, BOOL bDueDate)
 {
-	// We only need handle this if the existing task has been filtered out
 	DWORD dwTaskID = task.GetTaskID(task.GetFirstTask());
 
+	// If the just completed task no longer exists in the tree
+	// because it has been filtered out as part of its completion
+	// then the default implementation will fail, so we need to
+	// handle this specific case
 	if (HasAnyFilter() && (m_taskTree.GetItem(dwTaskID) == NULL))
 	{
 		// Merge task into data structure after the existing task
@@ -1394,8 +1398,13 @@ DWORD CFilteredToDoCtrl::RecreateRecurringTaskInTree(const CTaskFile& task, cons
 
 		InitialiseNewRecurringTask(dwTaskID, dwNewTaskID, dtNext, bDueDate);
 		RefreshFilter(FALSE);
-		
-		ASSERT(m_taskTree.GetItem(dwNewTaskID) != NULL);
+
+		// Note: there is no guarantee that this new task will not
+		// also have been filtered out
+		if (m_taskTree.GetItem(dwNewTaskID) == NULL)
+			return 0L;
+
+		// else
 		return dwNewTaskID;
 	}
 
