@@ -10047,18 +10047,15 @@ void CToDoCtrl::LoadAttributeVisibility(const CTaskFile& tasks, const CPreferenc
 
 	if (tasks.GetAttributeVisibility(vis))
 	{
-		// update style to match
 		m_styles[TDCS_SAVEUIVISINTASKLIST] = TRUE;
 	}
-	else if (vis.Load(prefs, GetPreferencesKey()))
-	{
-		// Preserve edit field visibility
-		vis.ShowColorEditIfAsColumns(m_visColEdit.IsEditFieldVisible(TDCA_COLOR));
-	}
-	else
+	else if (!vis.Load(prefs, GetPreferencesKey()))
 	{
 		vis = m_visColEdit;
 	}
+
+	// Preserve edit field visibility
+	vis.ShowColorEditIfAsColumns(m_visColEdit.IsEditFieldVisible(TDCA_COLOR));
 
 	SetColumnFieldVisibility(vis);
 }
