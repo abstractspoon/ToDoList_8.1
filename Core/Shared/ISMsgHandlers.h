@@ -80,8 +80,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -118,20 +118,20 @@ public:
 			sClass.ReleaseBuffer();
 		}
 */
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = LPCREATESTRUCT");
-		AddParam(pParams, "   params: 0x%08X", pCS->lpCreateParams);
-		AddParam(pParams, "   instance: 0x%08X", pCS->hInstance);
-		AddParam(pParams, "   hmenu: 0x%08X", pCS->hMenu);
-		AddParam(pParams, "   hwndParent: 0x%08X", pCS->hwndParent);
-		AddParam(pParams, "   class: %s", sClass);
-		AddParam(pParams, "   text/caption: %s", pCS->lpszName);
-		AddParam(pParams, "   x: %d", pCS->x);
-		AddParam(pParams, "   y: %d", pCS->y);
-		AddParam(pParams, "   cx: %d", pCS->cx);
-		AddParam(pParams, "   cy: %d", pCS->cy);
-		AddParam(pParams, "   style: 0x%08X", pCS->style);
-		AddParam(pParams, "   extended style: 0x%08X", pCS->dwExStyle);
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = LPCREATESTRUCT");
+		AddParam(pParams, L"   params: 0x%08X", pCS->lpCreateParams);
+		AddParam(pParams, L"   instance: 0x%08X", pCS->hInstance);
+		AddParam(pParams, L"   hmenu: 0x%08X", pCS->hMenu);
+		AddParam(pParams, L"   hwndParent: 0x%08X", pCS->hwndParent);
+		AddParam(pParams, L"   class: %s", sClass);
+		AddParam(pParams, L"   text/caption: %s", pCS->lpszName);
+		AddParam(pParams, L"   x: %d", pCS->x);
+		AddParam(pParams, L"   y: %d", pCS->y);
+		AddParam(pParams, L"   cx: %d", pCS->cx);
+		AddParam(pParams, L"   cy: %d", pCS->cy);
+		AddParam(pParams, L"   style: 0x%08X", pCS->style);
+		AddParam(pParams, L"   extended style: 0x%08X", pCS->dwExStyle);
 
 		return TRUE;
 	}
@@ -153,8 +153,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flags: 0x%04X", LOWORD(WP(pMsg)));
-		AddParam(pParams, "lp = client cursor pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
+		AddParam(pParams, L"wp = flags: 0x%04X", LOWORD(WP(pMsg)));
+		AddParam(pParams, L"lp = client cursor pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -176,8 +176,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hdc: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = options: %s", MapOptions(LP(pMsg)));
+		AddParam(pParams, L"wp = hdc: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = options: %s", MapOptions(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -211,8 +211,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: %s", WP(pMsg) ? "show" : "hide");
-		AddParam(pParams, "lp = status: %s", MapStatus(LP(pMsg)));
+		AddParam(pParams, L"wp = flag: %s", WP(pMsg) ? "show" : "hide");
+		AddParam(pParams, L"lp = status: %s", MapStatus(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -246,37 +246,37 @@ public:
 
     // encode the actual notification into the message name
     if (!sCode.IsEmpty())
-      sMsg.Format("%s (%s)", m_sMsg, sCode);
+      sMsg.Format(L"%s (%s)", m_sMsg, sCode);
     else
       sMsg = m_sMsg;
 
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = control id: 0x%04X (%d)", WP(pMsg), WP(pMsg));
+		AddParam(pParams, L"wp = control id: 0x%04X (%d)", WP(pMsg), WP(pMsg));
 
 		if (pNMHDR->code == NM_CUSTOMDRAW)
 		{
-			AddParam(pParams, "lp = LPNMCUSTOMDRAW");
+			AddParam(pParams, L"lp = LPNMCUSTOMDRAW");
 
-			AddParam(pParams, "   NMHDR.hwnd: 0x%08X", pNMHDR->hwndFrom);
-			AddParam(pParams, "   NMDHR.control id: 0x%04X", pNMHDR->idFrom, pNMHDR->idFrom);
-			AddParam(pParams, "   NMHDR.code: NM_CUSTOMDRAW");
+			AddParam(pParams, L"   NMHDR.hwnd: 0x%08X", pNMHDR->hwndFrom);
+			AddParam(pParams, L"   NMDHR.control id: 0x%04X", pNMHDR->idFrom, pNMHDR->idFrom);
+			AddParam(pParams, L"   NMHDR.code: NM_CUSTOMDRAW");
 
 			LPNMCUSTOMDRAW pNMCD = (LPNMCUSTOMDRAW)LP(pMsg);
 
-			AddParam(pParams, "   draw stage: %s", MapDrawStage(pNMCD->dwDrawStage));
-			AddParam(pParams, "   hdc: 0x%08X", pNMCD->hdc);
-			AddParam(pParams, "   rect: (%d, %d, %d, %d)", pNMCD->rc.left, pNMCD->rc.top, pNMCD->rc.right, pNMCD->rc.bottom);
-			AddParam(pParams, "   item spec: 0x%08X", pNMCD->dwItemSpec);
-			AddParam(pParams, "   item state: 0x%08X", pNMCD->uItemState);
-			AddParam(pParams, "   item lparam: 0x%08X", pNMCD->lItemlParam);
+			AddParam(pParams, L"   draw stage: %s", MapDrawStage(pNMCD->dwDrawStage));
+			AddParam(pParams, L"   hdc: 0x%08X", pNMCD->hdc);
+			AddParam(pParams, L"   rect: (%d, %d, %d, %d)", pNMCD->rc.left, pNMCD->rc.top, pNMCD->rc.right, pNMCD->rc.bottom);
+			AddParam(pParams, L"   item spec: 0x%08X", pNMCD->dwItemSpec);
+			AddParam(pParams, L"   item state: 0x%08X", pNMCD->uItemState);
+			AddParam(pParams, L"   item lparam: 0x%08X", pNMCD->lItemlParam);
 		}
 		else
 		{
-			AddParam(pParams, "   hwnd: 0x%08X", pNMHDR->hwndFrom);
-			AddParam(pParams, "   control id: 0x%04X", pNMHDR->idFrom, pNMHDR->idFrom);
-			AddParam(pParams, "   code: %s", sCode);
+			AddParam(pParams, L"   hwnd: 0x%08X", pNMHDR->hwndFrom);
+			AddParam(pParams, L"   control id: 0x%04X", pNMHDR->idFrom, pNMHDR->idFrom);
+			AddParam(pParams, L"   code: %s", sCode);
 		}
 
 		return TRUE;
@@ -367,8 +367,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: %s", MapStatus(WP(pMsg)));
-		AddParam(pParams, "lp = hwnd being %s: 0x%08X", (WP(pMsg) == WA_INACTIVE) ? "activated" : "deactivated", LP(pMsg));
+		AddParam(pParams, L"wp = flag: %s", MapStatus(WP(pMsg)));
+		AddParam(pParams, L"lp = hwnd being %s: 0x%08X", (WP(pMsg) == WA_INACTIVE) ? "activated" : "deactivated", LP(pMsg));
 
 		return TRUE;
 	}
@@ -402,8 +402,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hwnd: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = hwnd: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -425,8 +425,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: %s", WP(pMsg) ? "enable" : "disable");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = flag: %s", WP(pMsg) ? "enable" : "disable");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -448,8 +448,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: %s", WP(pMsg) ? "enable" : "disable");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = flag: %s", WP(pMsg) ? "enable" : "disable");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -471,8 +471,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = virt key: %04X", WP(pMsg));
-		AddParam(pParams, "lp = flags: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = virt key: %04X", WP(pMsg));
+		AddParam(pParams, L"lp = flags: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -494,8 +494,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = char code: %c", WP(pMsg));
-		AddParam(pParams, "lp = flags: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = char code: %c", WP(pMsg));
+		AddParam(pParams, L"lp = flags: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -517,8 +517,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = text: %s", (LPCTSTR)LP(pMsg));
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = text: %s", (LPCTSTR)LP(pMsg));
 
 		return TRUE;
 	}
@@ -540,8 +540,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hwnd: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = hwnd: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -563,8 +563,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = buffer size: %d", WP(pMsg));
-		AddParam(pParams, "lp = buffer: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = buffer size: %d", WP(pMsg));
+		AddParam(pParams, L"lp = buffer: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -590,14 +590,14 @@ public:
 		{
 		case SB_THUMBPOSITION:
 		case SB_THUMBTRACK:
-			AddParam(pParams, "wp = req: %s, pos: %d", MapRequest(LOWORD(WP(pMsg))), HIWORD(WP(pMsg)));
+			AddParam(pParams, L"wp = req: %s, pos: %d", MapRequest(LOWORD(WP(pMsg))), HIWORD(WP(pMsg)));
 			break; 
 
 		default:
-			AddParam(pParams, "wp = req: %s", MapRequest(LOWORD(WP(pMsg))));
+			AddParam(pParams, L"wp = req: %s", MapRequest(LOWORD(WP(pMsg))));
 		}
 
-		AddParam(pParams, "lp = scrollbar hwnd: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"lp = scrollbar hwnd: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -641,14 +641,14 @@ public:
 		{
 		case SB_THUMBPOSITION:
 		case SB_THUMBTRACK:
-			AddParam(pParams, "wp = req: %s, pos: %d", MapRequest(LOWORD(WP(pMsg))), HIWORD(WP(pMsg)));
+			AddParam(pParams, L"wp = req: %s, pos: %d", MapRequest(LOWORD(WP(pMsg))), HIWORD(WP(pMsg)));
 			break; 
 
 		default:
-			AddParam(pParams, "wp = req: %s", MapRequest(LOWORD(WP(pMsg))));
+			AddParam(pParams, L"wp = req: %s", MapRequest(LOWORD(WP(pMsg))));
 		}
 
-		AddParam(pParams, "lp = scrollbar hwnd: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"lp = scrollbar hwnd: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -691,11 +691,11 @@ public:
 		switch (HIWORD(WP(pMsg)))
 		{
 		case 1:
-			AddParam(pParams, "wp = cmd id: %d, accelerator", LOWORD(WP(pMsg)));
+			AddParam(pParams, L"wp = cmd id: %d, accelerator", LOWORD(WP(pMsg)));
 			break;
 
 		case 0:
-			AddParam(pParams, "wp = cmd id: %d, menu", LOWORD(WP(pMsg)));
+			AddParam(pParams, L"wp = cmd id: %d, menu", LOWORD(WP(pMsg)));
 			break;
 
 		default:
@@ -705,8 +705,8 @@ public:
         int nCtrlID = LOWORD(WP(pMsg));
         int nNotifyCode = HIWORD(WP(pMsg));
 
-			  AddParam(pParams, "wp = control id: %04X (%d), notify code: %s", nCtrlID, nCtrlID, MapControlNotification(sClass, nNotifyCode));
-        AddParam(pParams, "lp = control hwnd: 0x%08X, class: %s", hWnd, sClass);
+			  AddParam(pParams, L"wp = control id: %04X (%d), notify code: %s", nCtrlID, nCtrlID, MapControlNotification(sClass, nNotifyCode));
+        AddParam(pParams, L"lp = control hwnd: 0x%08X, class: %s", hWnd, sClass);
       }
 			break;
 		}
@@ -830,6 +830,8 @@ public:
 
     BEGINNOTIFY(WC_SHELLEMBEDDING) 
     ENDNOTIFY
+
+	return L"";
   }
 
 };
@@ -849,8 +851,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = cmd type: %s", MapSysCmd(WP(pMsg)));
-		AddParam(pParams, "lp = cursor screen pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
+		AddParam(pParams, L"wp = cmd type: %s", MapSysCmd(WP(pMsg)));
+		AddParam(pParams, L"lp = cursor screen pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -898,14 +900,14 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
+		AddParam(pParams, L"wp = <not used>");
 
 		CString sMsgParam;
 
 		if (LP(pMsg) && CISMsgManager::HandleMsg((MSG*)LP(pMsg), sMsgParam))
-			AddParam(pParams, "lp = msg: %s", sMsgParam);
+			AddParam(pParams, L"lp = msg: %s", sMsgParam);
 		else
-			AddParam(pParams, "lp = msg: 0");
+			AddParam(pParams, L"lp = msg: 0");
 
 		return TRUE;
 	}
@@ -927,8 +929,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = parent client pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = parent client pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -950,8 +952,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: %04X", LOWORD(WP(pMsg)));
-		AddParam(pParams, "lp = client size: %d x %d", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
+		AddParam(pParams, L"wp = flag: %04X", LOWORD(WP(pMsg)));
+		AddParam(pParams, L"lp = client size: %d x %d", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -973,8 +975,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flags: %04X, delta: %d", LOWORD(WP(pMsg)), HIWORD(WP(pMsg)));
-		AddParam(pParams, "lp = cursor client pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
+		AddParam(pParams, L"wp = flags: %04X, delta: %d", LOWORD(WP(pMsg)), HIWORD(WP(pMsg)));
+		AddParam(pParams, L"lp = cursor client pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -996,8 +998,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = cursor screen pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = cursor screen pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -1018,8 +1020,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hit test: %s", MapHitTest(WP(pMsg)));
-		AddParam(pParams, "lp = cursor screen pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
+		AddParam(pParams, L"wp = hit test: %s", MapHitTest(WP(pMsg)));
+		AddParam(pParams, L"lp = cursor screen pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -1040,8 +1042,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = dc: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = hwnd: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = dc: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = hwnd: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1063,8 +1065,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hdc: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = hdc: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -1087,11 +1089,11 @@ public:
 			return TRUE;
 
 		if (WP(pMsg) == 1)
-			AddParam(pParams, "wp = update region: 1 (entire window)");
+			AddParam(pParams, L"wp = update region: 1 (entire window)");
 		else
-			AddParam(pParams, "wp = update region: 0x%08X", WP(pMsg));
+			AddParam(pParams, L"wp = update region: 0x%08X", WP(pMsg));
 
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -1113,8 +1115,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = id: 0x%04X (%d)", WP(pMsg));
-		AddParam(pParams, "lp = callback address: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = id: 0x%04X (%d)", WP(pMsg));
+		AddParam(pParams, L"lp = callback address: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1135,8 +1137,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hwnd: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = hittest: %s, mouse msg: 0x%04X", MapHitTest(LOWORD(LP(pMsg))), HIWORD(LOWORD(LP(pMsg))));
+		AddParam(pParams, L"wp = hwnd: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = hittest: %s, mouse msg: 0x%04X", MapHitTest(LOWORD(LP(pMsg))), HIWORD(LOWORD(LP(pMsg))));
 
 		return TRUE;
 	}
@@ -1161,12 +1163,12 @@ public:
 		MINMAXINFO* pMMI = (MINMAXINFO*)LP(pMsg);
 		ASSERT (pMMI);
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = MINMAXINFO");
-		AddParam(pParams, "   ptMaxSize = (%d, %d)", pMMI->ptMaxSize.x, pMMI->ptMaxSize.y); 
-		AddParam(pParams, "   ptMaxPosition = (%d, %d)", pMMI->ptMaxPosition.x, pMMI->ptMaxPosition.y); 
-		AddParam(pParams, "   ptMinTrackSize = (%d, %d)", pMMI->ptMinTrackSize.x, pMMI->ptMinTrackSize.y); 
-		AddParam(pParams, "   ptMaxTrackSize = (%d, %d)", pMMI->ptMaxTrackSize.x, pMMI->ptMaxTrackSize.y); 
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = MINMAXINFO");
+		AddParam(pParams, L"   ptMaxSize = (%d, %d)", pMMI->ptMaxSize.x, pMMI->ptMaxSize.y); 
+		AddParam(pParams, L"   ptMaxPosition = (%d, %d)", pMMI->ptMaxPosition.x, pMMI->ptMaxPosition.y); 
+		AddParam(pParams, L"   ptMinTrackSize = (%d, %d)", pMMI->ptMinTrackSize.x, pMMI->ptMinTrackSize.y); 
+		AddParam(pParams, L"   ptMaxTrackSize = (%d, %d)", pMMI->ptMaxTrackSize.x, pMMI->ptMaxTrackSize.y); 
 
 		return TRUE;
 	}
@@ -1188,8 +1190,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = logoff flag: %s", (LP(pMsg) & ENDSESSION_LOGOFF) ? "logging off" : "shutting down"); 
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = logoff flag: %s", (LP(pMsg) & ENDSESSION_LOGOFF) ? "logging off" : "shutting down"); 
 
 		return TRUE;
 	}
@@ -1211,8 +1213,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = exit code: %d", WP(pMsg));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = exit code: %d", WP(pMsg));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -1234,8 +1236,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = end-session flag: %s", WP(pMsg) ? "ending" : "not ending");
-		AddParam(pParams, "lp = logoff flag: %s", (LP(pMsg) & ENDSESSION_LOGOFF) ? "logging off" : "shutting down"); 
+		AddParam(pParams, L"wp = end-session flag: %s", WP(pMsg) ? "ending" : "not ending");
+		AddParam(pParams, L"lp = logoff flag: %s", (LP(pMsg) & ENDSESSION_LOGOFF) ? "logging off" : "shutting down"); 
 
 		return TRUE;
 	}
@@ -1257,8 +1259,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = system parameter area: %s", LP(pMsg) ? (LPCTSTR)LP(pMsg) : "<unknown>");
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = system parameter area: %s", LP(pMsg) ? (LPCTSTR)LP(pMsg) : L"<unknown>");
 
 		return TRUE;
 	}
@@ -1280,8 +1282,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = system param area: %s", LP(pMsg) ? (LPCTSTR)LP(pMsg) : "<unknown>");
+		AddParam(pParams, L"wp = flag: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = system param area: %s", LP(pMsg) ? (LPCTSTR)LP(pMsg) : L"<unknown>");
 
 		return TRUE;
 	}
@@ -1303,8 +1305,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = device: ", LP(pMsg) ? (LPCTSTR)LP(pMsg) : "");
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = device: ", LP(pMsg) ? (LPCTSTR)LP(pMsg) : L"");
 
 		return TRUE;
 	}
@@ -1326,8 +1328,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: %s", WP(pMsg) ? "activating" : "deactivating");
-		AddParam(pParams, "lp = thread id: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = flag: %s", WP(pMsg) ? L"activating" : L"deactivating");
+		AddParam(pParams, L"lp = thread id: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1349,8 +1351,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-//		AddParam(pParams, "wp = <not used>");
-//		AddParam(pParams, "lp = <not used>");
+//		AddParam(pParams, L"wp = <not used>");
+//		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -1372,8 +1374,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: 0x%04X", WP(pMsg));
-		AddParam(pParams, "lp = jobs left: %d", LP(pMsg));
+		AddParam(pParams, L"wp = flag: 0x%04X", WP(pMsg));
+		AddParam(pParams, L"lp = jobs left: %d", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1397,27 +1399,27 @@ public:
 
 		LPDRAWITEMSTRUCT lpDI = (LPDRAWITEMSTRUCT)LP(pMsg);
 
-		AddParam(pParams, "wp = control id: %d (0x%04X)", WP(pMsg), WP(pMsg));
-		AddParam(pParams, "lp = LPDRAWITEMSTRUCT");
-		AddParam(pParams, "   type: %s", MapType(lpDI->CtlType)); 
+		AddParam(pParams, L"wp = control id: %d (0x%04X)", WP(pMsg), WP(pMsg));
+		AddParam(pParams, L"lp = LPDRAWITEMSTRUCT");
+		AddParam(pParams, L"   type: %s", MapType(lpDI->CtlType)); 
 
 		if (lpDI->CtlType == ODT_MENU)
 		{
-			AddParam(pParams, "   hmenu: 0x%08X", lpDI->hwndItem); 
-			AddParam(pParams, "   item id: 0x%04X", lpDI->itemID); 
+			AddParam(pParams, L"   hmenu: 0x%08X", lpDI->hwndItem); 
+			AddParam(pParams, L"   item id: 0x%04X", lpDI->itemID); 
 		}
 		else
 		{
-			AddParam(pParams, "   control id: %d (0x%04X)", lpDI->CtlID, lpDI->CtlID); 
-			AddParam(pParams, "   hwnd: 0x%08X", lpDI->hwndItem); 
-			AddParam(pParams, "   item index: %d", lpDI->itemID); 
+			AddParam(pParams, L"   control id: %d (0x%04X)", lpDI->CtlID, lpDI->CtlID); 
+			AddParam(pParams, L"   hwnd: 0x%08X", lpDI->hwndItem); 
+			AddParam(pParams, L"   item index: %d", lpDI->itemID); 
 		}
 
-		AddParam(pParams, "   item action: 0x%08X", lpDI->itemAction); 
-		AddParam(pParams, "   item state: 0x%08X", lpDI->itemState); 
-		AddParam(pParams, "   hdc: 0x%08X", lpDI->hDC); 
-		AddParam(pParams, "   rect: (%d, %d, %d, %d)", lpDI->rcItem.left, lpDI->rcItem.top, lpDI->rcItem.right, lpDI->rcItem.bottom);
-		AddParam(pParams, "   item data: 0x%08X", lpDI->itemData); 
+		AddParam(pParams, L"   item action: 0x%08X", lpDI->itemAction); 
+		AddParam(pParams, L"   item state: 0x%08X", lpDI->itemState); 
+		AddParam(pParams, L"   hdc: 0x%08X", lpDI->hDC); 
+		AddParam(pParams, L"   rect: (%d, %d, %d, %d)", lpDI->rcItem.left, lpDI->rcItem.top, lpDI->rcItem.right, lpDI->rcItem.bottom);
+		AddParam(pParams, L"   item data: 0x%08X", lpDI->itemData); 
 
 		return TRUE;
 	}
@@ -1435,7 +1437,7 @@ public:
 			CASE2STRING(ODT_TAB)
 		}
 
-		return "<unknown>";
+		return L"<unknown>";
 	}
 };
 
@@ -1456,21 +1458,21 @@ public:
 
 		LPMEASUREITEMSTRUCT lpMI = (LPMEASUREITEMSTRUCT)LP(pMsg);
 
-		AddParam(pParams, "wp = control id: %d (0x%04X)", WP(pMsg), WP(pMsg));
-		AddParam(pParams, "lp = LPDRAWITEMSTRUCT");
-		AddParam(pParams, "   type: %s", MapType(lpMI->CtlType)); 
+		AddParam(pParams, L"wp = control id: %d (0x%04X)", WP(pMsg), WP(pMsg));
+		AddParam(pParams, L"lp = LPDRAWITEMSTRUCT");
+		AddParam(pParams, L"   type: %s", MapType(lpMI->CtlType)); 
 
 		if (lpMI->CtlType == ODT_MENU)
-			AddParam(pParams, "   item id: 0x%04X", lpMI->itemID); 
+			AddParam(pParams, L"   item id: 0x%04X", lpMI->itemID); 
 		else
 		{
-			AddParam(pParams, "   control id: %d (0x%04X)", lpMI->CtlID, lpMI->CtlID); 
-			AddParam(pParams, "   item index: %d", lpMI->itemID); 
+			AddParam(pParams, L"   control id: %d (0x%04X)", lpMI->CtlID, lpMI->CtlID); 
+			AddParam(pParams, L"   item index: %d", lpMI->itemID); 
 		}
 
-		AddParam(pParams, "   item width: %d", lpMI->itemWidth); 
-		AddParam(pParams, "   item height: %d", lpMI->itemHeight); 
-		AddParam(pParams, "   item data: 0x%08X", lpMI->itemData); 
+		AddParam(pParams, L"   item width: %d", lpMI->itemWidth); 
+		AddParam(pParams, L"   item height: %d", lpMI->itemHeight); 
+		AddParam(pParams, L"   item data: 0x%08X", lpMI->itemData); 
 
 		return TRUE;
 	}
@@ -1494,13 +1496,13 @@ public:
 
 		LPDELETEITEMSTRUCT lpDI = (LPDELETEITEMSTRUCT)LP(pMsg);
 
-		AddParam(pParams, "wp = control id: %d (0x%04X)", WP(pMsg), WP(pMsg));
-		AddParam(pParams, "lp = LPDELETEITEMSTRUCT");
-		AddParam(pParams, "   type: %s", (lpDI->CtlType == ODT_LISTBOX) ? "ODT_LISTBOX" : "ODT_COMBOBOX"); 
-		AddParam(pParams, "   control id: %d (0x%04X)", lpDI->CtlID, lpDI->CtlID); 
-		AddParam(pParams, "   hwnd: 0x%08X", lpDI->hwndItem); 
-		AddParam(pParams, "   item index: %d", lpDI->itemID); 
-		AddParam(pParams, "   item data: 0x%08X", lpDI->itemData); 
+		AddParam(pParams, L"wp = control id: %d (0x%04X)", WP(pMsg), WP(pMsg));
+		AddParam(pParams, L"lp = LPDELETEITEMSTRUCT");
+		AddParam(pParams, L"   type: %s", (lpDI->CtlType == ODT_LISTBOX) ? "ODT_LISTBOX" : "ODT_COMBOBOX"); 
+		AddParam(pParams, L"   control id: %d (0x%04X)", lpDI->CtlID, lpDI->CtlID); 
+		AddParam(pParams, L"   hwnd: 0x%08X", lpDI->hwndItem); 
+		AddParam(pParams, L"   item index: %d", lpDI->itemID); 
+		AddParam(pParams, L"   item data: 0x%08X", lpDI->itemData); 
 
 		return TRUE;
 	}
@@ -1522,8 +1524,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = virtual key: 0x%04X, caret pos: %d", LOWORD(WP(pMsg)), HIWORD(WP(pMsg)));
-		AddParam(pParams, "lp = hwnd: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = virtual key: 0x%04X, caret pos: %d", LOWORD(WP(pMsg)), HIWORD(WP(pMsg)));
+		AddParam(pParams, L"lp = hwnd: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1545,8 +1547,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = char key: '%c', caret pos: %d", LOWORD(WP(pMsg)), HIWORD(WP(pMsg)));
-		AddParam(pParams, "lp = hwnd: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = char key: '%c', caret pos: %d", LOWORD(WP(pMsg)), HIWORD(WP(pMsg)));
+		AddParam(pParams, L"lp = hwnd: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1568,8 +1570,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hfont: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = flag: %s", LP(pMsg) ? "redraw" : "do not redraw");
+		AddParam(pParams, L"wp = hfont: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = flag: %s", LP(pMsg) ? "redraw" : "do not redraw");
 
 		return TRUE;
 	}
@@ -1591,8 +1593,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = virtual key: 0x%04X, modifiers: %s", LOWORD(WP(pMsg)), MapModifiers(HIWORD(WP(pMsg))));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = virtual key: 0x%04X, modifiers: %s", LOWORD(WP(pMsg)), MapModifiers(HIWORD(WP(pMsg))));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -1626,8 +1628,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = ratio: %d%%", (WP(pMsg) * 100) / 0xffff);
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = ratio: %d%%", (WP(pMsg) * 100) / 0xffff);
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -1651,15 +1653,15 @@ public:
 
 		LPWINDOWPOS lpwp = (LPWINDOWPOS)LP(pMsg);
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = LPWINDOWPOS");
-		AddParam(pParams, "   hwnd: 0x%08X", lpwp->hwnd); 
-		AddParam(pParams, "   insert after: 0x%08X", lpwp->hwndInsertAfter); 
-		AddParam(pParams, "   x: %d", lpwp->x); 
-		AddParam(pParams, "   y: %d", lpwp->y); 
-		AddParam(pParams, "   cx: %d", lpwp->cx); 
-		AddParam(pParams, "   cy: %d", lpwp->cy); 
-		AddParam(pParams, "   flags: %s", MapFlags(lpwp->flags)); 
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = LPWINDOWPOS");
+		AddParam(pParams, L"   hwnd: 0x%08X", lpwp->hwnd); 
+		AddParam(pParams, L"   insert after: 0x%08X", lpwp->hwndInsertAfter); 
+		AddParam(pParams, L"   x: %d", lpwp->x); 
+		AddParam(pParams, L"   y: %d", lpwp->y); 
+		AddParam(pParams, L"   cx: %d", lpwp->cx); 
+		AddParam(pParams, L"   cy: %d", lpwp->cy); 
+		AddParam(pParams, L"   flags: %s", MapFlags(lpwp->flags)); 
 
 		return TRUE;
 	}
@@ -1701,8 +1703,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = event: %s", MapEvent(WP(pMsg)));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = event: %s", MapEvent(WP(pMsg)));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -1716,7 +1718,7 @@ public:
 			CASE2STRING(PWR_SUSPENDRESUME)
 		}
 
-		return "<unknown>";
+		return L"<unknown>";
 	}
 
 };
@@ -1738,11 +1740,11 @@ public:
 
 		PCOPYDATASTRUCT pData = (PCOPYDATASTRUCT)LP(pMsg);
 
-		AddParam(pParams, "wp = hwnd: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = PCOPYDATASTRUCT");
-		AddParam(pParams, "   data id: %d (0x%08X)", pData->dwData, pData->dwData);
-		AddParam(pParams, "   data size: %d bytes", pData->cbData);
-		AddParam(pParams, "   data: 0x%08X", pData->lpData);
+		AddParam(pParams, L"wp = hwnd: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = PCOPYDATASTRUCT");
+		AddParam(pParams, L"   data id: %d (0x%08X)", pData->dwData, pData->dwData);
+		AddParam(pParams, L"   data size: %d bytes", pData->cbData);
+		AddParam(pParams, L"   data: 0x%08X", pData->lpData);
 
 		return TRUE;
 	}
@@ -1764,8 +1766,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = locale id: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = flag: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = locale id: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1787,8 +1789,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = char set: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = locale id: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = char set: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = locale id: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1810,8 +1812,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = action: %s", MapAction(WP(pMsg)));
-		AddParam(pParams, "lp = action data: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = action: %s", MapAction(WP(pMsg)));
+		AddParam(pParams, L"lp = action data: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -1834,7 +1836,7 @@ public:
 			CASE2STRING(IDYES)
 		}
 
-		return "<unknown>";
+		return L"<unknown>";
 	}
 };
 
@@ -1855,23 +1857,23 @@ public:
 
 		LPHELPINFO lpHI = (LPHELPINFO)LP(pMsg);
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = LPHELPINFO");
-		AddParam(pParams, "   context type: %s", lpHI->iContextType == HELPINFO_MENUITEM ? "HELPINFO_MENUITEM" : "HELPINFO_WINDOW");
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = LPHELPINFO");
+		AddParam(pParams, L"   context type: %s", lpHI->iContextType == HELPINFO_MENUITEM ? "HELPINFO_MENUITEM" : "HELPINFO_WINDOW");
 
 		if (lpHI->iContextType == HELPINFO_MENUITEM)
 		{
-			AddParam(pParams, "   menu item: %d (0x%08X)", lpHI->iCtrlId);
-			AddParam(pParams, "   hmenu: 0x%08X", lpHI->hItemHandle);
+			AddParam(pParams, L"   menu item: %d (0x%08X)", lpHI->iCtrlId);
+			AddParam(pParams, L"   hmenu: 0x%08X", lpHI->hItemHandle);
 		}
 		else
 		{
-			AddParam(pParams, "   control id: %d (0x%08X)", lpHI->iCtrlId);
-			AddParam(pParams, "   hwnd: 0x%08X", lpHI->hItemHandle);
+			AddParam(pParams, L"   control id: %d (0x%08X)", lpHI->iCtrlId);
+			AddParam(pParams, L"   hwnd: 0x%08X", lpHI->hItemHandle);
 		}
 
-		AddParam(pParams, "   help context: 0x%08X", lpHI->dwContextId);
-		AddParam(pParams, "   screen cursor pos: (%d, %d)", lpHI->MousePos.x, lpHI->MousePos.y);
+		AddParam(pParams, L"   help context: 0x%08X", lpHI->dwContextId);
+		AddParam(pParams, L"   screen cursor pos: (%d, %d)", lpHI->MousePos.x, lpHI->MousePos.y);
 
 		return TRUE;
 	}
@@ -1893,8 +1895,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = %s hwnd: 0x%08X", LP(pMsg) == NF_QUERY ? "control" : "parent", WP(pMsg));
-		AddParam(pParams, "lp = cmd: %s", LP(pMsg) == NF_QUERY ? "NF_QUERY" : "NF_REQUERY");
+		AddParam(pParams, L"wp = %s hwnd: 0x%08X", LP(pMsg) == NF_QUERY ? "control" : "parent", WP(pMsg));
+		AddParam(pParams, L"lp = cmd: %s", LP(pMsg) == NF_QUERY ? "NF_QUERY" : "NF_REQUERY");
 
 		return TRUE;
 	}
@@ -1916,8 +1918,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hwnd: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = screen cursor pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_X_LPARAM(LP(pMsg)));
+		AddParam(pParams, L"wp = hwnd: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = screen cursor pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_X_LPARAM(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -1941,8 +1943,8 @@ public:
 
 		LPSTYLESTRUCT lpSS = (LPSTYLESTRUCT)LP(pMsg);
 
-		AddParam(pParams, "wp = type: %s", WP(pMsg) == GWL_STYLE ? "GWL_STYLE" : "GWL_EXSTYLE");
-		AddParam(pParams, "lp = old styles: 0x%08X, new styles: 0x%08X", lpSS->styleOld, lpSS->styleNew);
+		AddParam(pParams, L"wp = type: %s", WP(pMsg) == GWL_STYLE ? "GWL_STYLE" : "GWL_EXSTYLE");
+		AddParam(pParams, L"lp = old styles: 0x%08X, new styles: 0x%08X", lpSS->styleOld, lpSS->styleNew);
 
 		return TRUE;
 	}
@@ -1964,8 +1966,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = screen depth: %d bpp", WP(pMsg));
-		AddParam(pParams, "lp = screen res: %d x %d", LOWORD(LP(pMsg)), HIWORD(LP(pMsg)));
+		AddParam(pParams, L"wp = screen depth: %d bpp", WP(pMsg));
+		AddParam(pParams, L"lp = screen res: %d x %d", LOWORD(LP(pMsg)), HIWORD(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -1987,8 +1989,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = type: %s", WP(pMsg) == ICON_BIG ? "ICON_BIG" : "ICON_SMALL");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = type: %s", WP(pMsg) == ICON_BIG ? "ICON_BIG" : "ICON_SMALL");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2010,8 +2012,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = type: %s", WP(pMsg) == ICON_BIG ? "ICON_BIG" : "ICON_SMALL");
-		AddParam(pParams, "lp = hicon: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = type: %s", WP(pMsg) == ICON_BIG ? "ICON_BIG" : "ICON_SMALL");
+		AddParam(pParams, L"lp = hicon: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2033,28 +2035,28 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = validation flag: %d", WP(pMsg) ? 1 : 0);
+		AddParam(pParams, L"wp = validation flag: %d", WP(pMsg) ? 1 : 0);
 
 		if (WP(pMsg))
 		{
 			LPNCCALCSIZE_PARAMS pNCCS = (LPNCCALCSIZE_PARAMS)LP(pMsg);
-			AddParam(pParams, "lp = LPNCCALCSIZE_PARAMS");
-			AddParam(pParams, "   rect[0]: (%d, %d, %d, %d)", pNCCS->rgrc[0].left, pNCCS->rgrc[0].top, pNCCS->rgrc[0].right, pNCCS->rgrc[0].bottom);
-			AddParam(pParams, "   rect[1]: (%d, %d, %d, %d)", pNCCS->rgrc[1].left, pNCCS->rgrc[1].top, pNCCS->rgrc[1].right, pNCCS->rgrc[1].bottom);
-			AddParam(pParams, "   rect[2]: (%d, %d, %d, %d)", pNCCS->rgrc[2].left, pNCCS->rgrc[2].top, pNCCS->rgrc[2].right, pNCCS->rgrc[2].bottom);
-			AddParam(pParams, "   LPWINDOWPOS");
-			AddParam(pParams, "      hwnd: 0x%08X", pNCCS->lppos->hwnd); 
-			AddParam(pParams, "      insert after: 0x%08X", pNCCS->lppos->hwndInsertAfter); 
-			AddParam(pParams, "      x: %d", pNCCS->lppos->x); 
-			AddParam(pParams, "      y: %d", pNCCS->lppos->y); 
-			AddParam(pParams, "      cx: %d", pNCCS->lppos->cx); 
-			AddParam(pParams, "      cy: %d", pNCCS->lppos->cy); 
-			AddParam(pParams, "      flags: %s", MapFlags(pNCCS->lppos->flags)); 
+			AddParam(pParams, L"lp = LPNCCALCSIZE_PARAMS");
+			AddParam(pParams, L"   rect[0]: (%d, %d, %d, %d)", pNCCS->rgrc[0].left, pNCCS->rgrc[0].top, pNCCS->rgrc[0].right, pNCCS->rgrc[0].bottom);
+			AddParam(pParams, L"   rect[1]: (%d, %d, %d, %d)", pNCCS->rgrc[1].left, pNCCS->rgrc[1].top, pNCCS->rgrc[1].right, pNCCS->rgrc[1].bottom);
+			AddParam(pParams, L"   rect[2]: (%d, %d, %d, %d)", pNCCS->rgrc[2].left, pNCCS->rgrc[2].top, pNCCS->rgrc[2].right, pNCCS->rgrc[2].bottom);
+			AddParam(pParams, L"   LPWINDOWPOS");
+			AddParam(pParams, L"      hwnd: 0x%08X", pNCCS->lppos->hwnd); 
+			AddParam(pParams, L"      insert after: 0x%08X", pNCCS->lppos->hwndInsertAfter); 
+			AddParam(pParams, L"      x: %d", pNCCS->lppos->x); 
+			AddParam(pParams, L"      y: %d", pNCCS->lppos->y); 
+			AddParam(pParams, L"      cx: %d", pNCCS->lppos->cx); 
+			AddParam(pParams, L"      cy: %d", pNCCS->lppos->cy); 
+			AddParam(pParams, L"      flags: %s", MapFlags(pNCCS->lppos->flags)); 
 		}
 		else
 		{
 			LPRECT pRect = (LPRECT)LP(pMsg);
-			AddParam(pParams, "lp = rect: (%d, %d, %d, %d)", pRect->left, pRect->top, pRect->right, pRect->bottom);
+			AddParam(pParams, L"lp = rect: (%d, %d, %d, %d)", pRect->left, pRect->top, pRect->right, pRect->bottom);
 		}
 
 		return TRUE;
@@ -2077,8 +2079,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = new state: %s", WP(pMsg) ? "active" : "inactive");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = new state: %s", WP(pMsg) ? "active" : "inactive");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2102,16 +2104,16 @@ public:
 
 		LPCOMPAREITEMSTRUCT lpCI = (LPCOMPAREITEMSTRUCT)LP(pMsg);
 
-		AddParam(pParams, "wp = control id: %d (0x%04X)", WP(pMsg), WP(pMsg));
-		AddParam(pParams, "lp = LPDELETEITEMSTRUCT");
-		AddParam(pParams, "   type: %s", (lpCI->CtlType == ODT_LISTBOX) ? "ODT_LISTBOX" : "ODT_COMBOBOX"); 
-		AddParam(pParams, "   control id: %d (0x%04X)", lpCI->CtlID, lpCI->CtlID); 
-		AddParam(pParams, "   hwnd: 0x%08X", lpCI->hwndItem); 
-		AddParam(pParams, "   item1 index: %d", lpCI->itemID1); 
-		AddParam(pParams, "   item1 data: 0x%08X", lpCI->itemData1); 
-		AddParam(pParams, "   item2 index: %d", lpCI->itemID2); 
-		AddParam(pParams, "   item2 data: 0x%08X", lpCI->itemData2); 
-		AddParam(pParams, "   locale id: 0x%08X", lpCI->dwLocaleId); 
+		AddParam(pParams, L"wp = control id: %d (0x%04X)", WP(pMsg), WP(pMsg));
+		AddParam(pParams, L"lp = LPDELETEITEMSTRUCT");
+		AddParam(pParams, L"   type: %s", (lpCI->CtlType == ODT_LISTBOX) ? "ODT_LISTBOX" : "ODT_COMBOBOX"); 
+		AddParam(pParams, L"   control id: %d (0x%04X)", lpCI->CtlID, lpCI->CtlID); 
+		AddParam(pParams, L"   hwnd: 0x%08X", lpCI->hwndItem); 
+		AddParam(pParams, L"   item1 index: %d", lpCI->itemID1); 
+		AddParam(pParams, L"   item1 data: 0x%08X", lpCI->itemData1); 
+		AddParam(pParams, L"   item2 index: %d", lpCI->itemID2); 
+		AddParam(pParams, L"   item2 data: 0x%08X", lpCI->itemData2); 
+		AddParam(pParams, L"   locale id: 0x%08X", lpCI->dwLocaleId); 
 
 		return TRUE;
 	}
@@ -2133,8 +2135,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = default control hwnd: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = user data: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = default control hwnd: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = user data: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2156,8 +2158,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hmenu: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = hmenu: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2179,8 +2181,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hsubmenu: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = item pos: %d, %s", LOWORD(LP(pMsg)), HIWORD(LP(pMsg)) ? "window menu" : "not window menu");
+		AddParam(pParams, L"wp = hsubmenu: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = item pos: %d, %s", LOWORD(LP(pMsg)), HIWORD(LP(pMsg)) ? "window menu" : "not window menu");
 
 		return TRUE;
 	}
@@ -2205,11 +2207,11 @@ public:
 		UINT uFlags = HIWORD(WP(pMsg));
 
 		if (uFlags & MF_POPUP)
-			AddParam(pParams, "wp = popup index: %d, flags: %s", LOWORD(WP(pMsg)), MapFlags(uFlags));
+			AddParam(pParams, L"wp = popup index: %d, flags: %s", LOWORD(WP(pMsg)), MapFlags(uFlags));
 		else
-			AddParam(pParams, "wp = item id: %d (0x%08X), flags: %s", LOWORD(WP(pMsg)), MapFlags(uFlags));
+			AddParam(pParams, L"wp = item id: %d (0x%08X), flags: %s", LOWORD(WP(pMsg)), MapFlags(uFlags));
 
-		AddParam(pParams, "lp = hmenu: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"lp = hmenu: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2248,8 +2250,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = char key: '%c', type: %s", LOWORD(WP(pMsg)), HIWORD(WP(pMsg)) == MF_SYSMENU ? "MF_SYSMENU" : "MF_POPUP");
-		AddParam(pParams, "lp = hmenu: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = char key: '%c', type: %s", LOWORD(WP(pMsg)), HIWORD(WP(pMsg)) == MF_SYSMENU ? "MF_SYSMENU" : "MF_POPUP");
+		AddParam(pParams, L"lp = hmenu: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2273,13 +2275,13 @@ public:
 
 		if (WP(pMsg) == MSGF_MENU)
 		{
-			AddParam(pParams, "wp = reason: MSGF_MENU");
-			AddParam(pParams, "lp = owner hwnd: 0x%08X", LP(pMsg));
+			AddParam(pParams, L"wp = reason: MSGF_MENU");
+			AddParam(pParams, L"lp = owner hwnd: 0x%08X", LP(pMsg));
 		}
 		else
 		{
-			AddParam(pParams, "wp = reason: MSGF_DIALOG");
-			AddParam(pParams, "lp = hwnd: 0x%08X", LP(pMsg));
+			AddParam(pParams, L"wp = reason: MSGF_DIALOG");
+			AddParam(pParams, L"lp = hwnd: 0x%08X", LP(pMsg));
 		}
 
 		return TRUE;
@@ -2310,13 +2312,13 @@ public:
 
 		if (uMsg == WM_CREATE || uMsg == WM_DESTROY)
 		{
-			AddParam(pParams, "wp = msg: %s, control id: %d (0x%04X)", MapMsg(uMsg), HIWORD(WP(pMsg)), HIWORD(WP(pMsg)));
-			AddParam(pParams, "lp = hwnd: 0x%08X", LP(pMsg));
+			AddParam(pParams, L"wp = msg: %s, control id: %d (0x%04X)", MapMsg(uMsg), HIWORD(WP(pMsg)), HIWORD(WP(pMsg)));
+			AddParam(pParams, L"lp = hwnd: 0x%08X", LP(pMsg));
 		}
 		else
 		{
-			AddParam(pParams, "wp = msg: %s", MapMsg(uMsg));
-			AddParam(pParams, "lp = cursor pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
+			AddParam(pParams, L"wp = msg: %s", MapMsg(uMsg));
+			AddParam(pParams, L"lp = cursor pos: (%d, %d)", GET_X_LPARAM(LP(pMsg)), GET_Y_LPARAM(LP(pMsg)));
 		}
 
 		return TRUE;
@@ -2334,7 +2336,7 @@ public:
 			CASE2STRING(WM_XBUTTONDOWN)
 		}
 
-		return "<unknown>";
+		return L"<unknown>";
 	}
 };
 
@@ -2353,8 +2355,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: %s", WP(pMsg) ? "TrackPopupMenu()" : "not TrackPopupMenu()");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = flag: %s", WP(pMsg) ? "TrackPopupMenu()" : "not TrackPopupMenu()");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2376,8 +2378,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = status: %s", WP(pMsg) ? "shortcut menu" : "not shortcut menu");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = status: %s", WP(pMsg) ? "shortcut menu" : "not shortcut menu");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2401,11 +2403,11 @@ public:
 
 		LPMDINEXTMENU lpMNM = (LPMDINEXTMENU)LP(pMsg);
 
-		AddParam(pParams, "wp = virtual key: 0x%04X", WP(pMsg));
-		AddParam(pParams, "lp = LPMDINEXTMENU");
-		AddParam(pParams, "   current hmenu: 0x%08X", lpMNM->hmenuIn);
-		AddParam(pParams, "   next hmenu: 0x%08X", lpMNM->hmenuNext);
-		AddParam(pParams, "   owner hwnd: 0x%08X", lpMNM->hwndNext);
+		AddParam(pParams, L"wp = virtual key: 0x%04X", WP(pMsg));
+		AddParam(pParams, L"lp = LPMDINEXTMENU");
+		AddParam(pParams, L"   current hmenu: 0x%08X", lpMNM->hmenuIn);
+		AddParam(pParams, L"   next hmenu: 0x%08X", lpMNM->hmenuNext);
+		AddParam(pParams, L"   owner hwnd: 0x%08X", lpMNM->hwndNext);
 
 		return TRUE;
 	}
@@ -2427,10 +2429,10 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = edge: %s", MapEdge(WP(pMsg)));
+		AddParam(pParams, L"wp = edge: %s", MapEdge(WP(pMsg)));
 
 		LPRECT pRect = (LPRECT)LP(pMsg);
-		AddParam(pParams, "lp = drag rect: (%d, %d, %d, %d)", pRect->left, pRect->top, pRect->right, pRect->bottom);
+		AddParam(pParams, L"lp = drag rect: (%d, %d, %d, %d)", pRect->left, pRect->top, pRect->right, pRect->bottom);
 
 		return TRUE;
 	}
@@ -2449,7 +2451,7 @@ public:
 			CASE2STRING(WMSZ_TOPRIGHT)
 		}
 
-		return "<unknown>";
+		return L"<unknown>";
 	}
 };
 
@@ -2468,8 +2470,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = other hwnd: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = other hwnd: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2491,8 +2493,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = event: %s", MapEvent(WP(pMsg)));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = event: %s", MapEvent(WP(pMsg)));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2512,7 +2514,7 @@ public:
 			CASE2STRING(PBT_APMSUSPEND) 
 		}
 
-		return "<unknown>";
+		return L"<unknown>";
 	}
 };
 
@@ -2531,8 +2533,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = event: %s", MapEvent(WP(pMsg)));
-		AddParam(pParams, "lp = event data: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = event: %s", MapEvent(WP(pMsg)));
+		AddParam(pParams, L"lp = event data: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2554,7 +2556,7 @@ public:
 			CASE2STRING(DBT_USERDEFINED)  
 		}
 
-		return "<unknown>";
+		return L"<unknown>";
 	}
 	
 };
@@ -2576,17 +2578,17 @@ public:
 
 		LPMDICREATESTRUCT lpCS = (LPMDICREATESTRUCT)LP(pMsg);
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = LPMDICREATESTRUCT");
-		AddParam(pParams, "   class: %s", lpCS->szClass);
-		AddParam(pParams, "   caption: %s", lpCS->szTitle);
-		AddParam(pParams, "   hwndOwner: 0x%08X", lpCS->hOwner);
-		AddParam(pParams, "   x: %d", lpCS->x);
-		AddParam(pParams, "   y: %d", lpCS->y);
-		AddParam(pParams, "   cx: %d", lpCS->cx);
-		AddParam(pParams, "   cy: %d", lpCS->cy);
-		AddParam(pParams, "   style: 0x%08X", lpCS->style);
-		AddParam(pParams, "   lparam: 0x%08X", lpCS->lParam);
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = LPMDICREATESTRUCT");
+		AddParam(pParams, L"   class: %s", lpCS->szClass);
+		AddParam(pParams, L"   caption: %s", lpCS->szTitle);
+		AddParam(pParams, L"   hwndOwner: 0x%08X", lpCS->hOwner);
+		AddParam(pParams, L"   x: %d", lpCS->x);
+		AddParam(pParams, L"   y: %d", lpCS->y);
+		AddParam(pParams, L"   cx: %d", lpCS->cx);
+		AddParam(pParams, L"   cy: %d", lpCS->cy);
+		AddParam(pParams, L"   style: 0x%08X", lpCS->style);
+		AddParam(pParams, L"   lparam: 0x%08X", lpCS->lParam);
 
 		return TRUE;
 	}
@@ -2608,8 +2610,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = current hwnd: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = flag: %s", LP(pMsg) ? "next" : "previous");
+		AddParam(pParams, L"wp = current hwnd: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = flag: %s", LP(pMsg) ? "next" : "previous");
 
 		return TRUE;
 	}
@@ -2631,8 +2633,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = flag: %s", (WP(pMsg) == MDITILE_VERTICAL) ? "vertical" : "horizontal");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = flag: %s", (WP(pMsg) == MDITILE_VERTICAL) ? "vertical" : "horizontal");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2654,8 +2656,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = arrange flag: %s", (WP(pMsg) == MDITILE_SKIPDISABLED) ? "skip disabled" : "zorder");
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = arrange flag: %s", (WP(pMsg) == MDITILE_SKIPDISABLED) ? "skip disabled" : "zorder");
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2677,8 +2679,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = <not used>");
-		AddParam(pParams, "lp = LPBOOL: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = <not used>");
+		AddParam(pParams, L"lp = LPBOOL: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2700,8 +2702,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = frame hmenu: 0x%08X", WP(pMsg));
-		AddParam(pParams, "wp = window hmenu: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = frame hmenu: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"wp = window hmenu: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2723,8 +2725,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = hdrop: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = hdrop: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2746,8 +2748,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = causer hwnd: 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = causer hwnd: 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2769,8 +2771,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = type: %s", MapType(WP(pMsg)));
-		AddParam(pParams, "lp = key modifiers: %s", MapMods(LP(pMsg)));
+		AddParam(pParams, L"wp = type: %s", MapType(WP(pMsg)));
+		AddParam(pParams, L"lp = key modifiers: %s", MapMods(LP(pMsg)));
 
 		return TRUE;
 	}
@@ -2783,7 +2785,7 @@ public:
 			CASE2STRING(IDHOT_SNAPWINDOW)
 		}
 
-		return "<unknown>";
+		return L"<unknown>";
 	}
 
 	CString MapMods(UINT uMods)
@@ -2814,8 +2816,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = item index: %d", WP(pMsg));
-		AddParam(pParams, "lp = hmenu: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = item index: %d", WP(pMsg));
+		AddParam(pParams, L"lp = hmenu: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2837,8 +2839,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = 0x%08X", WP(pMsg));
-		AddParam(pParams, "lp = hmenu: 0x%08X", LP(pMsg));
+		AddParam(pParams, L"wp = 0x%08X", WP(pMsg));
+		AddParam(pParams, L"lp = hmenu: 0x%08X", LP(pMsg));
 
 		return TRUE;
 	}
@@ -2868,8 +2870,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = action: %s, element: %s", MapAction(LOWORD(WP(pMsg))), MapElements(HIWORD(WP(pMsg))));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = action: %s, element: %s", MapAction(LOWORD(WP(pMsg))), MapElements(HIWORD(WP(pMsg))));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2913,8 +2915,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = string id: 0x%04X", WP(pMsg));
-		AddParam(pParams, "lp = text: %s", LP(pMsg) ? (LPCTSTR)LP(pMsg) : "");
+		AddParam(pParams, L"wp = string id: 0x%04X", WP(pMsg));
+		AddParam(pParams, L"lp = text: %s", LP(pMsg) ? (LPCTSTR)LP(pMsg) : L"");
 
 		return TRUE;
 	}
@@ -2936,8 +2938,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = disable (if no handler) flag: %d", WP(pMsg));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = disable (if no handler) flag: %d", WP(pMsg));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2959,8 +2961,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-		AddParam(pParams, "wp = status: %s", MapStatus(WP(pMsg)));
-		AddParam(pParams, "lp = <not used>");
+		AddParam(pParams, L"wp = status: %s", MapStatus(WP(pMsg)));
+		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
@@ -2993,7 +2995,7 @@ public:
     sMsg = GetUserMessageName(pMsg);
 
     if (sMsg.IsEmpty())
-        sMsg.Format("WM_USER + %d", pMsg->message - WM_USER);
+        sMsg.Format(L"WM_USER + %d", pMsg->message - WM_USER);
 
     // default params
 
@@ -3144,7 +3146,7 @@ public:
 	{
     ASSERT (pMsg->message >= WM_APP && pMsg->message <= 0xBFFF);
 
-    sMsg.Format("WM_APP + %d", pMsg->message - WM_APP);
+    sMsg.Format(L"WM_APP + %d", pMsg->message - WM_APP);
 
     // default params
 
@@ -3214,8 +3216,8 @@ public:
 		if (!pParams)
 			return TRUE;
 
-//		AddParam(pParams, "wp = <not used>");
-//		AddParam(pParams, "lp = <not used>");
+//		AddParam(pParams, L"wp = <not used>");
+//		AddParam(pParams, L"lp = <not used>");
 
 		return TRUE;
 	}
