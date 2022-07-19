@@ -16,6 +16,8 @@
 #include <dbt.h>
 #include <afxpriv.h>
 
+#pragma warning(disable:4065) // empty switch statements
+
 #ifndef GET_X_LPARAM
 #	define GET_X_LPARAM(lp)   ((int)(short)LOWORD(lp))
 #	define GET_Y_LPARAM(lp)   ((int)(short)HIWORD(lp))
