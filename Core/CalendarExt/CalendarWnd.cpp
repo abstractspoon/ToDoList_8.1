@@ -404,11 +404,6 @@ bool CCalendarWnd::DoAppCommand(IUI_APPCOMMAND nCmd, IUIAPPCOMMANDDATA* pData)
 			return (m_BigCalendar.SortBy(pData->nSortBy, (pData->bSortAscending ? TRUE : FALSE)) != FALSE);
 		break;
 		
-	case IUI_SELECTTASK:
-		if (pData)
-			return SelectTask(pData->dwTaskID);
-		break;
-		
 	case IUI_SETFOCUS:
 		m_BigCalendar.SetFocus();
 		return true;
@@ -453,9 +448,6 @@ bool CCalendarWnd::CanDoAppCommand(IUI_APPCOMMAND nCmd, const IUIAPPCOMMANDDATA*
 
 	case IUI_SETFOCUS:
 		return (CDialogHelper::IsChildOrSame(this, GetFocus()) == FALSE);
-
-	case IUI_SELECTTASK:
-		return true;
 
 	case IUI_SORT:
 		if (pData)
@@ -527,7 +519,7 @@ DWORD CCalendarWnd::HitTestTask(POINT ptScreen, bool /*bTitleColumnOnly*/) const
 	return m_BigCalendar.HitTestTask(ptBigCal);
 }
 
-bool CCalendarWnd::SelectTask(DWORD dwTaskID)
+bool CCalendarWnd::SelectTask(DWORD dwTaskID, bool bTaskLink)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
