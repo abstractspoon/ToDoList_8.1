@@ -138,6 +138,8 @@ public:
 	BOOL SelectedTaskHasDate(TDC_DATE nDate) const;
 	CString GetSelectedTaskPath(BOOL bIncludeTaskName, int nMaxLen = -1) const;
 	COleDateTime GetSelectedTaskDate(TDC_DATE nDate) const;
+	COleDateTime GetEarliestSelectedTaskDate(TDC_DATE nDate) const;
+	COleDateTime GetLatestSelectedTaskDate(TDC_DATE nDate) const;
 	BOOL GetSelectedTaskCustomAttributeData(const CString& sAttribID, TDCCADATA& data, BOOL bFormatted = FALSE) const;
 	BOOL IsSelectedTaskReference() const;
 	DWORD GetSelectedTaskParentID() const;

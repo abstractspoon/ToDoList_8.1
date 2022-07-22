@@ -1921,6 +1921,22 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 	EnableDisableControls(hti);
 }
 
+void CToDoCtrl::UpdateDateTimeControlLimits()
+{
+	// Start date must come before the earlier of the due/done dates
+	COleDateTime dtMinDue = m_taskTree.GetEarliestSelectedTaskDate(TDCD_DUE);
+	COleDateTime dtMinDone = m_taskTree.GetEarliestSelectedTaskDate(TDCD_DONE);
+
+	COleDateTime dtMaxStart = CDateHelper::GetMin(dtMinDue, dtMinDone);
+	m_dtcStart.SetRange(NULL, &dtMaxStart);
+
+	// Due/Done date must come after the Start date
+	dtMaxStart = m_taskTree.GetLatestSelectedTaskDate(TDCD_START);
+
+	m_dtcDue.SetRange(&dtMaxStart, NULL);
+	m_dtcDone.SetRange(&dtMaxStart, NULL);
+}
+
 void CToDoCtrl::UpdateDateTimeControls(BOOL bHasSelection)
 {
 	if (bHasSelection)
@@ -1937,19 +1953,13 @@ void CToDoCtrl::UpdateDateTimeControls(BOOL bHasSelection)
 		SetCtrlDate(m_dtcDone, dateDone);
 		m_cbTimeDone.SetOleTime(dateDone.m_dt);
 
-		// Start date must come before the earlier of the due/done dates
-		COleDateTime dtMaxStart = CDateHelper::GetMin(dateDue, dateDone);
-		m_dtcStart.SetRange(NULL, &dtMaxStart);
-
-		// Due/Done date must come after the Start date
-		m_dtcDue.SetRange(&dateStart, &dateDone);
-		m_dtcDone.SetRange(&dateStart, NULL);
-
 		// use due date if present else start date
 		if (CDateHelper::IsDateSet(dateDue))
 			m_eRecurrence.SetDefaultDate(dateDue);
 		else
 			m_eRecurrence.SetDefaultDate(dateStart);
+
+		UpdateDateTimeControlLimits();
 	}
 	else
 	{
@@ -3112,10 +3122,7 @@ BOOL CToDoCtrl::SetSelectedTaskDate(TDC_DATE nDate, const COleDateTime& date, BO
 	while (pos)
 	{
 		DWORD dwTaskID = TSH().GetNextItemData(pos);
-
-		// due, start, creation
-		if (!HandleModResult(dwTaskID, m_data.SetTaskDate(dwTaskID, nDate, date), aModTaskIDs))
-			return FALSE;
+		HandleModResult(dwTaskID, m_data.SetTaskDate(dwTaskID, nDate, date), aModTaskIDs);
 	}
 	
 	if (aModTaskIDs.GetSize())
@@ -3181,12 +3188,17 @@ BOOL CToDoCtrl::SetSelectedTaskDate(TDC_DATE nDate, const COleDateTime& date, BO
 		{
 			UpdateControls(FALSE); // don't update comments
 		}
-		else if (bUpdateTimeEst)
+		else
 		{
-			TDCTIMEPERIOD time;
+			UpdateDateTimeControlLimits();
 
-			if (GetSelectedTaskTimeEstimate(time))
-				CTDCDialogHelper::UpdateDataEx(this, m_eTimeEstimate, time, FALSE);
+			if (bUpdateTimeEst)
+			{
+				TDCTIMEPERIOD time;
+
+				if (GetSelectedTaskTimeEstimate(time))
+					CTDCDialogHelper::UpdateDataEx(this, m_eTimeEstimate, time, FALSE);
+			}
 		}
 	}
 	

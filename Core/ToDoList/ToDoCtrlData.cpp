@@ -4243,7 +4243,7 @@ TDC_SET CToDoCtrlData::SetTaskDone(DWORD dwTaskID, const COleDateTime& date,
 
 // Internal version
 TDC_SET CToDoCtrlData::SetTaskDone(DWORD dwTaskID, const COleDateTime& date,
-							   BOOL bAndSubtasks, BOOL bUpdateAllSubtaskDates, BOOL bIsSubtask)
+									BOOL bAndSubtasks, BOOL bUpdateAllSubtaskDates, BOOL bIsSubtask)
 {
 	ASSERT(bAndSubtasks || !bIsSubtask);
 	ASSERT(!CDateHelper::IsDateSet(date) || !bUpdateAllSubtaskDates);
@@ -4262,8 +4262,15 @@ TDC_SET CToDoCtrlData::SetTaskDone(DWORD dwTaskID, const COleDateTime& date,
 
 	if (bDateChange && (!bIsSubtask || bUpdateAllSubtaskDates || bStateChange))
 	{
-		if (SetTaskDate(dwTaskID, TDCD_DONE, date) == SET_CHANGE)
+		switch (SetTaskDate(dwTaskID, TDCD_DONE, date))
+		{
+		case SET_FAILED:
+			return SET_FAILED;
+
+		case SET_CHANGE:
 			nRes = SET_CHANGE;
+			break;
+		}
 	}
 
 	if (bAndSubtasks && TaskHasSubtasks(dwTaskID))

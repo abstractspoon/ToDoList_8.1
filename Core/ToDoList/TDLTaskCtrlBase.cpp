@@ -6159,6 +6159,34 @@ COleDateTime CTDLTaskCtrlBase::GetSelectedTaskDate(TDC_DATE nDate) const
 	return date;
 }
 
+COleDateTime CTDLTaskCtrlBase::GetEarliestSelectedTaskDate(TDC_DATE nDate) const
+{
+	COleDateTime date;
+	POSITION pos = GetFirstSelectedTaskPos();
+		
+	while (pos)
+	{
+		DWORD dwTaskID = GetNextSelectedTaskID(pos);
+		CDateHelper::Min(date, m_data.GetTaskDate(dwTaskID, nDate));
+	}
+	
+	return date;
+}
+
+COleDateTime CTDLTaskCtrlBase::GetLatestSelectedTaskDate(TDC_DATE nDate) const
+{
+	COleDateTime date;
+	POSITION pos = GetFirstSelectedTaskPos();
+		
+	while (pos)
+	{
+		DWORD dwTaskID = GetNextSelectedTaskID(pos);
+		CDateHelper::Max(date, m_data.GetTaskDate(dwTaskID, nDate));
+	}
+	
+	return date;
+}
+
 int CTDLTaskCtrlBase::IsSelectedTaskFlagged() const
 {
 	return m_data.IsTaskFlagged(GetSelectedTaskID());
