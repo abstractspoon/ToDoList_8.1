@@ -210,6 +210,7 @@ public:
 	COleDateTimeSpan GetRemainingDueTime() const; // in days
 	COleDateTime GetDate(TDC_DATE nDate) const;
 	BOOL GetStartDueDates(COleDateTimeRange& dtRange) const;
+	BOOL IsValidDate(const COleDateTime& date, TDC_DATE nDate) const;
 
 	BOOL HasCustomAttributeValue(const CString& sAttribID) const;
 	BOOL GetCustomAttributeValue(const CString& sAttribID, TDCCADATA& data) const;

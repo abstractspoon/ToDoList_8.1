@@ -1215,6 +1215,43 @@ BOOL TODOITEM::GetStartDueDates(COleDateTimeRange& dtRange) const
 	return dtRange.IsValid();
 }
 
+BOOL TODOITEM::IsValidDate(const COleDateTime& date, TDC_DATE nDate) const
+{
+	// Clearing a date is always valid
+	if (!CDateHelper::IsDateSet(date))
+		return TRUE;
+
+	switch (nDate)
+	{
+	case TDCD_START:
+	case TDCD_STARTDATE:
+	case TDCD_STARTTIME:
+		{
+			COleDateTime dtMin = CDateHelper::GetMin(date, CDateHelper::GetMin(dateDue, dateDone));
+			return (dtMin == date);
+		}
+		break;
+
+	case TDCD_DUE:
+	case TDCD_DUEDATE:
+	case TDCD_DUETIME:
+	case TDCD_DONE:
+	case TDCD_DONEDATE:
+	case TDCD_DONETIME:
+		{
+			COleDateTime dtMax = CDateHelper::GetMax(date, dateStart);
+			return (dtMax == date);
+		}
+		break;
+
+	default:
+		ASSERT(0);
+		break;
+	}
+
+	return TRUE;
+}
+
 BOOL TODOITEM::GetCustomAttributeValue(const CString& sAttribID, TDCCADATA& data) const
 {
 	if (mapCustomData.Lookup(sAttribID, data) && !data.IsEmpty())

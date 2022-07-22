@@ -229,8 +229,10 @@ public:
 	static COleDateTime GetDate(const COleDateTime& date, BOOL bNoTimeIsEndOfDay);
 	static BOOL Min(COleDateTime& date, const COleDateTime& dtOther);
 	static BOOL Min(COleDateTime& date, const COleDateTime& dtOther, BOOL bNoTimeIsEndOfDay);
+	static COleDateTime GetMin(const COleDateTime& date1, const COleDateTime& date2);
 	static BOOL Max(COleDateTime& date, const COleDateTime& dtOther);
 	static BOOL Max(COleDateTime& date, const COleDateTime& dtOther, BOOL bNoTimeIsEndOfDay);
+	static COleDateTime GetMax(const COleDateTime& date1, const COleDateTime& date2);
 
 	static DH_DAYOFWEEK Map(OLE_DAYOFWEEK nDOW);
 	static OLE_DAYOFWEEK Map(DH_DAYOFWEEK nDOW);

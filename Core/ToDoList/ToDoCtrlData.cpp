@@ -2019,8 +2019,17 @@ TDC_SET CToDoCtrlData::SetTaskDate(DWORD dwTaskID, TODOITEM* pTDI, TDC_DATE nDat
 	COleDateTime dtDate(date);
 	BOOL bDateIsSet = CDateHelper::IsDateSet(dtDate);
 
-	if (bDateIsSet && CDateHelper::IsEndOfDay(dtDate, FALSE))
-		dtDate = CDateHelper::GetDateOnly(dtDate);
+	if (bDateIsSet)
+	{
+		if (CDateHelper::IsEndOfDay(dtDate, FALSE))
+			dtDate = CDateHelper::GetDateOnly(dtDate);
+
+		if (!pTDI->IsValidDate(dtDate, nDate))
+		{
+			ASSERT(0);
+			return SET_FAILED;
+		}
+	}
 	
 	BOOL bWasDone = pTDI->IsDone();
 	
@@ -2119,7 +2128,7 @@ TDC_SET CToDoCtrlData::SetTaskDate(DWORD dwTaskID, TODOITEM* pTDI, TDC_DATE nDat
 		pTDI->SetModified();
 		
 		// update dependent dates and time estimates
-		if (CDateHelper::IsDateSet(date))
+		if (bDateIsSet)
 		{
 			FixupTaskLocalDependentsDates(dwTaskID, nDate);
 

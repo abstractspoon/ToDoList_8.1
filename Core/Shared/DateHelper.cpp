@@ -1008,6 +1008,22 @@ BOOL CDateHelper::Min(COleDateTime& date, const COleDateTime& dtOther, BOOL bNoT
 	return IsDateSet(date);
 }
 
+COleDateTime CDateHelper::GetMin(const COleDateTime& date1, const COleDateTime& date2)
+{
+	COleDateTime dtMin(date1);
+	Min(dtMin, date2);
+
+	return dtMin;
+}
+
+COleDateTime CDateHelper::GetMax(const COleDateTime& date1, const COleDateTime& date2)
+{
+	COleDateTime dtMax(date1);
+	Max(dtMax, date2);
+
+	return dtMax;
+}
+
 BOOL CDateHelper::Max(COleDateTime& date, const COleDateTime& dtOther)
 {
 	return Max(date, dtOther, FALSE);
