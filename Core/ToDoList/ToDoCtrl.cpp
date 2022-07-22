@@ -1937,6 +1937,11 @@ void CToDoCtrl::UpdateDateTimeControls(BOOL bHasSelection)
 		SetCtrlDate(m_dtcDone, dateDone);
 		m_cbTimeDone.SetOleTime(dateDone.m_dt);
 
+		// Prevent start dates preceding due dates and vice-versa
+		m_dtcStart.SetRange(NULL, &dateDue);
+		m_dtcDue.SetRange(&dateStart, NULL);
+		m_dtcDone.SetRange(&dateStart, NULL);
+
 		// use due date if present else start date
 		if (CDateHelper::IsDateSet(dateDue))
 			m_eRecurrence.SetDefaultDate(dateDue);
