@@ -561,6 +561,8 @@ void CFilteredToDoCtrl::RefreshTreeFilter()
 {
 	if (m_data.GetTaskCount())
 	{
+		HandleUnsavedComments();
+
 		// rebuild the tree
 		RebuildTree();
 		
