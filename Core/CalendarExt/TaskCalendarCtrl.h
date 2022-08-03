@@ -55,8 +55,8 @@ public:
 	BOOL SelectTask(DWORD dwTaskID, BOOL bEnsureVisible);
 	BOOL SortBy(TDC_ATTRIBUTE nSortBy, BOOL bAscending);
 
-	TCC_SNAPMODE GetSnapMode() const;
-	void SetSnapMode(TCC_SNAPMODE nSnap) { m_nSnapMode = nSnap; }
+	TCC_SNAPMODE GetDefaultSnapMode() const { return m_nDefSnapMode; }
+	void SetDefaultSnapMode(TCC_SNAPMODE nSnap) { m_nDefSnapMode = nSnap; }
 
 	void SetOptions(DWORD dwOption);
 	DWORD GetOptions() const { return m_dwOptions; }
@@ -104,6 +104,7 @@ protected:
 	TDC_ATTRIBUTE m_nSortBy;
 	TCC_MONTHSTYLE m_nCellHeaderMonthStyle;
 	COLORREF m_crWeekend, m_crToday, m_crAltWeek; // Grid color handled by base class
+	TCC_SNAPMODE m_nDefSnapMode;
 
 	struct CONTINUOUSDRAWINFO
 	{
@@ -119,7 +120,6 @@ protected:
 	
 	mutable CArray<CONTINUOUSDRAWINFO, CONTINUOUSDRAWINFO&> m_aContinuousDrawInfo;
 	mutable int m_nMaxDayTaskCount;
-	mutable TCC_SNAPMODE m_nSnapMode;
 
 protected:
 	virtual int OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
@@ -177,6 +177,7 @@ protected:
 	BOOL SetTaskCursor(DWORD dwTaskID, TCC_HITTEST nHit) const;
 	BOOL EnableLabelTips(BOOL bEnable);
 	BOOL HasTask(DWORD dwTaskID, BOOL bExcludeHidden) const;
+	TCC_SNAPMODE GetSnapMode() const;
 
 	BOOL GetGridCell(DWORD dwTaskID, int &nRow, int &nCol) const;
 	BOOL GetGridCell(DWORD dwTaskID, int &nRow, int &nCol, int& nTask) const;
