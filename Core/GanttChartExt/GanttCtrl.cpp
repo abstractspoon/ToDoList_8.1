@@ -5614,6 +5614,7 @@ BOOL CGanttCtrl::StartDragging(const CPoint& ptCursor)
 	m_nDragging = nDrag;
 	m_dtDragMin = m_data.CalcMaxDependencyDate(m_giPreDrag);
 
+	SetFocus();
 	m_list.SetCapture();
 	
 	// keep parent informed
