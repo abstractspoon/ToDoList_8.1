@@ -107,7 +107,7 @@ CGanttCtrl::CGanttCtrl()
 	m_pDependEdit(NULL),
 	m_dwMaxTaskID(0),
 	m_bReadOnly(FALSE),
-	m_nSnapMode(GTLCSM_FREE)
+	m_nDefSnapMode(GTLCSM_FREE)
 {
 
 }
@@ -6082,117 +6082,105 @@ GTLC_SNAPMODE CGanttCtrl::GetSnapMode() const
 			{
 			case GTLC_DISPLAY_QUARTERCENTURIES:
 			case GTLC_DISPLAY_DECADES:
-				if (bCtrl && bShift)
 				{
-					m_nSnapMode = GTLCSM_NEARESTHALFYEAR;
-				}
-				else if (bCtrl)
-				{
-					m_nSnapMode = GTLCSM_NEARESTYEAR;
-				}
-				else if (bShift)
-				{
-					m_nSnapMode = GTLCSM_NEARESTDECADE;
+					if (bCtrl && bShift)
+						return GTLCSM_NEARESTHALFYEAR;
+
+					if (bCtrl)
+						return GTLCSM_NEARESTYEAR;
+
+					if (bShift)
+						return GTLCSM_NEARESTDECADE;
 				}
 				break;
 
 			case GTLC_DISPLAY_YEARS:
-				if (bCtrl && bShift)
 				{
-					m_nSnapMode = GTLCSM_NEARESTHALFYEAR;
-				}
-				else if (bCtrl)
-				{
-					m_nSnapMode = GTLCSM_NEARESTMONTH;
-				}
-				else if (bShift)
-				{
-					m_nSnapMode = GTLCSM_NEARESTYEAR;
+					if (bCtrl && bShift)
+						return GTLCSM_NEARESTHALFYEAR;
+
+					if (bCtrl)
+						return GTLCSM_NEARESTMONTH;
+
+					if (bShift)
+						return GTLCSM_NEARESTYEAR;
 				}
 				break;
 				
 			case GTLC_DISPLAY_QUARTERS_SHORT:
 			case GTLC_DISPLAY_QUARTERS_MID:
 			case GTLC_DISPLAY_QUARTERS_LONG:
-				if (bCtrl)
 				{
-					m_nSnapMode = GTLCSM_NEARESTMONTH;
-				}
-				else if (bShift)
-				{
-					m_nSnapMode = GTLCSM_NEARESTQUARTER;
+					if (bCtrl)
+						return GTLCSM_NEARESTMONTH;
+					
+					if (bShift)
+						return GTLCSM_NEARESTQUARTER;
 				}
 				break;
 				
 			case GTLC_DISPLAY_MONTHS_SHORT:
 			case GTLC_DISPLAY_MONTHS_MID:
 			case GTLC_DISPLAY_MONTHS_LONG:
-				if (bCtrl)
 				{
-					m_nSnapMode = GTLCSM_NEARESTDAY;
-				}
-				else if (bShift)
-				{
-					m_nSnapMode = GTLCSM_NEARESTMONTH;
+					if (bCtrl)
+						return GTLCSM_NEARESTDAY;
+
+					if (bShift)
+						return GTLCSM_NEARESTMONTH;
 				}
 				break;
 				
 			case GTLC_DISPLAY_WEEKS_SHORT:
 			case GTLC_DISPLAY_WEEKS_MID:
 			case GTLC_DISPLAY_WEEKS_LONG:
-				if (bCtrl)
 				{
-					m_nSnapMode = GTLCSM_NEARESTDAY;
-				}
-				else if (bShift)
-				{
-					m_nSnapMode = GTLCSM_NEARESTWEEK;
+					if (bCtrl)
+						return GTLCSM_NEARESTDAY;
+
+					if (bShift)
+						return GTLCSM_NEARESTWEEK;
 				}
 				break;
 				
 			case GTLC_DISPLAY_DAYS_SHORT:
 			case GTLC_DISPLAY_DAYS_MID:
 			case GTLC_DISPLAY_DAYS_LONG:
-				if (bCtrl && bShift)
 				{
-					m_nSnapMode = GTLCSM_NEARESTHALFDAY;
-				}
-				else if (bCtrl)
-				{
-					m_nSnapMode = GTLCSM_NEARESTHOUR;
-				}
-				else if (bShift)
-				{
-					m_nSnapMode = GTLCSM_NEARESTDAY;
+					if (bCtrl && bShift)
+						return GTLCSM_NEARESTHALFDAY;
+
+					if (bCtrl)
+						return GTLCSM_NEARESTHOUR;
+
+					if (bShift)
+						return GTLCSM_NEARESTDAY;
 				}
 				break;
 
 			case GTLC_DISPLAY_HOURS:
-				if (bCtrl && bShift)
 				{
-					m_nSnapMode = GTLCSM_NEARESTHOUR;
+					if (bCtrl && bShift)
+						return GTLCSM_NEARESTHOUR;
+
+					if (bCtrl)
+						return GTLCSM_NEARESTHALFHOUR;
+
+					if (bShift)
+						return GTLCSM_NEARESTHALFDAY;
 				}
-				else if (bCtrl)
-				{
-					m_nSnapMode = GTLCSM_NEARESTHALFHOUR;
-				}
-				else if (bShift)
-				{
-					m_nSnapMode = GTLCSM_NEARESTHALFDAY;
-				}
-				// TODO
 				break;
 				
 			default:
 				ASSERT(0);
-				// fall thru to whatever's currently set
+				// fall thru to default
 				break;
 			}
 		}
 	}
 
 	// else
-	return m_nSnapMode;
+	return m_nDefSnapMode;
 }
 
 COleDateTime CGanttCtrl::GetNearestDate(const COleDateTime& dtDrag) const

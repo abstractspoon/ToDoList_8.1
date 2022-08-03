@@ -87,8 +87,8 @@ public:
 	void SetMilestoneTag(const CString& sTag);
 	void SetReadOnly(bool bReadOnly);
 	
-	void SetSnapMode(GTLC_SNAPMODE nSnap) { m_nSnapMode = nSnap; }
-	GTLC_SNAPMODE GetSnapMode() const;
+	void SetDefaultSnapMode(GTLC_SNAPMODE nSnap) { m_nDefSnapMode = nSnap; }
+	GTLC_SNAPMODE GetDefaultSnapMode() const { return m_nDefSnapMode; }
 
 	BOOL BeginDependencyEdit(IGanttDependencyEditor* pDependEdit);
 	void OnEndDepedencyEdit();
@@ -131,11 +131,9 @@ protected:
 	int m_nMonthWidth;
 	CString m_sMilestoneTag;
 	GTLC_DRAG m_nDragging;
+	GTLC_SNAPMODE m_nDefSnapMode;
 
 	CGanttItemMap m_data;
-
-private:
-	mutable GTLC_SNAPMODE m_nSnapMode;
 
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -264,6 +262,7 @@ protected:
 	void IncrementItemPositions(HTREEITEM htiParent, int nFromPos);
 	HIMAGELIST GetTaskIcon(DWORD dwTaskID, int& iImageIndex) const;
 	BOOL GetVisibleDateRange(GANTTDATERANGE& dtRange) const;
+	GTLC_SNAPMODE GetSnapMode() const;
 
 	GANTTITEM* GetGanttItem(DWORD dwTaskID) const;
 	BOOL RestoreGanttItem(const GANTTITEM& giPrev);
