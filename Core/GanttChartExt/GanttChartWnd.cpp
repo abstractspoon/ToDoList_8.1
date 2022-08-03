@@ -1150,7 +1150,7 @@ void CGanttChartWnd::UpdateActiveRangeLabel()
 	SetDlgItemText(IDC_ACTIVEDATERANGE_LABEL, CEnString(IDS_ACTIVEDATERANGE, sRange));
 }
 
-LRESULT CGanttChartWnd::OnGanttNotifyDragChange(WPARAM wp, LPARAM /*lp*/)
+LRESULT CGanttChartWnd::OnGanttNotifyDragChange(WPARAM /*wp*/, LPARAM /*lp*/)
 {
 /*
 	// save snap changes as we go

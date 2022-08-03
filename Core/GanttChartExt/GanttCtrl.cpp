@@ -5614,6 +5614,7 @@ BOOL CGanttCtrl::StartDragging(const CPoint& ptCursor)
 	m_nDragging = nDrag;
 	m_dtDragMin = m_data.CalcMaxDependencyDate(m_giPreDrag);
 
+	SetFocus();
 	m_list.SetCapture();
 	
 	// keep parent informed
@@ -5711,8 +5712,8 @@ BOOL CGanttCtrl::UpdateDragging(const CPoint& ptCursor)
 
 		GET_GI_RET(dwTaskID, pGI, FALSE);
 
-		COleDateTime dtStart, dtDue;
-		GetTaskStartEndDates(*pGI, dtStart, dtDue);
+		COleDateTime dtCurStart, dtCurDue;
+		GetTaskStartEndDates(*pGI, dtCurStart, dtCurDue);
 
 		// update taskID to refID because we're really dragging the refID
 		if (pGI->dwOrgRefID)
@@ -5732,15 +5733,28 @@ BOOL CGanttCtrl::UpdateDragging(const CPoint& ptCursor)
 
 			CDateHelper::Max(dtDrag, m_dtDragMin);
 
+			COleDateTime dtOrgStart, dtOrgDue;
+			GetTaskStartEndDates(m_giPreDrag, dtOrgStart, dtOrgDue);
+
 			switch (m_nDragging)
 			{
 			case GTLCD_START:
 				{
 					// prevent the start and end dates from overlapping
-					double dMinDuration = CalcMinDragDuration();
-					COleDateTime dtNewStart(min(dtDrag.m_dt, (dtDue.m_dt - dMinDuration)));
+					if (dtDrag >= dtCurDue)
+					{
+						bNoDrag = (dtOrgStart >= dtCurStart);
+						pGI->SetStartDate(max(dtCurStart, dtOrgStart));
+					}
+					else
+					{
+						pGI->SetStartDate(dtDrag);
+					}
 
-					pGI->SetStartDate(dtNewStart);
+// 					double dMinDuration = CalcMinDragDuration();
+// 					COleDateTime dtNewStart(min(dtDrag.m_dt, (dtDue.m_dt - dMinDuration)));
+// 
+// 					pGI->SetStartDate(dtNewStart);
 					szCursor = IDC_SIZEWE;
 				}
 				break;
@@ -5748,11 +5762,22 @@ BOOL CGanttCtrl::UpdateDragging(const CPoint& ptCursor)
 			case GTLCD_END:
 				{
 					// prevent the start and end dates from overlapping
-					double dMinDuration = CalcMinDragDuration();
-					COleDateTime dtNewDue(max(dtDrag.m_dt, (dtStart.m_dt + dMinDuration)));
+					if (dtDrag <= dtCurStart)
+					{
+						bNoDrag = (dtOrgDue <= dtCurDue);
+						pGI->SetDueDate(min(dtCurDue, dtOrgDue));
+					}
+					else
+					{
+						pGI->SetDueDate(dtDrag);
+					}
 
-					pGI->SetDueDate(dtNewDue);
+// 					double dMinDuration = CalcMinDragDuration();
+// 					COleDateTime dtNewDue(max(dtDrag.m_dt, (dtStart.m_dt + dMinDuration)));
+// 
+// 					pGI->SetDueDate(dtNewDue);
 					szCursor = IDC_SIZEWE;
+
 				}
 				break;
 
@@ -5763,9 +5788,6 @@ BOOL CGanttCtrl::UpdateDragging(const CPoint& ptCursor)
 					// a day because that's all it knows how to do.
 					// We however don't always want it to so we must
 					// detect those times and subtract a day as required
-					COleDateTime dtOrgStart, dtOrgDue;
-					GetTaskStartEndDates(m_giPreDrag, dtOrgStart, dtOrgDue);
-					
 					COleDateTime dtDuration(dtOrgDue - dtOrgStart);
 					COleDateTime dtEnd = (dtDrag + dtDuration);
 					
@@ -5806,6 +5828,7 @@ BOOL CGanttCtrl::UpdateDragging(const CPoint& ptCursor)
 	return FALSE; // not dragging
 }
 
+/*
 double CGanttCtrl::CalcMinDragDuration() const
 {
 	ASSERT((m_nDragging == GTLCD_START) || (m_nDragging == GTLCD_END));
@@ -5891,6 +5914,7 @@ BOOL CGanttCtrl::CalcMinDragDuration(GTLC_SNAPMODE nMode, double& dMin)
 
 	return TRUE;
 }
+*/
 
 BOOL CGanttCtrl::GetValidDragDate(const CPoint& ptCursor, COleDateTime& dtDrag) const
 {
