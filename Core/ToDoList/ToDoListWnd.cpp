@@ -1212,24 +1212,26 @@ void CToDoListWnd::SaveCurrentFocus(HWND hwndFocus)
 	if (!hwndFocus)
 		hwndFocus = ::GetFocus();
 
-	if (hwndFocus != *this)
-		m_hwndLastFocus = hwndFocus;
-}
-
-void CToDoListWnd::PostAppRestoreFocus(HWND hwndFocus)
-{
-	if (!hwndFocus)
-		hwndFocus = m_hwndLastFocus;
-
-	if (!hwndFocus || (hwndFocus == *this))
-		return;
-	
 	if (CDialogHelper::IsChildOrSame(m_dlgReminders, hwndFocus))
 		return;
 
 	if (CDialogHelper::IsChildOrSame(m_dlgTimeTracker, hwndFocus))
 		return;
 
+	if (hwndFocus != *this)
+		m_hwndLastFocus = hwndFocus;
+}
+
+void CToDoListWnd::PostAppRestoreFocus(BOOL bActivate)
+{
+	HWND hwndFocus = m_hwndLastFocus;
+
+	if (bActivate && GetTDCCount() && (!hwndFocus || Prefs().GetAutoFocusTasklist()))
+		hwndFocus = GetToDoCtrl();
+	
+	if (!hwndFocus || (hwndFocus == *this))
+		return;
+	
 	PostMessage(WM_APPRESTOREFOCUS, 0L, (LPARAM)hwndFocus);
 }
 
@@ -9583,20 +9585,15 @@ void CToDoListWnd::OnSysCommand(UINT nID, LPARAM lParam)
 	switch (nID)
 	{
 	case SC_MINIMIZE:
-		// we don't minimize if we're going to be hiding to the system tray
+		if (Prefs().HasSysTrayOptions(STO_ONMINIMIZE, STO_ONMINCLOSE))
 		{
-			SaveCurrentFocus();
-
-			if (Prefs().HasSysTrayOptions(STO_ONMINIMIZE, STO_ONMINCLOSE))
-			{
-				MinimizeToTray();
-			}
-			else
-			{
-				// SPECIAL FIX: Apparently when Ultramon hooks the minimize
-				// button it ends up sending us a close message!
-				ShowWindow(SW_MINIMIZE);
-			}
+			MinimizeToTray();
+		}
+		else
+		{
+			// SPECIAL FIX: Apparently when Ultramon hooks the minimize
+			// button it ends up sending us a close message!
+			ShowWindow(SW_MINIMIZE);
 		}
 		return;
 
@@ -11488,11 +11485,7 @@ void CToDoListWnd::OnActivateApp(BOOL bActive, HTASK hTask)
 			}
 		}
 		
-		if (GetTDCCount() && (!m_hwndLastFocus || Prefs().GetAutoFocusTasklist()))
-			PostAppRestoreFocus(GetToDoCtrl());
-		else
-			PostAppRestoreFocus();
-
+		PostAppRestoreFocus(TRUE);
 		UpdateCwd();
 	}
 }
@@ -11507,12 +11500,11 @@ void CToDoListWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 	switch (nState)
 	{
 	case WA_ACTIVE:
-		// If we are being activated as a consequence of closing
-		// the time tracker or the reminder window then we set the 
-		// focus back to the active tasklist
 		if ((pWndOther == &m_dlgReminders) || (pWndOther == &m_dlgTimeTracker))
 		{
-			GetToDoCtrl().SetFocusToTasks();
+			// Restore the focus if we are being reactivated as a consequence 
+			// of closing the time tracker or the reminder window 
+			PostAppRestoreFocus(TRUE);
 		}
 		break;
 	}
