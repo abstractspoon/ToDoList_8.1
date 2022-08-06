@@ -1209,6 +1209,12 @@ void CToDoListWnd::OnShowKeyboardshortcuts()
 
 void CToDoListWnd::SaveCurrentFocus(HWND hwndFocus)
 {
+	if (!IsWindowEnabled())
+		return;
+
+	if (IsIconic())
+		return;
+
 	if (!hwndFocus)
 		hwndFocus = ::GetFocus();
 
@@ -11556,9 +11562,6 @@ void CToDoListWnd::OnEnable(BOOL bEnable)
 	
 	if (!bEnable)
 	{
-		// save current focus because modal window is being shown
-		SaveCurrentFocus();
-
 		// Save and hide time tracker if it is top-most
 		if (m_dlgTimeTracker.GetSafeHwnd())
 		{
