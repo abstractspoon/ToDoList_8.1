@@ -1898,7 +1898,7 @@ BOOL CTaskCalendarCtrl::SelectGridCell(int nRow, int nCol)
 		NotifyParentClick();
 	}
 
-	return true;
+	return TRUE;
 }
 
 BOOL CTaskCalendarCtrl::IsTaskVisible(DWORD dwTaskID) const

@@ -825,6 +825,7 @@ void CCalendarWnd::OnClickSelectedTaskDates()
 
 LRESULT CCalendarWnd::OnBigCalendarNotifyDragChange(WPARAM wp, LPARAM /*lp*/)
 {
+	//CDialogHelper::SelectItemByData(m_cbSnapModes, wp);
 	UpdateSelectedTaskDates();
 
 	return 0L;
