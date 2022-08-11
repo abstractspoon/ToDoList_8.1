@@ -55,7 +55,7 @@
 const UINT WM_TDL_SHOWWINDOW		= ::RegisterWindowMessage(_T("WM_TDL_SHOWWINDOW"));
 const UINT WM_TDL_ISCLOSING			= ::RegisterWindowMessage(_T("WM_TDL_ISCLOSING"));
 const UINT WM_TDL_REFRESHPREFS		= ::RegisterWindowMessage(_T("WM_TDL_REFRESHPREFS"));
-const UINT WM_TDL_PASSWORDRESTORE			= ::RegisterWindowMessage(_T("WM_TDL_PASSWORDRESTORE"));
+const UINT WM_TDL_PASSWORDRESTORE	= ::RegisterWindowMessage(_T("WM_TDL_PASSWORDRESTORE"));
 
 /////////////////////////////////////////////////////////////////////////////
 
