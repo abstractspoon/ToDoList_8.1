@@ -2341,7 +2341,7 @@ COleDateTime CToDoCtrlData::CalcNewDueDate(const COleDateTime& dtCurStart, const
 	}
 	
 	// We need to calculate it 'fully'
-	return AddDuration(dtNewStart, dCurDuration, nUnits, TRUE); // updates dtNewStart
+	return AddDuration(dtNewStart, dNewDuration, nUnits, TRUE); // updates dtNewStart
 }
 
 TDC_SET CToDoCtrlData::InitMissingTaskDate(DWORD dwTaskID, TDC_DATE nDate, const COleDateTime& date)
