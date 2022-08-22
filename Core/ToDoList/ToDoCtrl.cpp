@@ -12225,7 +12225,6 @@ BOOL CToDoCtrl::CopySelectedTaskAttributeData(const CString& sFromCustomAttribID
 	Flush();
 
 	POSITION pos = TSH().GetFirstItemPos();
-	TDC_SET nRes = SET_NOCHANGE;
 	CDWordArray aModTaskIDs;
 
 	IMPLEMENT_DATA_UNDO_EDIT(m_data);
