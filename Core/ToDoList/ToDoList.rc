@@ -5789,6 +5789,7 @@ BEGIN
     IDS_CONFIRMSAVEAS       "%s already exists.\nDo you want to replace it?"
     IDS_CONFIRMSAVEAS_TITLE "Confirm Save As"
     IDS_PRINT_TASKVIEW      "Screenshot of active task view (%s)"
+    IDS_CUSTOM_FEATURE_SHOWEDITFIELD "Display checkbox edit field"
 END
 
 #endif    // English (Australia) resources

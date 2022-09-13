@@ -215,9 +215,9 @@ BOOL TDCCUSTOMATTRIBUTEDEFINITION::SupportsFeature(DWORD dwFeature) const
 {
 	switch (dwFeature)
 	{
-		// sorting and inheritance works on all data types
 	case TDCCAF_SORT:
 	case TDCCAF_INHERITPARENTCHANGES:
+		// sorting and inheritance works on all data types
 		return TRUE;
 
 	case TDCCAF_FILTER:
@@ -227,12 +227,13 @@ BOOL TDCCUSTOMATTRIBUTEDEFINITION::SupportsFeature(DWORD dwFeature) const
 		return (IsList() && !IsMultiList());
 
 	default:
-		// calculations not supported on multi-list types
+		// Other features not supported on multi-list types
 		if (IsMultiList())
 			return FALSE;
 		break;
 	}
 
+	// Attributes
 	DWORD dwDataType = GetDataType();
 
 	switch (dwDataType)
@@ -263,9 +264,11 @@ BOOL TDCCUSTOMATTRIBUTEDEFINITION::SupportsFeature(DWORD dwFeature) const
 				(dwFeature == TDCCAF_MINIMIZE) ||
 				(dwFeature == TDCCAF_SHOWTIME));
 
+	case TDCCA_BOOL:
+		return (dwFeature == TDCCAF_SHOWEDITFIELD);
+
 	case TDCCA_STRING:
 	case TDCCA_FILELINK:
-	case TDCCA_BOOL:
 	case TDCCA_ICON:
 		break;
 
