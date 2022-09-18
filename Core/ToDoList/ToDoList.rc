@@ -28,7 +28,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 8,1,10,0
+ FILEVERSION 8,1,11,0
  PRODUCTVERSION 1,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -47,7 +47,7 @@ BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "AbstractSpoon Software\0"
             VALUE "FileDescription", "ToDoList\0"
-            VALUE "FileVersion", "8, 1, 10, 0\0"
+            VALUE "FileVersion", "8, 1, 11, 0\0"
             VALUE "InternalName", "ToDoList\0"
             VALUE "LegalCopyright", "Copyright (c) AbstractSpoon 2003-22\0"
             VALUE "LegalTrademarks", "\0"
@@ -5789,7 +5789,7 @@ BEGIN
     IDS_CONFIRMSAVEAS       "%s already exists.\nDo you want to replace it?"
     IDS_CONFIRMSAVEAS_TITLE "Confirm Save As"
     IDS_PRINT_TASKVIEW      "Screenshot of active task view (%s)"
-    IDS_CUSTOM_FEATURE_SHOWEDITFIELD "Display checkbox edit field"
+    IDS_CUSTOM_FEATURE_SHOWEDITFIELD "Show edit field"
 END
 
 #endif    // English (Australia) resources
