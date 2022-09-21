@@ -3875,7 +3875,6 @@ void CTabbedToDoCtrl::UpdateExtensionViewsSelection(const CTDCAttributeMap& mapA
 
 		// DONT include subtasks UNLESS the completion date
 		// has changed OR this is an inherited attribute
-		// OR this is an undo
 		if (!mapAttribIDs.Has(TDCA_DONEDATE) && 
 			!WantUpdateInheritedAttibutes(mapAttribIDs))
 		{
