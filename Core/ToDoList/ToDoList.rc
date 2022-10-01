@@ -3087,6 +3087,7 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "Edit Task &Recurrence...",    ID_EDIT_RECURRENCE
             MENUITEM SEPARATOR
+            MENUITEM "Edit Task &Dependency...",    ID_EDIT_DEPENDENCY
             MENUITEM "&Go To Task Dependency",      ID_EDIT_GOTODEPENDENCY
             MENUITEM SEPARATOR
             MENUITEM "&Clear Focused Task Attribute", 
@@ -3838,6 +3839,7 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "Edit Task &Recurrence...",    ID_EDIT_RECURRENCE
             MENUITEM SEPARATOR
+            MENUITEM "Edit Task &Dependency...",    ID_EDIT_DEPENDENCY
             MENUITEM "&Go To Task Dependency",      ID_EDIT_GOTODEPENDENCY
             MENUITEM SEPARATOR
             MENUITEM "&Clear Focused Task Attribute", 

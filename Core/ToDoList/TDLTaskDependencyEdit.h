@@ -26,6 +26,7 @@ public:
 	void GetDependencies(CTDCDependencyArray& aDepends) const;
 	void SetDependencies(const CTDCDependencyArray& aDepends);
 	
+	BOOL DoEdit();
 	void DDX(CDataExchange* pDX, CTDCDependencyArray& aValues);
 
 protected:
@@ -47,7 +48,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	int Parse(CTDCDependencyArray& aDepends) const;
-	BOOL DoEdit();
 };
 
 #endif 

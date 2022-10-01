@@ -1556,6 +1556,7 @@
 #define ID_VIEW_SHOWALLBARS             34744
 #define ID_VIEW_HIDEALLBARS             34745
 #define ID_DEBUG_FORMATGETLASTERROR     34746
+#define ID_EDIT_DEPENDENCY              34747
 #define IDS_FIRSTSTRING                 50601
 #define IDS_CMDLINE_FIRST               50601
 #define IDS_CMDLINE_INIFILE             50601
@@ -2448,7 +2449,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        325
-#define _APS_NEXT_COMMAND_VALUE         34747
+#define _APS_NEXT_COMMAND_VALUE         34748
 #define _APS_NEXT_CONTROL_VALUE         1554
 #define _APS_NEXT_SYMED_VALUE           108
 #endif

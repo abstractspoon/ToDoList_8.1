@@ -11089,6 +11089,16 @@ BOOL CToDoCtrl::GotoSelectedTaskDependency()
 	return FALSE;
 }
 
+BOOL CToDoCtrl::EditSelectedTaskDependency()
+{
+	if (CanEditSelectedTask(TDCA_DEPENDENCY))
+		return m_eDependency.DoEdit();
+
+	// else
+	return FALSE;
+}
+
+
 BOOL CToDoCtrl::EditSelectedTaskRecurrence()
 {
 	if (CanEditSelectedTask(TDCA_RECURRENCE) && !IsSelectedTaskDone())
