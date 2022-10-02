@@ -11794,16 +11794,13 @@ HBRUSH CToDoCtrl::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	
 	if (CThemed::IsAppThemed() && (nCtlColor == CTLCOLOR_STATIC))
 	{
-	//	if (CWinClasses::IsClass(*pWnd, WC_STATIC) || CWinClasses::IsClass(*pWnd, WC_BUTTON))
-		{
-			if (m_theme.crAppText != CLR_NONE)
-				pDC->SetTextColor(m_theme.crAppText);
+		if (m_theme.crAppText != CLR_NONE)
+			pDC->SetTextColor(m_theme.crAppText);
 		
-			if (m_brUIBack.GetSafeHandle())
-			{
-				pDC->SetBkMode(TRANSPARENT);
-				hbr = m_brUIBack;
-			}
+		if (m_brUIBack.GetSafeHandle())
+		{
+			pDC->SetBkMode(TRANSPARENT);
+			hbr = m_brUIBack;
 		}
 	}
 
