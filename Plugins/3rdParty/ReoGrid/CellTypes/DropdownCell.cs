@@ -17,6 +17,7 @@
  ****************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -107,6 +108,7 @@ namespace unvell.ReoGrid.CellTypes
 		/// </summary>
 		protected virtual void OnDropdownControlLostFocus()
 		{
+			Debug.WriteLine("DropdownCell.PullUp(OnDropdownControlLostFocus)");
 			this.PullUp();
 		}
 
@@ -127,10 +129,12 @@ namespace unvell.ReoGrid.CellTypes
 				{
 					if (value)
 					{
+						Debug.WriteLine("DropdownCell.PushDown(IsDropdown)");
 						PushDown();
 					}
 					else
 					{
+						Debug.WriteLine("DropdownCell.PullUp(IsDropdown)");
 						PullUp();
 					}
 				}
@@ -242,10 +246,12 @@ namespace unvell.ReoGrid.CellTypes
 			{
 				if (this.isDropdown)
 				{
+					Debug.WriteLine("DropdownCell.PullUp(OnMouseDown)");
 					PullUp();
 				}
 				else
 				{
+					Debug.WriteLine("DropdownCell.PushDown(OnMouseDown)");
 					PushDown();
 				}
 
@@ -278,6 +284,7 @@ namespace unvell.ReoGrid.CellTypes
 		/// </summary>
 		public override void OnLostFocus()
 		{
+			Debug.WriteLine("DropdownCell.PullUp(OnLostFocus)");
 			PullUp();
 		}
 
@@ -297,6 +304,8 @@ namespace unvell.ReoGrid.CellTypes
 		/// <returns>True if edit operation is allowed; otherwise return false to abort edit.</returns>
 		public override bool OnStartEdit()
 		{
+			Debug.WriteLine("DropdownCell.PushDown(OnStartEdit)");
+
 			PushDown();
 			return false;
 		}
