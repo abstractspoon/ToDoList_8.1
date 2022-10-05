@@ -289,7 +289,7 @@ namespace unvell.ReoGrid.CellTypes
 		}
 
 		/// <summary>
-		/// Event rasied when dropdown-panel is opened.
+		/// Event raised when dropdown-panel is opened.
 		/// </summary>
 		public event EventHandler DropdownOpened;
 
