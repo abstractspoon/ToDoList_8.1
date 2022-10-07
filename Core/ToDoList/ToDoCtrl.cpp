@@ -3364,7 +3364,6 @@ TDC_SET CToDoCtrl::OffsetTaskStartAndDueDates(DWORD dwTaskID, int nAmount, TDC_U
 			{
 				DWORD dwChildID = pTDS->GetSubTaskID(nSubTask);
 
-				// RECURSIVE CALL
 				if (SET_CHANGE == OffsetTaskStartAndDueDates(dwChildID, nAmount, nUnits, TRUE, bFromToday, mapProcessed)) // RECURSIVE CALL
 					nRes = SET_CHANGE;
 			}
