@@ -23,8 +23,7 @@ using System.Reflection;
 using System.Linq;
 
 using System.Windows.Forms;
-using RGFloat = System.Single;
-using RGImage = System.Drawing.Image;
+using System.Windows.Forms.VisualStyles;
 
 using unvell.ReoGrid.Events;
 using unvell.ReoGrid.Graphics;
@@ -222,15 +221,35 @@ namespace unvell.ReoGrid.CellTypes
 		{
 			if (this.Cell != null)
 			{
-				if (this.Cell.IsReadOnly)
+				if (Application.RenderWithVisualStyles)
 				{
-					ControlPaint.DrawComboButton(dc.Graphics.PlatformGraphics, (System.Drawing.Rectangle)(buttonRect),
-						System.Windows.Forms.ButtonState.Inactive);
+					var btnState = ComboBoxState.Normal;
+
+					if (this.Cell.IsReadOnly)
+					{
+						btnState = ComboBoxState.Disabled;
+					}
+					else if (this.IsDropdown)
+					{
+						btnState = ComboBoxState.Pressed;
+					}
+
+					ComboBoxRenderer.DrawDropDownButton(dc.Graphics.PlatformGraphics, (System.Drawing.Rectangle)buttonRect, btnState);
 				}
 				else
 				{
-					ControlPaint.DrawComboButton(dc.Graphics.PlatformGraphics, (System.Drawing.Rectangle)(buttonRect),
-						this.isDropdown ? System.Windows.Forms.ButtonState.Pushed : System.Windows.Forms.ButtonState.Normal);
+					var btnState = ButtonState.Normal;
+
+					if (this.Cell.IsReadOnly)
+					{
+						btnState = ButtonState.Inactive;
+					}
+					else if (this.IsDropdown)
+					{
+						btnState = ButtonState.Pushed;
+					}
+
+					ControlPaint.DrawComboButton(dc.Graphics.PlatformGraphics, (System.Drawing.Rectangle)(buttonRect), btnState);
 				}
 			}
 		}
