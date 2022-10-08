@@ -108,8 +108,37 @@ namespace unvell.ReoGrid.CellTypes
 		/// </summary>
 		protected virtual void OnDropdownControlLostFocus()
 		{
+			// ignore this if it occurred as a consequence of the user
+			// clicking a second time in the cell region
+			if (IsMouseDownWithinControl())
+				return;
+
 			Debug.WriteLine("DropdownCell.PullUp(OnDropdownControlLostFocus)");
 			this.PullUp();
+		}
+
+		protected bool IsMouseDownWithinControl()
+		{
+			if (Control.MouseButtons == System.Windows.Forms.MouseButtons.Left)
+			{
+				var cellRect = Cell.Bounds;
+				var btnRect = dropdownButtonRect;
+				btnRect.Offset(cellRect.Left, cellRect.Top);
+
+				var mousePos = Cell.Worksheet.ControlAdapter.PointToClient(Cursor.Position);
+				mousePos.X -= Cell.Worksheet.ViewportController.FocusView.Left;
+				mousePos.Y -= Cell.Worksheet.ViewportController.FocusView.Top;
+				mousePos.X += Cell.Worksheet.ControlAdapter.ScrollBarHorizontalValue;
+				mousePos.Y += Cell.Worksheet.ControlAdapter.ScrollBarVerticalValue;
+
+				if ((PullDownOnClick && cellRect.Contains(mousePos)) ||
+					(btnRect.Contains(mousePos)))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private bool isDropdown;
