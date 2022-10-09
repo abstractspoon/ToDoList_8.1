@@ -303,11 +303,10 @@ namespace unvell.ReoGrid.CellTypes
 					Debug.WriteLine("DropdownCell.PushDown(OnMouseDown)");
 					PushDown();
 				}
-
-				return true;
 			}
-			else
-				return false;
+
+			// Always return false so that the cell also gets selected
+			return false;
 		}
 
 		/// <summary>
