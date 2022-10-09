@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -56,7 +57,7 @@ namespace unvell.ReoGrid.CellTypes
 			set { this.pullDownOnClick = value; }
 		}
 
-		private Size dropdownButtonSize = new Size(20, 20);
+		private Size dropdownButtonSize = new Size(SystemInformation.VerticalScrollBarWidth, 20);
 
 		/// <summary>
 		/// Get or set the drop-down button size.
@@ -162,28 +163,27 @@ namespace unvell.ReoGrid.CellTypes
 			{
 				this.dropdownButtonRect.Width = 3;
 			}
+			this.dropdownButtonRect.X = Bounds.Right - this.dropdownButtonRect.Width;
 
 			if (this.dropdownButtonAutoHeight)
 			{
 				this.dropdownButtonRect.Height = Bounds.Height - 1;
+				this.dropdownButtonRect.Y = 1;
 			}
 			else
 			{
 				this.dropdownButtonRect.Height = Math.Min(DropdownButtonSize.Height, Bounds.Height - 1);
-			}
 
-			this.dropdownButtonRect.X = Bounds.Right - this.dropdownButtonRect.Width;
+				ReoGridVerAlign valign = ReoGridVerAlign.General;
 
-			ReoGridVerAlign valign = ReoGridVerAlign.General;
+				if (this.Cell != null && this.Cell.InnerStyle != null
+					&& this.Cell.InnerStyle.HasStyle(PlainStyleFlag.VerticalAlign))
+				{
+					valign = this.Cell.InnerStyle.VAlign;
+				}
 
-			if (this.Cell != null && this.Cell.InnerStyle != null
-				&& this.Cell.InnerStyle.HasStyle(PlainStyleFlag.VerticalAlign))
-			{
-				valign = this.Cell.InnerStyle.VAlign;
-			}
-
-			switch (valign)
-			{
+				switch (valign)
+				{
 				case ReoGridVerAlign.Top:
 					this.dropdownButtonRect.Y = 1;
 					break;
@@ -196,6 +196,7 @@ namespace unvell.ReoGrid.CellTypes
 				case ReoGridVerAlign.Middle:
 					this.dropdownButtonRect.Y = Bounds.Top + (Bounds.Height - this.dropdownButtonRect.Height) / 2 + 1;
 					break;
+				}
 			}
 		}
 
