@@ -39,6 +39,8 @@ namespace unvell.ReoGrid.CellTypes
 	/// </summary>
 	public abstract class DropdownCell : CellBody
 	{
+		protected object SelectedItem = null;
+
 		private DropdownWindow dropdownPanel;
 
 		/// <summary>
@@ -113,7 +115,11 @@ namespace unvell.ReoGrid.CellTypes
 			if (IsMouseDownWithinControl())
 				return;
 
-			Debug.WriteLine("DropdownCell.PullUp(OnDropdownControlLostFocus)");
+			// Ignore if panel already pulled up
+			if (!IsDropdown)
+				return;
+
+			SelectedItem = null;
 			this.PullUp();
 		}
 
@@ -141,34 +147,10 @@ namespace unvell.ReoGrid.CellTypes
 			return false;
 		}
 
-		private bool isDropdown;
-
 		/// <summary>
 		/// Get or set whether the drop-down button is pressed. When this value is set to true, the drop-down panel will popped up.
 		/// </summary>
-		public bool IsDropdown
-		{
-			get
-			{
-				return this.isDropdown;
-			}
-			set
-			{
-				if (this.isDropdown != value)
-				{
-					if (value)
-					{
-						Debug.WriteLine("DropdownCell.PushDown(IsDropdown)");
-						PushDown();
-					}
-					else
-					{
-						Debug.WriteLine("DropdownCell.PullUp(IsDropdown)");
-						PullUp();
-					}
-				}
-			}
-		}
+		public bool IsDropdown { get; private set; }
 
 		/// <summary>
 		/// Create custom drop-down cell instance.
@@ -293,16 +275,10 @@ namespace unvell.ReoGrid.CellTypes
 		{
 			if (PullDownOnClick || dropdownButtonRect.Contains(e.RelativePosition))
 			{
-				if (this.isDropdown)
-				{
-					Debug.WriteLine("DropdownCell.PullUp(OnMouseDown)");
+				if (IsDropdown)
 					PullUp();
-				}
 				else
-				{
-					Debug.WriteLine("DropdownCell.PushDown(OnMouseDown)");
 					PushDown();
-				}
 			}
 
 			// Always return false so that the cell also gets selected
@@ -332,7 +308,6 @@ namespace unvell.ReoGrid.CellTypes
 		/// </summary>
 		public override void OnLostFocus()
 		{
-			Debug.WriteLine("DropdownCell.PullUp(OnLostFocus)");
 			PullUp();
 		}
 
@@ -352,8 +327,6 @@ namespace unvell.ReoGrid.CellTypes
 		/// <returns>True if edit operation is allowed; otherwise return false to abort edit.</returns>
 		public override bool OnStartEdit()
 		{
-			Debug.WriteLine("DropdownCell.PushDown(OnStartEdit)");
-
 			PushDown();
 			return false;
 		}
@@ -365,6 +338,8 @@ namespace unvell.ReoGrid.CellTypes
 		/// </summary>
 		public virtual void PushDown()
 		{
+			SelectedItem = null;
+
 			if (this.Cell == null && this.Cell.Worksheet == null) return;
 
 			if (this.Cell.IsReadOnly && this.DisableWhenCellReadonly)
@@ -397,7 +372,7 @@ namespace unvell.ReoGrid.CellTypes
 
 				this.DropdownControl.Focus();
 
-				this.isDropdown = true;
+				this.IsDropdown = true;
 			}
 
 			DropdownOpened?.Invoke(this, null);
@@ -435,21 +410,38 @@ namespace unvell.ReoGrid.CellTypes
 		/// </summary>
 		public virtual void PullUp()
 		{
+			if (!IsDropdown)
+				return;
+
 			if (this.dropdownPanel != null)
 			{
+				// Clear flag first else hiding the panel will trigger another call
+				// which will clear the selected item
+				this.IsDropdown = false;
+
 				this.dropdownPanel.Hide();
-
-				this.isDropdown = false;
-
+				
 				if (this.sheet != null)
 				{
 					this.sheet.RequestInvalidate();
+					this.sheet.ControlAdapter.Focus();
 				}
 			}
 
 			if (DropdownClosed != null)
 			{
 				DropdownClosed(this, null);
+			}
+
+			if ((SelectedItem != null))
+			{
+				if ((Cell.Data == null) || (Cell.Data.ToString() != SelectedItem.ToString()))
+				{
+					if (Cell.Worksheet != null)
+						Cell.Worksheet.SetSingleCellData(Cell, SelectedItem);
+					else
+						Cell.Data = SelectedItem;
+				}
 			}
 		}
 

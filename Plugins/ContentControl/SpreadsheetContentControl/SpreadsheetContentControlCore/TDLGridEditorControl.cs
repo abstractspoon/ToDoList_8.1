@@ -89,6 +89,7 @@ namespace SpreadsheetContentControl
 				e.Worksheet.AfterPaste += new EventHandler<RangeEventArgs>(OnAfterPaste);
 				e.Worksheet.AfterCellEdit += new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
 				e.Worksheet.CellBodyChanged += new EventHandler<CellEventArgs>(OnCellBodyChanged);
+				e.Worksheet.CellDataChanged += new EventHandler<CellEventArgs>(OnCellDataChanged);
 				e.Worksheet.CellMouseEnter += new EventHandler<CellMouseEventArgs>(OnCellMouseEnter);
 				e.Worksheet.CellMouseLeave += new EventHandler<CellMouseEventArgs>(OnCellMouseLeave);
 				e.Worksheet.CellMouseMove += new EventHandler<CellMouseEventArgs>(OnCellMouseMove);
@@ -99,6 +100,7 @@ namespace SpreadsheetContentControl
 				e.Worksheet.AfterPaste -= new EventHandler<RangeEventArgs>(OnAfterPaste);
 				e.Worksheet.AfterCellEdit -= new EventHandler<CellAfterEditEventArgs>(OnAfterCellEdit);
 				e.Worksheet.CellBodyChanged -= new EventHandler<CellEventArgs>(OnCellBodyChanged);
+				e.Worksheet.CellDataChanged -= new EventHandler<CellEventArgs>(OnCellDataChanged);
 				e.Worksheet.CellMouseEnter -= new EventHandler<CellMouseEventArgs>(OnCellMouseEnter);
 				e.Worksheet.CellMouseLeave -= new EventHandler<CellMouseEventArgs>(OnCellMouseLeave);
 				e.Worksheet.CellMouseMove -= new EventHandler<CellMouseEventArgs>(OnCellMouseMove);
@@ -899,6 +901,11 @@ namespace SpreadsheetContentControl
 				drop.PullDownOnClick = false;
 			}
 
+			NotifyParentContentChange();
+		}
+
+		private void OnCellDataChanged(object sender, CellEventArgs e)
+		{
 			NotifyParentContentChange();
 		}
 
