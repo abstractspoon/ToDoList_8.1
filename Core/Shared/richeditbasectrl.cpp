@@ -1290,44 +1290,25 @@ BOOL CRichEditBaseCtrl::GetRTF(CString& sRTF) const
 {
 	sRTF.Empty();
 
-	// A single allocation is faster than allowing the 
-	// memory file to grow itself. Also it allows us to
-	// catch memory allocations.
-	int nLen = GetRTFLength();
-	BYTE* fileBuff = NULL;
-
 	try
 	{
-		fileBuff = new BYTE[nLen];
+		int nReqLen = GetRTFLength();
+		unsigned char* szRTF = (unsigned char*)sRTF.GetBuffer(nReqLen);
+
+		CMemFile file(szRTF, nReqLen);
+		file.SeekToBegin();
+
+		EDITSTREAM es = { (DWORD)&file, 0, StreamOutCB };
+		const_cast<CRichEditBaseCtrl*>(this)->StreamOut(SF_RTF, es);
+
+		sRTF.ReleaseBuffer();
 	}
 	catch (...)
 	{
 		return FALSE;
 	}
-	
-	CMemFile file(fileBuff, nLen);
-	file.SeekToBegin();
 
-	EDITSTREAM es = { (DWORD)&file, 0, StreamOutCB };
-	const_cast<CRichEditBaseCtrl*>(this)->StreamOut(SF_RTF, es);
-	
-	// then copy to string
-	try
-	{
-		LPTSTR szRTF = sRTF.GetBuffer(nLen);
-
-		file.SeekToBegin();
-		file.Read((void*)szRTF, nLen);
-
-		sRTF.ReleaseBuffer(nLen);
-	}
-	catch (...)
-	{
-		nLen = -1;
-	}
-	delete [] fileBuff;
-
-	return (nLen != -1);
+	return TRUE;
 }
 
 int CRichEditBaseCtrl::GetRTFLength() const
