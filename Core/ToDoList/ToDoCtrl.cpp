@@ -318,31 +318,31 @@ void CToDoCtrl::DoDataExchange(CDataExchange* pDX)
 	}
 }
 
-void CToDoCtrl::UpdateComments(BOOL bSaveAndValidate)
+BOOL CToDoCtrl::UpdateComments(BOOL bSaveAndValidate)
 {
 	if (bSaveAndValidate)
+		return m_ctrlComments.GetContent(m_sTextComments, m_customComments);
+
+	// else
+	int nSelCount = GetSelectedTaskCount();
+
+	if (m_sTextComments.IsEmpty() && (nSelCount > 1))
 	{
-		m_ctrlComments.GetContent(m_sTextComments, m_customComments);
+		m_ctrlComments.ClearContent();
 	}
 	else
 	{
-		int nSelCount = GetSelectedTaskCount();
-
-		if (m_sTextComments.IsEmpty() && (nSelCount > 1))
-		{
-			m_ctrlComments.ClearContent();
-		}
-		else
-		{
-			BOOL bCommentsFocused = m_ctrlComments.HasFocus();
-			m_ctrlComments.SetContent(m_sTextComments, m_customComments, !bCommentsFocused);
-		}
-
-		CEnString sComboPrompt((nSelCount > 1) ? IDS_TDC_EDITPROMPT_MULTIPLEFORMATS : IDS_TDC_EDITPROMPT_UNKNOWNFORMAT);
-		CEnString sCommentsPrompt((nSelCount > 1) ? IDS_TDC_EDITPROMPT_MULTIPLETASKS : IDS_TDC_EDITPROMPT_COMMENTS);
-
-		m_ctrlComments.SetWindowPrompts(sComboPrompt, sCommentsPrompt);
+		BOOL bCommentsFocused = m_ctrlComments.HasFocus();
+		
+		if (!m_ctrlComments.SetContent(m_sTextComments, m_customComments, !bCommentsFocused))
+			return FALSE;
 	}
+
+	CEnString sComboPrompt((nSelCount > 1) ? IDS_TDC_EDITPROMPT_MULTIPLEFORMATS : IDS_TDC_EDITPROMPT_UNKNOWNFORMAT);
+	CEnString sCommentsPrompt((nSelCount > 1) ? IDS_TDC_EDITPROMPT_MULTIPLETASKS : IDS_TDC_EDITPROMPT_COMMENTS);
+
+	m_ctrlComments.SetWindowPrompts(sComboPrompt, sCommentsPrompt);
+	return TRUE;
 }
 
 BEGIN_MESSAGE_MAP(CToDoCtrl, CRuntimeDlg)
@@ -9022,14 +9022,21 @@ void CToDoCtrl::HandleUnsavedComments()
 {
 	if (m_nCommentsState == CS_PENDING)
 	{
-		UpdateComments(TRUE); // no longer handled by UpdateData
-		SetSelectedTaskComments(m_sTextComments, m_customComments, TRUE); // TRUE == internal call
+		if (UpdateComments(TRUE) == -1)
+		{
+			// TODO
+			int breakpoint = 0;
+		}
+		else
+		{
+			SetSelectedTaskComments(m_sTextComments, m_customComments, TRUE); // TRUE == internal call
 
-		m_nCommentsState = CS_CHANGED;
+			m_nCommentsState = CS_CHANGED;
 
-		// Update sort if required
-		if (m_visColEdit.IsColumnVisible(TDCC_COMMENTSSIZE) && IsSortingBy(TDCC_COMMENTSSIZE))
-			Resort();
+			// Update sort if required
+			if (m_visColEdit.IsColumnVisible(TDCC_COMMENTSSIZE) && IsSortingBy(TDCC_COMMENTSSIZE))
+				Resort();
+		}
 	}
 }
 
@@ -10870,10 +10877,15 @@ BOOL CToDoCtrl::FindReplaceSelectedTaskAttribute()
 											m_findReplace.WantCaseSensitive(), 
 											m_findReplace.WantWholeWord()))
 			{
-				UpdateComments(TRUE);
-
-				if (SetSelectedTaskComments(m_sTextComments, m_customComments, TRUE))
+				if (UpdateComments(TRUE) == -1)
+				{
+					// TODO
+					m_nCommentsState = CS_PENDING;
+				}
+				else if (SetSelectedTaskComments(m_sTextComments, m_customComments, TRUE))
+				{
 					return TRUE;
+				}
 			}
 			break;
 		}

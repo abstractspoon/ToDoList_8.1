@@ -1257,7 +1257,10 @@ DWORD CRichEditBaseCtrl::StreamInCB(DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG
 
 BOOL CRichEditBaseCtrl::Save(const CString& filename)
 {
-	CString str = GetRTF(); // returns multibyte encoded string
+	CString str;
+	
+	if (!GetRTF(str)) // returns multibyte encoded string
+		return FALSE;
 	
 	// save as multibyte
 	return FileMisc::SaveFile(filename, (LPCSTR)(LPCTSTR)str);
@@ -1283,27 +1286,48 @@ BOOL CRichEditBaseCtrl::Load(const CString& filename)
 	return TRUE;
 }
 
-CString CRichEditBaseCtrl::GetRTF() const
+BOOL CRichEditBaseCtrl::GetRTF(CString& sRTF) const
 {
-	// stream to mem file in big chunks
-	// note: we use a BIG file because it gives us excellent
-	// performance on content containing images
-	CMemFile file(2024 * 1024);
-	EDITSTREAM es = { (DWORD)&file, 0, StreamOutCB };
+	sRTF.Empty();
 
+	// A single allocation is faster than allowing the 
+	// memory file to grow itself. Also it allows us to
+	// catch memory allocations.
+	int nLen = GetRTFLength();
+	BYTE* fileBuff = NULL;
+
+	try
+	{
+		fileBuff = new BYTE[nLen];
+	}
+	catch (...)
+	{
+		return FALSE;
+	}
+	
+	CMemFile file(fileBuff, nLen);
+	file.SeekToBegin();
+
+	EDITSTREAM es = { (DWORD)&file, 0, StreamOutCB };
 	const_cast<CRichEditBaseCtrl*>(this)->StreamOut(SF_RTF, es);
 	
 	// then copy to string
-	CString sRTF;
-	int nLen = (int)file.GetLength();
-	
-	LPTSTR szRTF = sRTF.GetBuffer(nLen);
-	
-	file.SeekToBegin();
-	file.Read((void*)szRTF, nLen);
-	
-	sRTF.ReleaseBuffer(nLen);
-	return sRTF;
+	try
+	{
+		LPTSTR szRTF = sRTF.GetBuffer(nLen);
+
+		file.SeekToBegin();
+		file.Read((void*)szRTF, nLen);
+
+		sRTF.ReleaseBuffer(nLen);
+	}
+	catch (...)
+	{
+		nLen = -1;
+	}
+	delete [] fileBuff;
+
+	return (nLen != -1);
 }
 
 int CRichEditBaseCtrl::GetRTFLength() const

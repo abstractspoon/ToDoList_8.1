@@ -591,7 +591,7 @@ protected:
 
 	// Implementation
 protected:
-	void UpdateComments(BOOL bSaveAndValidate); 
+	BOOL UpdateComments(BOOL bSaveAndValidate); 
 	
 	// private CToDoCtrl messages
 	static UINT WM_TDC_FIXUPPOSTDROPSELECTION;

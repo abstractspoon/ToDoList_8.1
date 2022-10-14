@@ -219,7 +219,11 @@ int CRTFContentControl::GetContent(unsigned char* pContent) const
 	
 	if (pContent)
 	{
-		CString sContent = m_rtf.GetRTF();
+		CString sContent;
+		
+		if (!m_rtf.GetRTF(sContent))
+			return -1;
+
 		nLen = sContent.GetLength();
 		
 		// compress it
@@ -233,14 +237,17 @@ int CRTFContentControl::GetContent(unsigned char* pContent) const
 		{
 			CopyMemory(pContent, pCompressed, nLenCompressed);
 			nLen = nLenCompressed;
-			delete [] pCompressed;
 		}
 		else
+		{
 			nLen = 0;
+		}
+
+		delete[] pCompressed;
 	}
 	else
 	{
-		nLen = m_rtf.GetRTFLength();
+		nLen = m_rtf.GetRTFLength(); // Will always over-estimate because we compress
 	}
 	
 	return nLen;

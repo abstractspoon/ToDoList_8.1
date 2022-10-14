@@ -123,7 +123,7 @@ public:
 	BOOL Save(const CString& filename);
 	BOOL Load(const CString& filename);
 	
-	CString GetRTF() const; // ansi encoded string
+	BOOL GetRTF(CString& sRTF) const; // ansi encoded string 
 	int	GetRTFLength() const; // in characters
 	void SetRTF(const CString& rtf);
 
