@@ -1290,25 +1290,17 @@ BOOL CRichEditBaseCtrl::GetRTF(CString& sRTF) const
 {
 	sRTF.Empty();
 
-	try
-	{
-		int nReqLen = GetRTFLength();
-		unsigned char* szRTF = (unsigned char*)sRTF.GetBuffer(nReqLen);
+	int nReqLen = GetRTFLength();
+	unsigned char* szRTF = (unsigned char*)sRTF.GetBuffer(nReqLen);
 
-		CMemFile file(szRTF, nReqLen);
-		file.SeekToBegin();
+	int nCopiedLen = GetRTF(szRTF, nReqLen);
 
-		EDITSTREAM es = { (DWORD)&file, 0, StreamOutCB };
-		const_cast<CRichEditBaseCtrl*>(this)->StreamOut(SF_RTF, es);
+	if (nCopiedLen == -1)
+		sRTF.ReleaseBuffer(nReqLen);
+	else
+		sRTF.ReleaseBuffer(nCopiedLen);
 
-		sRTF.ReleaseBuffer();
-	}
-	catch (...)
-	{
-		return FALSE;
-	}
-
-	return TRUE;
+	return (nCopiedLen != -1);
 }
 
 int CRichEditBaseCtrl::GetRTF(unsigned char* pRTF, int nRTFLen) const
