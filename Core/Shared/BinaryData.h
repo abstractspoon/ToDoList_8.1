@@ -24,7 +24,6 @@ public:
 
   const unsigned char* Get(int& nByteLength) const;
   const unsigned char* Get() const;
-  int Get(CString& sContent) const;
 
   void Empty();
   BOOL IsEmpty() const;
@@ -36,6 +35,9 @@ public:
 
   BOOL Base64Encode(CString& sEncoded) const;
   BOOL Base64Decode(const CString& sEncoded);
+
+  CString AsString() const;
+  static CString AsString(const unsigned char* pData, int nByteLength);
 
 protected:
   int GetByteLength() const;

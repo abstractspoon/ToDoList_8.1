@@ -1756,10 +1756,6 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 	BOOL bReadOnly = (IsReadOnly() || !m_taskTree.SelectionHasUnlocked());
 	int nSelCount = GetSelectedTaskCount();
 
-	CONTENTFORMAT cfComments;
-	CString sTextComments;
-	CBinaryData customComments;
-	
 	if (hti)
 	{
 		DWORD dwTaskID = GetTrueTaskID(hti); 
@@ -1781,12 +1777,6 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 
 		if (m_crColour == 0)
 			m_crColour = CLR_DEFAULT;
-
-		if (bIncComments)
-		{
-			sTextComments = GetSelectedTaskComments();
-			customComments = GetSelectedTaskCustomComments(cfComments);
-		}
 		
 		CStringArray aMatched, aMixed;
 		
@@ -1881,8 +1871,6 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 		m_mapCustomCtrlData.RemoveAll();
 
 		// Keep whatever the current comments contents type is
-		if (bIncComments)
-			m_ctrlComments.GetSelectedFormat(cfComments);
 	}
 
 	UpdateDateTimeControls(hti != NULL);
@@ -1894,6 +1882,19 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 	{
 		ASSERT(!m_ctrlComments.IsUpdatingFormat());
 
+		// We need to take care to avoid unnecessary copying 
+		// of a task's comments which can be huge
+		static CString sEmptyComments;
+		static CBinaryData emptyComments;
+
+		CONTENTFORMAT cfComments;
+		const CBinaryData& customComments = (hti ? m_taskTree.GetSelectedTaskCustomComments(cfComments) : emptyComments);
+		
+		if (!hti)
+			m_ctrlComments.GetSelectedFormat(cfComments);
+		
+		CString sTextComments = (hti ? m_taskTree.GetSelectedTaskComments() : sEmptyComments);
+		
 		// if more than one comments type is selected then sCommentsType
 		// will be empty which will put the comments type combo in an
 		// indeterminate state which is the desired effect since this requires

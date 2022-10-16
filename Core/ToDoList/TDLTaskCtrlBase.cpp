@@ -5990,8 +5990,8 @@ const CBinaryData& CTDLTaskCtrlBase::GetSelectedTaskCustomComments(CONTENTFORMAT
 		}
 	}
 	
-	static CBinaryData content;
-	return content;
+	static CBinaryData emptyContent;
+	return emptyContent;
 }
 
 CString CTDLTaskCtrlBase::FormatSelectedTaskTitles(BOOL bFullPath, TCHAR cSep, int nMaxTasks) const

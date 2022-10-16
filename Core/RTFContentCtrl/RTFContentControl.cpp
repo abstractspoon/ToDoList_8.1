@@ -255,13 +255,12 @@ bool CRTFContentControl::SetContent(const unsigned char* pContent, int nLength, 
 	{
 		int nLenDecompressed = 0;
 
-		if (Compression::Decompress(pContent, nLength, pDecompressed, nLenDecompressed))
-		{
-			pContent = pDecompressed;
-			nLength = nLenDecompressed;
-		}
-		else
+		if (!Compression::Decompress(pContent, nLength, pDecompressed, nLenDecompressed))
 			return false;
+
+		// else
+		pContent = pDecompressed;
+		nLength = nLenDecompressed;
 	}
 
 	// content must begin with rtf tag or be empty
@@ -269,21 +268,11 @@ bool CRTFContentControl::SetContent(const unsigned char* pContent, int nLength, 
 		return false;
 
 	CReSaveCaret resc(bResetSelection ? NULL : m_rtf.GetSafeHwnd());
-	CString sContent;
 
-#ifdef _UNICODE
-	CBinaryData(pContent, nLength).Get(sContent);
-
-#	ifdef _DEBUG
-	LPCSTR szAnsi = (LPCSTR)(LPCTSTR)sContent;
-#	endif
-#else
-	memcpy(sContent.GetBufferSetLength(nLength), pContent, nLength);
-#endif
+	CString sContent = CBinaryData::AsString(pContent, nLength);
+	delete[] pDecompressed;
 
 	SetRTF(sContent);
-
-	delete [] pDecompressed;
 	
 	// reset caret
 	if (bResetSelection)

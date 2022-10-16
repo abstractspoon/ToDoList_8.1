@@ -9,13 +9,17 @@
 #include "..\3rdParty\Base64Coder.h"
 
 //////////////////////////////////////////////////////////////////////
+
+const int CHARLEN = sizeof(TCHAR);
+
+//////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CBinaryData::CBinaryData(LPCTSTR szData) 
 {
     if (szData)
-		Set((const unsigned char*)szData, lstrlen(szData) * sizeof(TCHAR));
+		Set((const unsigned char*)szData, lstrlen(szData) * CHARLEN);
 }
 
 CBinaryData::CBinaryData(const unsigned char* pData, int nByteLength)
@@ -25,7 +29,7 @@ CBinaryData::CBinaryData(const unsigned char* pData, int nByteLength)
 
 CBinaryData::CBinaryData(const CString& sContent)
 {
-    Set((const unsigned char*)(LPCTSTR)sContent, sContent.GetLength() * sizeof(TCHAR));
+    Set((const unsigned char*)(LPCTSTR)sContent, sContent.GetLength() * CHARLEN);
 }
 
 CBinaryData::CBinaryData(const CBinaryData& data)
@@ -93,12 +97,16 @@ BOOL CBinaryData::IsEmpty() const
     return CString::IsEmpty();
 }
 
-int CBinaryData::Get(CString& sContent) const
+CString CBinaryData::AsString() const
 {
-    int nStrLength = GetByteLength() / sizeof(TCHAR);
-    sContent = CString((LPCTSTR)Get(), nStrLength);
+	return AsString(Get(), GetByteLength());
+}
 
-	return GetLength();
+CString CBinaryData::AsString(const unsigned char* pData, int nByteLength)
+{
+	int nStrLength = ((nByteLength / CHARLEN) + ((nByteLength % CHARLEN) ? 1 : 0));
+	
+	return CString((LPCTSTR)pData, nStrLength);
 }
 
 bool CBinaryData::operator == (const CBinaryData& data) const
@@ -118,7 +126,7 @@ int CBinaryData::GetLength() const
 
 int CBinaryData::GetByteLength() const
 {
-	int nByteLength = CString::GetLength() * sizeof(TCHAR);
+	int nByteLength = CString::GetLength() * CHARLEN;
 	return nByteLength;
 }
 
