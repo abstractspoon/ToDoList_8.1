@@ -215,39 +215,29 @@ void CRTFContentControl::OnKillFocus()
 // ICustomControl implementation
 int CRTFContentControl::GetContent(unsigned char* pContent) const
 {
-	int nLen = 0;
+	int nLen = m_rtf.GetRTFLength(); // Will always over-estimate because we compress
 	
 	if (pContent)
 	{
-		CString sContent;
-		
-		if (!m_rtf.GetRTF(sContent))
-			return -1;
+		nLen = m_rtf.GetRTF(pContent, nLen);
 
-		nLen = sContent.GetLength();
-		
-		// compress it
-		if (!nLen)
-			return 0;
-		
-		unsigned char* pCompressed = NULL;
-		int nLenCompressed = 0;
-		
-		if (Compression::Compress((unsigned char*)(LPSTR)(LPCTSTR)sContent, nLen, pCompressed, nLenCompressed) && nLenCompressed)
+		if (nLen > 0)
 		{
-			CopyMemory(pContent, pCompressed, nLenCompressed);
-			nLen = nLenCompressed;
-		}
-		else
-		{
-			nLen = 0;
-		}
+			unsigned char* pCompressed = NULL;
+			int nLenCompressed = 0;
 
-		delete[] pCompressed;
-	}
-	else
-	{
-		nLen = m_rtf.GetRTFLength(); // Will always over-estimate because we compress
+			if (Compression::Compress(pContent, nLen, pCompressed, nLenCompressed) && nLenCompressed)
+			{
+				CopyMemory(pContent, pCompressed, nLenCompressed);
+				nLen = nLenCompressed;
+			}
+			else
+			{
+				nLen = 0;
+			}
+
+			delete[] pCompressed;
+		}
 	}
 	
 	return nLen;

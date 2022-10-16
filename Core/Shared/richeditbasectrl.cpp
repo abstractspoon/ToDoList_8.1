@@ -1311,6 +1311,31 @@ BOOL CRichEditBaseCtrl::GetRTF(CString& sRTF) const
 	return TRUE;
 }
 
+int CRichEditBaseCtrl::GetRTF(unsigned char* pRTF, int nRTFLen) const
+{
+	ASSERT(nRTFLen >= GetRTFLength());
+
+	int nBytesCopied = 0;
+	ZeroMemory(pRTF, nRTFLen);
+
+	try
+	{
+		CMemFile file(pRTF, nRTFLen);
+		file.SeekToBegin();
+
+		EDITSTREAM es = { (DWORD)&file, 0, StreamOutCB };
+		const_cast<CRichEditBaseCtrl*>(this)->StreamOut(SF_RTF, es);
+
+		nBytesCopied = (int)file.GetLength();
+	}
+	catch(...)
+	{
+		nBytesCopied = -1;
+	}
+
+	return nBytesCopied;
+}
+
 int CRichEditBaseCtrl::GetRTFLength() const
 {
 	int nByteLen = 0;
