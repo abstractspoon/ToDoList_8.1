@@ -37,42 +37,24 @@ CBinaryData::CBinaryData(const CBinaryData& data)
     Set(data, data.GetLength());
 }
 
+int CBinaryData::GetEquivalentStringLength(int nByteLength)
+{
+	int nStrLen = (nByteLength / CHARLEN);
+
+	if (nByteLength % CHARLEN)
+		nStrLen++;
+
+	return nStrLen;
+}
+
 unsigned char* CBinaryData::GetBuffer(int nByteLength)
 {
-#ifdef _UNICODE
-	
-    // need to copy into wide buffer
-    // must make the length multiple of 2
-    int nFixedLen = nByteLength + (nByteLength % 2);
-    LPWSTR pBuf = CString::GetBuffer(nFixedLen / 2);
-	
-    ZeroMemory(pBuf, nFixedLen);
-	
-#else
-	
-    // simple copy
-    LPSTR pBuf = CString::GetBuffer(nByteLength);
-    ZeroMemory(pBuf, nByteLength);
-	
-#endif
-	
-    return (unsigned char*)pBuf;
+    return (unsigned char*)CString::GetBuffer(GetEquivalentStringLength(nByteLength));
 }
 
 void CBinaryData::ReleaseBuffer(int nByteLength)
 {
-#ifdef _UNICODE
-
-    // must make the length multiple of 2
-    int nFixedLen = nByteLength + (nByteLength % 2);
-	CString::ReleaseBuffer(nFixedLen / 2);
-
-#else
-
-    // simple release
-	CString::ReleaseBuffer(nByteLength);
-
-#endif
+	CString::ReleaseBuffer(GetEquivalentStringLength(nByteLength));
 }
 
 
@@ -104,9 +86,7 @@ CString CBinaryData::AsString() const
 
 CString CBinaryData::AsString(const unsigned char* pData, int nByteLength)
 {
-	int nStrLength = ((nByteLength / CHARLEN) + ((nByteLength % CHARLEN) ? 1 : 0));
-	
-	return CString((LPCTSTR)pData, nStrLength);
+	return CString((LPCTSTR)pData, GetEquivalentStringLength(nByteLength));
 }
 
 bool CBinaryData::operator == (const CBinaryData& data) const
@@ -126,8 +106,7 @@ int CBinaryData::GetLength() const
 
 int CBinaryData::GetByteLength() const
 {
-	int nByteLength = CString::GetLength() * CHARLEN;
-	return nByteLength;
+	return (CString::GetLength() * CHARLEN);
 }
 
 void CBinaryData::Set(const unsigned char* pData, int nByteLength)

@@ -43,6 +43,8 @@ protected:
   int GetByteLength() const;
   void Set(const unsigned char* pData, int nByteLength);
 
+  static int GetEquivalentStringLength(int nByteLength);
+
   operator const unsigned char*() const;
 
 };
