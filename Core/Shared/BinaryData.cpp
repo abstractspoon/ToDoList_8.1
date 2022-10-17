@@ -37,6 +37,12 @@ CBinaryData::CBinaryData(const CBinaryData& data)
     Set(data, data.GetLength());
 }
 
+void CBinaryData::operator = (const CBinaryData& data)
+{
+	if (this != &data)
+		Set(data, data.GetLength());
+}
+
 int CBinaryData::GetEquivalentStringLength(int nByteLength)
 {
 	int nStrLen = (nByteLength / CHARLEN);
@@ -56,7 +62,6 @@ void CBinaryData::ReleaseBuffer(int nByteLength)
 {
 	CString::ReleaseBuffer(GetEquivalentStringLength(nByteLength));
 }
-
 
 const unsigned char* CBinaryData::Get(int& nByteLength) const
 {
@@ -99,11 +104,6 @@ bool CBinaryData::operator != (const CBinaryData& data) const
     return !(*this == data);
 }
 
-int CBinaryData::GetLength() const 
-{ 
-	return GetByteLength(); 
-}
-
 int CBinaryData::GetByteLength() const
 {
 	return (CString::GetLength() * CHARLEN);
@@ -111,6 +111,8 @@ int CBinaryData::GetByteLength() const
 
 void CBinaryData::Set(const unsigned char* pData, int nByteLength)
 {
+	Empty();
+
 	unsigned char* pBuf = CBinaryData::GetBuffer(nByteLength);
 	CopyMemory(pBuf, pData, nByteLength);
 	CBinaryData::ReleaseBuffer(nByteLength);
