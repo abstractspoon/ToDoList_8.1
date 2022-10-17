@@ -1291,16 +1291,17 @@ BOOL CRichEditBaseCtrl::GetRTF(CString& sRTF) const
 	sRTF.Empty();
 
 	int nReqLen = GetRTFLength();
-	unsigned char* szRTF = (unsigned char*)sRTF.GetBuffer(nReqLen);
+	int nStrLen = (nReqLen / sizeof(TCHAR));
 
-	int nCopiedLen = GetRTF(szRTF, nReqLen);
+	if (nReqLen % sizeof(TCHAR))
+		nStrLen++;
 
-	if (nCopiedLen == -1)
-		sRTF.ReleaseBuffer(nReqLen);
-	else
-		sRTF.ReleaseBuffer(nCopiedLen);
+	unsigned char* pRTF = (unsigned char*)sRTF.GetBuffer(nStrLen);
+	int nResult = GetRTF(pRTF, nReqLen);
 
-	return (nCopiedLen != -1);
+	sRTF.ReleaseBuffer(nStrLen);
+
+	return (nResult != -1);
 }
 
 int CRichEditBaseCtrl::GetRTF(unsigned char* pRTF, int nRTFLen) const
