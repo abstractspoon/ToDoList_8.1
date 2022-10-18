@@ -300,7 +300,7 @@ int CContentCtrl::GetContent(CBinaryData& content) const
 		{
 			try 
 			{
-				unsigned char* szContent = content.GetBuffer(nBytesReq);
+				unsigned char* szContent = content.GetBuffer(nBytesReq * 2);
 				nBytesCopied = m_pContentCtrl->GetContent(szContent);
 
 				if (nBytesCopied != -1)

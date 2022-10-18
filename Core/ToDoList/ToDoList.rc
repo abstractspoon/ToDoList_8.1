@@ -5795,6 +5795,7 @@ BEGIN
     IDS_CONFIRMSAVEAS_TITLE "Confirm Save As"
     IDS_PRINT_TASKVIEW      "Screenshot of active task view (%s)"
     IDS_CUSTOM_FEATURE_SHOWEDITFIELD "Show edit field"
+    IDS_COMMENTSMEMORYERROR "Memory Allocation Error|The application was unable to allocate enough memory to retrieve the most recently modified comments.\n\nTry creating a separate subtask for any further comments."
 END
 
 #endif    // English (Australia) resources

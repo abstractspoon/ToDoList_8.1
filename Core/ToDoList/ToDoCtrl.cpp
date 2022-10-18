@@ -736,7 +736,8 @@ void CToDoCtrl::ResizeAttributeColumnsToFit()
 
 void CToDoCtrl::SetMaximizeState(TDC_MAXSTATE nState)
 {
-	HandleUnsavedComments();
+	if (!HandleUnsavedComments())
+		return;
 
 	if (m_nMaxState != nState)
 	{
@@ -6989,7 +6990,15 @@ LRESULT CToDoCtrl::OnCommentsGetAttributeList(WPARAM wParam, LPARAM lParam)
 
 LRESULT CToDoCtrl::OnCommentsKillFocus(WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
-	HandleUnsavedComments();
+	TDCSELECTIONCACHE cache;
+	CacheTreeSelection(cache, FALSE);
+
+	if (!HandleUnsavedComments())
+	{
+		m_ctrlComments.SetFocus();
+		RestoreTreeSelection(cache);
+	}
+
 	return 0L;
 }
 
@@ -8919,7 +8928,8 @@ void CToDoCtrl::SelectItem(HTREEITEM hti)
 
 void CToDoCtrl::SelectAll() 
 { 
-	HandleUnsavedComments();
+	if (!HandleUnsavedComments())
+		return;
 
 	if (m_taskTree.SelectAll())
 	{
@@ -9013,7 +9023,7 @@ int CToDoCtrl::GetAllTasks(CTaskFile& tasks) const
 	return m_exporter.ExportAllTasks(tasks);
 }
 
-void CToDoCtrl::HandleUnsavedComments()
+BOOL CToDoCtrl::HandleUnsavedComments()
 {
 	if (m_nCommentsState == CS_PENDING)
 	{
@@ -9023,20 +9033,21 @@ void CToDoCtrl::HandleUnsavedComments()
 		if (m_ctrlComments.GetContent(sTextComments, customComments) == -1)
 		{
 			// Notify user
-			// TODO
-			int breakpoint = 0;
+			AfxMessageBox(IDS_COMMENTSMEMORYERROR, MB_ICONERROR | MB_OK);
+			return FALSE;
 		}
-		else
-		{
-			SetSelectedTaskComments(sTextComments, customComments, TRUE); // TRUE == internal call
 
-			m_nCommentsState = CS_CHANGED;
+		// else
+		SetSelectedTaskComments(sTextComments, customComments, TRUE); // TRUE == internal call
 
-			// Update sort if required
-			if (m_visColEdit.IsColumnVisible(TDCC_COMMENTSSIZE) && IsSortingBy(TDCC_COMMENTSSIZE))
-				Resort();
-		}
+		m_nCommentsState = CS_CHANGED;
+
+		// Update sort if required
+		if (m_visColEdit.IsColumnVisible(TDCC_COMMENTSSIZE) && IsSortingBy(TDCC_COMMENTSSIZE))
+			Resort();
 	}
+
+	return TRUE;
 }
 
 HTREEITEM CToDoCtrl::SetAllTasks(const CTaskFile& tasks)
@@ -10105,7 +10116,7 @@ void CToDoCtrl::EndLabelEdit(BOOL bCancel)
 	m_eTaskName.EndEdit(bCancel);
 }
 
-void CToDoCtrl::Flush() 
+BOOL CToDoCtrl::Flush() 
 {
 	CWnd* pFocus = GetFocus();
 
@@ -10143,7 +10154,7 @@ void CToDoCtrl::Flush()
 
 	m_treeDragDrop.CancelDrag();
 
-	HandleUnsavedComments();
+	return HandleUnsavedComments();
 }
 
 TDC_FILE CToDoCtrl::CheckIn()
@@ -11207,7 +11218,8 @@ BOOL CToDoCtrl::SelectTasksInHistory(BOOL bForward)
 	if (!CanSelectTasksInHistory(bForward))
 		return FALSE;
 
-	HandleUnsavedComments();
+	if (!HandleUnsavedComments())
+		return FALSE;
 
 	m_taskTree.SelectTasksInHistory(bForward);
 	UpdateControls();
@@ -11539,7 +11551,11 @@ BOOL CToDoCtrl::ShowTaskLink(const CString& sLink, BOOL bURL)
 
 void CToDoCtrl::OnSelChangeCommentsType()
 {
-	HandleUnsavedComments();
+	if (!HandleUnsavedComments())
+	{
+		m_ctrlComments.SetSelectedFormat(m_cfComments);
+		return;
+	}
 
 	BOOL bMixedSelection = (m_cfComments.IsEmpty());
 	m_ctrlComments.GetSelectedFormat(m_cfComments);
