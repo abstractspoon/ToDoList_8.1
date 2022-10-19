@@ -173,12 +173,6 @@ namespace SpreadsheetContentControl
 						link.AutoNavigate = false;
 						link.Click += new EventHandler<HyperlinkCell.ClickEventArgs>(OnClickHyperlinkCell);
 					}
-					else if (HasCellBody<CheckBoxCell>(cell))
-					{
-						var check = CellBody<CheckBoxCell>(cell);
-
-						check.CheckChanged += new EventHandler(OnCellCheckChanged);
-					}
 					else if (HasCellBody<DropdownCell>(cell))
 					{
 						var drop = CellBody<DropdownCell>(cell);
@@ -888,12 +882,6 @@ namespace SpreadsheetContentControl
 				link.AutoNavigate = false;
 				link.Click += new EventHandler<HyperlinkCell.ClickEventArgs>(OnClickHyperlinkCell);
 			}
-			else if (HasCellBody<CheckBoxCell>(e))
-			{
-				var check = CellBody<CheckBoxCell>(e.Cell);
-
-				check.CheckChanged += new EventHandler(OnCellCheckChanged);
-			}
 			else if (HasCellBody<DropdownCell>(e.Cell))
 			{
 				var drop = CellBody<DropdownCell>(e.Cell);
@@ -905,11 +893,6 @@ namespace SpreadsheetContentControl
 		}
 
 		private void OnCellDataChanged(object sender, CellEventArgs e)
-		{
-			NotifyParentContentChange();
-		}
-
-		private void OnCellCheckChanged(object sender, EventArgs e)
 		{
 			NotifyParentContentChange();
 		}
