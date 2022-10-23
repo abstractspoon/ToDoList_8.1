@@ -92,13 +92,8 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CCalendarPreferencesPage)
-	afx_msg void OnShowTasksContinuous();
-	afx_msg void OnShowStartDates();
-	afx_msg void OnShowDueDates();
-	afx_msg void OnShowMiniCalendar();
+	afx_msg void OnOptionChanged();
 	//}}AFX_MSG
-	afx_msg void OnHideParentTasksByTag();
-	afx_msg void OnSelChangeHeatMapPalette();
 	DECLARE_MESSAGE_MAP()
 
 protected:

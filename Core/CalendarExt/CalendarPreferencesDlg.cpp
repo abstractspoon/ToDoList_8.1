@@ -100,13 +100,14 @@ void CCalendarPreferencesPage::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CCalendarPreferencesPage, CPreferencesPageBase)
 	//{{AFX_MSG_MAP(CCalendarPreferencesPage)
-	ON_BN_CLICKED(IDC_SHOWTASKSCONTINUOUS, OnShowTasksContinuous)
-	ON_BN_CLICKED(IDC_SHOWSTARTDATES, OnShowStartDates)
-	ON_BN_CLICKED(IDC_SHOWDUEDATES, OnShowDueDates)
-	ON_BN_CLICKED(IDC_SHOWMINICALENDAR, OnShowMiniCalendar)
+	ON_BN_CLICKED(IDC_SHOWTASKSCONTINUOUS, OnOptionChanged)
+	ON_BN_CLICKED(IDC_SHOWSTARTDATES, OnOptionChanged)
+	ON_BN_CLICKED(IDC_SHOWDUEDATES, OnOptionChanged)
+	ON_BN_CLICKED(IDC_SHOWMINICALENDAR, OnOptionChanged)
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDC_HIDEPARENTTASKSBYTAG, OnHideParentTasksByTag)
-	ON_CBN_SELCHANGE(IDC_HEATMAPPALETTE, OnSelChangeHeatMapPalette)
+	ON_BN_CLICKED(IDC_HIDEPARENTTASKSBYTAG, OnOptionChanged)
+	ON_BN_CLICKED(IDC_HIDEPARENTTASKS, OnOptionChanged)
+	ON_CBN_SELCHANGE(IDC_HEATMAPPALETTE, OnOptionChanged)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -153,31 +154,7 @@ void CCalendarPreferencesPage::EnableDisableControls()
 	}
 }
 
-void CCalendarPreferencesPage::OnHideParentTasksByTag()
-{
-	UpdateData();
-	EnableDisableControls();
-}
-
-void CCalendarPreferencesPage::OnShowTasksContinuous() 
-{
-	UpdateData();
-	EnableDisableControls();
-}
-
-void CCalendarPreferencesPage::OnSelChangeHeatMapPalette()
-{
-	UpdateData();
-	EnableDisableControls();
-}
-
-void CCalendarPreferencesPage::OnShowStartDates() 
-{
-	UpdateData();
-	EnableDisableControls();
-}
-
-void CCalendarPreferencesPage::OnShowDueDates() 
+void CCalendarPreferencesPage::OnOptionChanged()
 {
 	UpdateData();
 	EnableDisableControls();
@@ -302,12 +279,6 @@ BOOL CCalendarPreferencesPage::GetCalcMissingDueAsStart() const
 BOOL CCalendarPreferencesPage::GetCalcMissingDueAsLatestStartAndToday() const
 {
 	return (m_nCalcMissingDueDates == CALCDUE_ASLATESTSTARTANDTODAY);
-}
-
-void CCalendarPreferencesPage::OnShowMiniCalendar() 
-{
-	UpdateData();
-	EnableDisableControls();
 }
 
 void CCalendarPreferencesPage::SetThemeBkgndColors(COLORREF crLight, COLORREF crDark) 
