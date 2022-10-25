@@ -31,7 +31,7 @@ public:
 	BOOL TASKCALITEM::operator==(const TASKCALITEM& tci);
 
 	BOOL UpdateTask(const ITASKLISTBASE* pTasks, HTASKITEM hTask, DWORD dwCalcDates);
-	void RecalcDates(DWORD dwCalcDates);
+	void RecalcDates(DWORD dwCalcDates, BOOL bDragging);
 	inline DWORD GetTaskID() const { return dwTaskID; }
 
 	BOOL IsValid() const;

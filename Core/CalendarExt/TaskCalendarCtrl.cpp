@@ -59,9 +59,7 @@ CTaskCalendarCtrl::CTaskCalendarCtrl()
 	:
 	m_nMaxDayTaskCount(0),
 	m_dwSelectedTaskID(0),
-	m_bDraggingStart(FALSE),
-	m_bDraggingEnd(FALSE),
-	m_bDragging(FALSE),
+	m_nDragging(TCCHT_NOWHERE),
 	m_ptDragOrigin(0),
 	m_nDefSnapMode(TCCSM_NEARESTHOUR),
 	m_dwOptions(TCCO_DISPLAYCONTINUOUS | TCCO_ENABLELABELTIPS),
@@ -199,7 +197,7 @@ void CTaskCalendarCtrl::RecalcTaskDates()
 		ASSERT(pTCI);
 		ASSERT(pTCI->GetTaskID() == dwTaskID);
 
-		pTCI->RecalcDates(m_dwOptions);
+		pTCI->RecalcDates(m_dwOptions, FALSE);
 	}
 }
 
@@ -2244,10 +2242,8 @@ BOOL CTaskCalendarCtrl::StartDragging(const CPoint& ptCursor)
 
 	TCC_HITTEST nHit = TCCHT_NOWHERE;
 	DWORD dwTaskID = HitTestTask(ptCursor, nHit);
-	
-	BOOL bCanDrag = CanDragTask(dwTaskID, nHit);
 
-	if (bCanDrag <= 0)
+	if ((dwTaskID == 0) || !CanDragTask(dwTaskID, nHit))
 		return FALSE;
 
 	// when not drawing tasks continuously, it's possible
@@ -2264,21 +2260,19 @@ BOOL CTaskCalendarCtrl::StartDragging(const CPoint& ptCursor)
 	
 	SetCapture();
 
-	switch (nHit)
-	{
-	case TCCHT_BEGIN:	m_bDraggingStart = TRUE;	break;
-	case TCCHT_END:		m_bDraggingEnd = TRUE;		break;
-	case TCCHT_MIDDLE:	m_bDragging = TRUE;			break;
-		
-	default:			
-		ASSERT(0);
-		return FALSE;
-	}
+	m_nDragging = nHit;
 	
-	m_tciPreDrag = *(GetTaskCalItem(dwTaskID));
+	TASKCALITEM* pTCI = GetTaskCalItem(dwTaskID);
+	ASSERT(pTCI);
+
+	m_tciPreDrag = *pTCI;
 	m_ptDragOrigin = ptCursor;
 	VERIFY(GetDateFromPoint(m_ptDragOrigin, m_dtDragOrigin));
 
+	// Recalc dates if either start/end is not set
+	if (!pTCI->IsStartDateSet() || !pTCI->IsEndDateSet())
+		pTCI->RecalcDates(m_dwOptions, TRUE);
+	
 	// keep parent informed
 	NotifyParentDragChange();
 
@@ -2312,40 +2306,45 @@ BOOL CTaskCalendarCtrl::GetValidDragDate(const CPoint& ptCursor, COleDateTime& d
 	// dtDrag as TASKCALITEM::dtStart/dtEnd offset by the
 	// difference between the current drag pos and the
 	// initial drag pos
-	BOOL bEndOfDay = m_bDraggingEnd;
+	BOOL bEndOfDay = (m_nDragging == TCCHT_END);
 
-	if (m_bDragging)
+	switch (m_nDragging)
 	{
-		// offset from pre-drag position
-		double dOffset = (dtDrag.m_dt - m_dtDragOrigin.m_dt);
-
-		if (m_tciPreDrag.IsStartDateSet())
+	case TCCHT_MIDDLE:
 		{
-			dtDrag = (m_tciPreDrag.GetAnyStartDate().m_dt + dOffset);
-			bEndOfDay = FALSE;
-		}
-		else
-		{
-			ASSERT(m_tciPreDrag.IsEndDateSet());
+			// offset from pre-drag position
+			double dOffset = (dtDrag.m_dt - m_dtDragOrigin.m_dt);
 
-			dtDrag = (m_tciPreDrag.GetAnyEndDate().m_dt + dOffset);
-			bEndOfDay = TRUE;
+			if (m_tciPreDrag.IsStartDateSet())
+			{
+				dtDrag = (m_tciPreDrag.GetAnyStartDate().m_dt + dOffset);
+				bEndOfDay = FALSE;
+			}
+			else
+			{
+				ASSERT(m_tciPreDrag.IsEndDateSet());
+
+				dtDrag = (m_tciPreDrag.GetAnyEndDate().m_dt + dOffset);
+				bEndOfDay = TRUE;
+			}
+
+			SetCursor(AfxGetApp()->LoadStandardCursor(IDC_SIZEALL));
 		}
-		
-		SetCursor(AfxGetApp()->LoadStandardCursor(IDC_SIZEALL));
-	}
-	else
-	{
-		if (m_bDraggingStart)
+		break;
+
+	case TCCHT_BEGIN:
 		{
 			dtDrag.m_dt = min(dtDrag.m_dt, (dtRowMax.m_dt + 1.0 - dSnap));
+			SetCursor(AfxGetApp()->LoadStandardCursor(IDC_SIZEWE));
 		}
-		else // if (m_bDraggingEnd)
+		break;
+
+	case TCCHT_END:
 		{
 			dtDrag.m_dt = max(dtDrag.m_dt, (dtRowMin.m_dt + dSnap));
+			SetCursor(AfxGetApp()->LoadStandardCursor(IDC_SIZEWE));
 		}
-
-		SetCursor(AfxGetApp()->LoadStandardCursor(IDC_SIZEWE));
+		break;
 	}
 	
 	// adjust date depending on snap mode
@@ -2364,7 +2363,7 @@ BOOL CTaskCalendarCtrl::GetValidDragDate(const CPoint& ptCursor, COleDateTime& d
 		break;
 
 	case TCCSM_FREE:
-		if (m_bDraggingEnd)
+		if (bEndOfDay)
 		{
 			COleDateTime dtEndOfDay(CDateHelper::GetEndOfDay(dtDrag));
 
@@ -2436,56 +2435,64 @@ BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 			if (GetValidDragDate(ptCursor, dtDrag))
 			{
 				// prevent the start and end dates from overlapping
-				if (m_bDraggingStart)
+				switch (m_nDragging)
 				{
-					// but only if the due date is set
-					if (pTCI->IsEndDateSet())
-						pTCI->SetStartDate(min(dtDrag.m_dt, pTCI->GetAnyEndDate().m_dt - ONE_HOUR));
-					else
-						pTCI->SetStartDate(dtDrag);
-				}
-				else if (m_bDraggingEnd)
-				{
-					// but only if the start date is set
-					if (pTCI->IsStartDateSet())
-						pTCI->SetDueDate(max(dtDrag.m_dt, pTCI->GetAnyStartDate().m_dt + ONE_HOUR));
-					else
-						pTCI->SetDueDate(dtDrag);
-				}
-				else // m_bDragging
-				{
-					if (pTCI->IsStartDateSet() && pTCI->IsEndDateSet())
+				case TCCHT_BEGIN:
 					{
-						COleDateTime dtStart = pTCI->GetAnyStartDate();
-						COleDateTime dtEnd = pTCI->GetAnyEndDate();
-
-						// If the end date is currently at 'end of day'
-						// then bump it to the start of the next day so
-						// that the calculated duration is accurate
-						if (CDateHelper::GetEndOfDay(dtEnd) == dtEnd)
-							dtEnd = CDateHelper::GetStartOfNextDay(dtEnd);
-
-						double dDuration = (dtEnd.m_dt - dtStart.m_dt);
-						
-						pTCI->SetStartDate(dtDrag);
-
-						// If end date would fall on the start of a new day
-						// move it to the previous day
-						dtEnd = (dtDrag.m_dt + dDuration);
-
-						if (!CDateHelper::DateHasTime(dtEnd))
-							dtEnd = CDateHelper::GetEndOfPreviousDay(dtEnd);
-						
-						pTCI->SetDueDate(dtEnd);
+						// but only if the due date is set
+						if (pTCI->IsEndDateSet())
+							pTCI->SetStartDate(min(dtDrag.m_dt, pTCI->GetAnyEndDate().m_dt - ONE_HOUR));
+						else
+							pTCI->SetStartDate(dtDrag);
 					}
-					else if (pTCI->IsStartDateSet())
+					break;
+
+				case TCCHT_END:
 					{
-						pTCI->SetStartDate(dtDrag);
+						// but only if the start date is set
+						if (pTCI->IsStartDateSet())
+							pTCI->SetDueDate(max(dtDrag.m_dt, pTCI->GetAnyStartDate().m_dt + ONE_HOUR));
+						else
+							pTCI->SetDueDate(dtDrag);
 					}
-					else if (pTCI->IsEndDateSet())
+					break;
+
+				case TCCHT_MIDDLE:
 					{
-						pTCI->SetDueDate(dtDrag);
+						if (pTCI->IsStartDateSet() && pTCI->IsEndDateSet())
+						{
+							COleDateTime dtStart = pTCI->GetAnyStartDate();
+							COleDateTime dtEnd = pTCI->GetAnyEndDate();
+
+							// If the end date is currently at 'end of day'
+							// then bump it to the start of the next day so
+							// that the calculated duration is accurate
+							if (CDateHelper::GetEndOfDay(dtEnd) == dtEnd)
+								dtEnd = CDateHelper::GetStartOfNextDay(dtEnd);
+
+							double dDuration = (dtEnd.m_dt - dtStart.m_dt);
+
+							pTCI->SetStartDate(dtDrag);
+
+							// If end date would fall on the start of a new day
+							// move it to the previous day
+							dtEnd = (dtDrag.m_dt + dDuration);
+
+							if (!CDateHelper::DateHasTime(dtEnd))
+								dtEnd = CDateHelper::GetEndOfPreviousDay(dtEnd);
+
+							pTCI->SetDueDate(dtEnd);
+						}
+						else if (pTCI->IsStartDateSet())
+						{
+							pTCI->SetStartDate(dtDrag);
+						}
+						else if (pTCI->IsEndDateSet())
+						{
+							pTCI->SetDueDate(dtDrag);
+						}
 					}
+					break;
 				}
 			}
 
@@ -2509,7 +2516,7 @@ BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 
 		// Recalc dates if either start/end is not set
 		if (!pTCI->IsStartDateSet() || !pTCI->IsEndDateSet())
-			pTCI->RecalcDates(m_dwOptions);
+			pTCI->RecalcDates(m_dwOptions, TRUE);
 			
 		Invalidate();
 		UpdateWindow();
@@ -2549,36 +2556,26 @@ BOOL CTaskCalendarCtrl::EndDragging(const CPoint& ptCursor)
 		{
 			*pTCI = m_tciPreDrag;
 		}
-		else if (m_bDraggingStart)
-		{
-			nDragWhat = TCCHT_BEGIN;
-		}
-		else if (m_bDraggingEnd)
-		{
-			nDragWhat = TCCHT_END;
-		}
 		else
 		{
-			ASSERT(m_bDragging);
+			nDragWhat = m_nDragging;
 
-			// if the start is calculated, treat this like an end move
-			if (!pTCI->IsStartDateSet())
+			if (nDragWhat == TCCHT_MIDDLE)
 			{
-				nDragWhat = TCCHT_END;
-			}
-			else if (!pTCI->IsEndDateSet())
-			{
-				nDragWhat = TCCHT_BEGIN;
-			}
-			else
-			{
-				ASSERT(pTCI->IsStartDateSet() && pTCI->IsEndDateSet());
-				nDragWhat = TCCHT_MIDDLE;
+				// if the start is calculated, treat this like an end move
+				if (!pTCI->IsStartDateSet())
+				{
+					nDragWhat = TCCHT_END;
+				}
+				else if (!pTCI->IsEndDateSet())
+				{
+					nDragWhat = TCCHT_BEGIN;
+				}
 			}
 		}
 
 		// cleanup
-		m_bDraggingStart = m_bDraggingEnd = m_bDragging = FALSE;
+		m_nDragging = TCCHT_NOWHERE;
 		ReleaseCapture();
 
 		// keep parent informed
@@ -2736,7 +2733,7 @@ BOOL CTaskCalendarCtrl::SetTaskCursor(DWORD dwTaskID, TCC_HITTEST nHit) const
 
 BOOL CTaskCalendarCtrl::IsDragging() const
 {
-	return (m_bDragging || m_bDraggingStart || m_bDraggingEnd);
+	return (m_nDragging != TCCHT_NOWHERE);
 }
 
 BOOL CTaskCalendarCtrl::IsValidDrag(const CPoint& ptDrag) const
@@ -2862,7 +2859,7 @@ void CTaskCalendarCtrl::CancelDrag(BOOL bReleaseCapture)
 	ASSERT(pTCI);
 	
 	*pTCI = m_tciPreDrag;
-	m_bDragging = m_bDraggingStart = m_bDraggingEnd = FALSE;
+	m_nDragging = TCCHT_NOWHERE;
 	
 	if (bReleaseCapture)
 		ReleaseCapture();

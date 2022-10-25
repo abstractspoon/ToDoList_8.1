@@ -80,8 +80,8 @@ protected:
 	CTaskCalFutureItemMap m_mapFutureOccurrences;
 	CDWordSet m_mapRecurringTaskIDs;
 	TASKCALITEM m_tciPreDrag;
+	TCC_HITTEST m_nDragging;
 
-	BOOL m_bDraggingStart, m_bDraggingEnd, m_bDragging;
 	BOOL m_bReadOnly;
 	BOOL m_bStrikeThruDone;
 	BOOL m_bSavingToImage;

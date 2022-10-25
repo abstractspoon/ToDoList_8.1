@@ -141,7 +141,7 @@ void TASKCALITEM::UpdateTaskDates(const ITASKLISTBASE* pTasks, HTASKITEM hTask, 
 			CDateHelper::ClearDate(dtDone);
 	}
 
-	RecalcDates(dwCalcDates);
+	RecalcDates(dwCalcDates, FALSE);
 }
 
 void TASKCALITEM::ClearCalculatedDates()
@@ -152,7 +152,7 @@ void TASKCALITEM::ClearCalculatedDates()
 	bTreatOverdueAsDueToday = FALSE;
 }
 
-void TASKCALITEM::RecalcDates(DWORD dwCalcDates)
+void TASKCALITEM::RecalcDates(DWORD dwCalcDates, BOOL bDragging)
 {
 	ClearCalculatedDates();
 
