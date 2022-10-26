@@ -9,6 +9,8 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
+#include "CalEnum.h"
+
 #include "..\shared\mapex.h"
 #include "..\shared\DateHelper.h"
 
@@ -31,7 +33,7 @@ public:
 	BOOL TASKCALITEM::operator==(const TASKCALITEM& tci);
 
 	BOOL UpdateTask(const ITASKLISTBASE* pTasks, HTASKITEM hTask, DWORD dwCalcDates);
-	void RecalcDates(DWORD dwCalcDates, BOOL bDragging);
+	void RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging = TCCHT_NOWHERE);
 	inline DWORD GetTaskID() const { return dwTaskID; }
 
 	BOOL IsValid() const;

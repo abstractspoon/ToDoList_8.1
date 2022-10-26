@@ -197,7 +197,7 @@ void CTaskCalendarCtrl::RecalcTaskDates()
 		ASSERT(pTCI);
 		ASSERT(pTCI->GetTaskID() == dwTaskID);
 
-		pTCI->RecalcDates(m_dwOptions, FALSE);
+		pTCI->RecalcDates(m_dwOptions);
 	}
 }
 
@@ -2271,7 +2271,7 @@ BOOL CTaskCalendarCtrl::StartDragging(const CPoint& ptCursor)
 
 	// Recalc dates if either start/end is not set
 	if (!pTCI->IsStartDateSet() || !pTCI->IsEndDateSet())
-		pTCI->RecalcDates(m_dwOptions, TRUE);
+		pTCI->RecalcDates(m_dwOptions, m_nDragging);
 	
 	// keep parent informed
 	NotifyParentDragChange();
@@ -2516,7 +2516,7 @@ BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 
 		// Recalc dates if either start/end is not set
 		if (!pTCI->IsStartDateSet() || !pTCI->IsEndDateSet())
-			pTCI->RecalcDates(m_dwOptions, TRUE);
+			pTCI->RecalcDates(m_dwOptions, m_nDragging);
 			
 		Invalidate();
 		UpdateWindow();

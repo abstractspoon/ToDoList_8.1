@@ -141,7 +141,7 @@ void TASKCALITEM::UpdateTaskDates(const ITASKLISTBASE* pTasks, HTASKITEM hTask, 
 			CDateHelper::ClearDate(dtDone);
 	}
 
-	RecalcDates(dwCalcDates, FALSE);
+	RecalcDates(dwCalcDates);
 }
 
 void TASKCALITEM::ClearCalculatedDates()
@@ -152,7 +152,7 @@ void TASKCALITEM::ClearCalculatedDates()
 	bTreatOverdueAsDueToday = FALSE;
 }
 
-void TASKCALITEM::RecalcDates(DWORD dwCalcDates, BOOL bDragging)
+void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 {
 	ClearCalculatedDates();
 
@@ -171,96 +171,70 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, BOOL bDragging)
 
 	if (!bHasStartDate) // -----------------------------------------------------
 	{
+		ASSERT(bHasEndDate);
+
 		if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASCREATION))
 		{
-			if (bHasEndDate)
-			{
-				dtStartCalc = min(dtEnd, dtCreation);
-			}
-			else
-			{
-				dtStartCalc = dtCreation;
-			}
+			dtStartCalc = min(dtEnd, dtCreation);
 		}
 		else if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASDUE))
 		{
-			if (bHasEndDate)
-			{
-				dtStartCalc = dtEnd;
-			}
+			dtStartCalc = dtEnd;
 		}
 		else // TCCO_CALCMISSINGSTARTASEARLIESTDUEANDTODAY
 		{
-			if (bHasEndDate)
-			{
-				dtStartCalc = min(dtEnd, dtNow);
-			}
-			else 
-			{
-				dtStartCalc = dtNow;
-			}
+			dtStartCalc = min(dtEnd, dtNow);
 		}
 
 		dtStartCalc = CDateHelper::GetDateOnly(dtStartCalc);
 	}
-
-	if (!bHasEndDate) // -------------------------------------------------------
+	else if (!bHasEndDate) // -------------------------------------------------------
 	{
+		ASSERT(bHasStartDate);
+
 		if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGDUEASSTART))
 		{
-			if (bHasStartDate)
-			{
-				dtEndCalc = dtStart;
-			}
+			dtEndCalc = dtStart;
 		}
 		else // TCCO_CALCMISSINGDUEASLATESTSTARTANDTODAY
 		{
-			if (bHasStartDate)
-			{
-				dtEndCalc = max(dtStart, dtNow);
-			}
-			else
-			{
-				dtEndCalc = dtNow;
-			}
+			dtEndCalc = max(dtStart, dtNow);
 		}
 
 		dtEndCalc = CDateHelper::GetEndOfDay(dtEndCalc);
 	}
-	else if (bHasDoneDate) // ---------------------------------------------------
+	else // -------------------------------------------------------------------
 	{
-		// adjust done date to point to end of day if it has no time component
-		if (!CDateHelper::DateHasTime(dtDone))
-		{
-			dtDone = CDateHelper::GetEndOfDay(dtDone);
-		}
-	}
-	else if (bHasDueDate) // ---------------------------------------------------
-	{
-		// Special case: treat overdue tasks as due today
-		if ((dtDue < dtNow) && Misc::HasFlag(dwCalcDates, TCCO_TREATOVERDUEASDUETODAY))
-		{
-			dtEndCalc = CDateHelper::GetEndOfDay(dtNow);
-			bTreatOverdueAsDueToday = TRUE;
-		}
+		ASSERT(bHasStartDate && bHasEndDate);
 
-		// adjust due date to point to end of day if it has no time component
-		if (!CDateHelper::DateHasTime(dtDue))
+		if (bHasDoneDate)
 		{
-			dtDue = CDateHelper::GetEndOfDay(dtDue);
-		}
-	}
+			// adjust done date to point to end of day if it has no time component
+			if (!CDateHelper::DateHasTime(dtDone))
+				dtDone = CDateHelper::GetEndOfDay(dtDone);
 
-	// Finally ensure start date precedes end date
-	if (bHasStartDate && bHasEndDate) // ----------------------------------------
-	{
-		if (bHasDoneDate && (dtStart > dtDone))
-		{
-			dtStartCalc = CDateHelper::GetDateOnly(dtDone);
+			// Ensure start date precedes end date
+			if (dtStart > dtDone)
+				dtStartCalc = CDateHelper::GetDateOnly(dtDone);
 		}
-		else if (bHasDueDate && (dtStart > dtDue))
+		else
 		{
-			dtStartCalc = CDateHelper::GetDateOnly(dtDue);
+			ASSERT(bHasDueDate);
+
+			// Special case: treat overdue tasks as due today
+			if ((dtDue < dtNow) && Misc::HasFlag(dwCalcDates, TCCO_TREATOVERDUEASDUETODAY))
+			{
+				dtEndCalc = CDateHelper::GetEndOfDay(dtNow);
+				bTreatOverdueAsDueToday = TRUE;
+			}
+
+			// adjust due date to point to end of day if it has no time component
+			if (!CDateHelper::DateHasTime(dtDue))
+				dtDue = CDateHelper::GetEndOfDay(dtDue);
+
+			// Ensure start date precedes end date
+			if (dtStart > dtDue)
+				dtStartCalc = CDateHelper::GetDateOnly(dtDue);
 		}
 	}
 }
