@@ -203,7 +203,7 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 
 		dtEndCalc = CDateHelper::GetEndOfDay(dtEndCalc);
 	}
-	else // -------------------------------------------------------------------
+	else if (nDragging == TCCHT_NOWHERE) // -------------------------------------------------------------------
 	{
 		ASSERT(bHasStartDate && bHasEndDate);
 

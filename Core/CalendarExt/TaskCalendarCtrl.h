@@ -79,8 +79,7 @@ protected:
 	CTaskCalItemMap m_mapData;
 	CTaskCalFutureItemMap m_mapFutureOccurrences;
 	CDWordSet m_mapRecurringTaskIDs;
-	TASKCALITEM m_tciPreDrag;
-	TCC_HITTEST m_nDragging;
+	TASKCALDRAGSTATE m_DragState;
 
 	BOOL m_bReadOnly;
 	BOOL m_bStrikeThruDone;
@@ -94,8 +93,6 @@ protected:
 	DWORD m_dwSelectedTaskID;
 	DWORD m_dwOptions;
 	DWORD m_dwMaximumTaskID;
-	CPoint m_ptDragOrigin;
-	COleDateTime m_dtDragOrigin;
 	int m_nCellVScrollPos;
 	CFont m_fontAltText;
 	CFontCache m_fonts;
@@ -200,10 +197,8 @@ protected:
 	BOOL StartDragging(const CPoint& ptCursor);
 	BOOL EndDragging(const CPoint& ptCursor);
 	BOOL UpdateDragging(const CPoint& ptCursor);
-	BOOL IsValidDrag(const CPoint& ptDrag) const;
 	BOOL ValidateDragPoint(CPoint& ptDrag) const;
 	void CancelDrag(BOOL bReleaseCapture);
-	BOOL IsDragging() const;
 	BOOL GetValidDragDate(const CPoint& ptCursor, COleDateTime& dtDrag) const;
 	double CalcDateDragTolerance() const;
 	BOOL SelectTask(DWORD dwTaskID, BOOL bEnsureVisible, BOOL bNotify);

@@ -59,8 +59,6 @@ CTaskCalendarCtrl::CTaskCalendarCtrl()
 	:
 	m_nMaxDayTaskCount(0),
 	m_dwSelectedTaskID(0),
-	m_nDragging(TCCHT_NOWHERE),
-	m_ptDragOrigin(0),
 	m_nDefSnapMode(TCCSM_NEARESTHOUR),
 	m_dwOptions(TCCO_DISPLAYCONTINUOUS | TCCO_ENABLELABELTIPS),
 	m_bReadOnly(FALSE),
@@ -2260,19 +2258,27 @@ BOOL CTaskCalendarCtrl::StartDragging(const CPoint& ptCursor)
 	
 	SetCapture();
 
-	m_nDragging = nHit;
-	
-	TASKCALITEM* pTCI = GetTaskCalItem(dwTaskID);
+	TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 	ASSERT(pTCI);
 
-	m_tciPreDrag = *pTCI;
-	m_ptDragOrigin = ptCursor;
-	VERIFY(GetDateFromPoint(m_ptDragOrigin, m_dtDragOrigin));
+	pTCI->RecalcDates(m_dwOptions, nHit);
 
-	// Recalc dates if either start/end is not set
-	if (!pTCI->IsStartDateSet() || !pTCI->IsEndDateSet())
-		pTCI->RecalcDates(m_dwOptions, m_nDragging);
-	
+	m_DragState.nWhat = nHit;
+	m_DragState.tciOriginal = *pTCI;
+	m_DragState.ptOrigin = ptCursor;
+
+	VERIFY(GetDateFromPoint(ptCursor, m_DragState.dtOrigin));
+
+	// If the selected task is no longer beneath the cursor
+	// move the drag origin to the closer of the start or due dates
+	if ((nHit == TCCHT_MIDDLE) &&
+		(HitTestTask(ptCursor, nHit) != m_dwSelectedTaskID))
+	{
+		m_DragState.dtOrigin.m_dt = pTCI->GetAnyStartDate().m_dt + 0.5;
+	}
+
+	RebuildCellTasks();
+
 	// keep parent informed
 	NotifyParentDragChange();
 
@@ -2306,25 +2312,25 @@ BOOL CTaskCalendarCtrl::GetValidDragDate(const CPoint& ptCursor, COleDateTime& d
 	// dtDrag as TASKCALITEM::dtStart/dtEnd offset by the
 	// difference between the current drag pos and the
 	// initial drag pos
-	BOOL bEndOfDay = (m_nDragging == TCCHT_END);
+	BOOL bEndOfDay = (m_DragState.nWhat == TCCHT_END);
 
-	switch (m_nDragging)
+	switch (m_DragState.nWhat)
 	{
 	case TCCHT_MIDDLE:
 		{
 			// offset from pre-drag position
-			double dOffset = (dtDrag.m_dt - m_dtDragOrigin.m_dt);
+			double dOffset = (dtDrag.m_dt - m_DragState.dtOrigin.m_dt);
 
-			if (m_tciPreDrag.IsStartDateSet())
+			if (m_DragState.tciOriginal.IsStartDateSet())
 			{
-				dtDrag = (m_tciPreDrag.GetAnyStartDate().m_dt + dOffset);
+				dtDrag = (m_DragState.tciOriginal.GetAnyStartDate().m_dt + dOffset);
 				bEndOfDay = FALSE;
 			}
 			else
 			{
-				ASSERT(m_tciPreDrag.IsEndDateSet());
+				ASSERT(m_DragState.tciOriginal.IsEndDateSet());
 
-				dtDrag = (m_tciPreDrag.GetAnyEndDate().m_dt + dOffset);
+				dtDrag = (m_DragState.tciOriginal.GetAnyEndDate().m_dt + dOffset);
 				bEndOfDay = TRUE;
 			}
 
@@ -2397,7 +2403,7 @@ double CTaskCalendarCtrl::GetSnapIncrement() const
 
 TCC_SNAPMODE CTaskCalendarCtrl::GetSnapMode() const
 {
-	if (IsDragging())
+	if (m_DragState.IsDragging())
 	{
 		// active keys override
 		if (Misc::ModKeysArePressed(MKS_CTRL))
@@ -2423,19 +2429,19 @@ void CTaskCalendarCtrl::OnMouseMove(UINT nFlags, CPoint point)
 
 BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 {
-	if (IsDragging())
+	if (m_DragState.IsDragging())
 	{
 		TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 		ASSERT(pTCI);
 			
-		if (IsValidDrag(ptCursor))
+		if (m_DragState.IsValidDrag(ptCursor))
 		{
 			COleDateTime dtDrag;
 
 			if (GetValidDragDate(ptCursor, dtDrag))
 			{
 				// prevent the start and end dates from overlapping
-				switch (m_nDragging)
+				switch (m_DragState.nWhat)
 				{
 				case TCCHT_BEGIN:
 					{
@@ -2494,6 +2500,8 @@ BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 					}
 					break;
 				}
+
+				pTCI->RecalcDates(m_dwOptions, m_DragState.nWhat);
 			}
 
 			// Rebuild the cell tasks because the task may have moved cells
@@ -2511,12 +2519,8 @@ BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 		}
 		else
 		{
-			*pTCI = m_tciPreDrag;
+			*pTCI = m_DragState.tciOriginal;
 		}
-
-		// Recalc dates if either start/end is not set
-		if (!pTCI->IsStartDateSet() || !pTCI->IsEndDateSet())
-			pTCI->RecalcDates(m_dwOptions, m_nDragging);
 			
 		Invalidate();
 		UpdateWindow();
@@ -2541,8 +2545,14 @@ void CTaskCalendarCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 
 BOOL CTaskCalendarCtrl::EndDragging(const CPoint& ptCursor)
 {
-	if (IsDragging())
+	if (m_DragState.IsDragging())
 	{
+		// Copy the drag state so we can immediately release capture
+		TASKCALDRAGSTATE state = m_DragState;
+
+		m_DragState.Clear();
+		ReleaseCapture();
+		
 		TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 		ASSERT(pTCI);
 
@@ -2550,15 +2560,11 @@ BOOL CTaskCalendarCtrl::EndDragging(const CPoint& ptCursor)
 		CRect rLimits;
 		GetAllowableDragLimits(rLimits);
 
-		TCC_HITTEST nDragWhat = TCCHT_NOWHERE;
+		BOOL bSuccess = FALSE;
 
-		if (!rLimits.PtInRect(ptCursor) || !IsValidDrag(ptCursor))
+		if (rLimits.PtInRect(ptCursor) && m_DragState.IsValidDrag(ptCursor))
 		{
-			*pTCI = m_tciPreDrag;
-		}
-		else
-		{
-			nDragWhat = m_nDragging;
+			TCC_HITTEST nDragWhat = m_DragState.nWhat;
 
 			if (nDragWhat == TCCHT_MIDDLE)
 			{
@@ -2572,21 +2578,15 @@ BOOL CTaskCalendarCtrl::EndDragging(const CPoint& ptCursor)
 					nDragWhat = TCCHT_BEGIN;
 				}
 			}
+
+			bSuccess = NotifyParentDateChange(nDragWhat);
 		}
 
-		// cleanup
-		m_nDragging = TCCHT_NOWHERE;
-		ReleaseCapture();
+		if (!bSuccess)
+			*pTCI = state.tciOriginal;
 
-		// keep parent informed
-		if (!NotifyParentDateChange(nDragWhat))
-		{
-			*pTCI = m_tciPreDrag;
-		}
-		else if (m_mapRecurringTaskIDs.Has(m_dwSelectedTaskID))
-		{
-			RebuildCellTasks();
-		}
+		pTCI->RecalcDates(m_dwOptions);
+		RebuildCellTasks();
 
 		Invalidate(FALSE);
 		NotifyParentDragChange();
@@ -2682,7 +2682,7 @@ BOOL CTaskCalendarCtrl::CanDragTask(DWORD dwTaskID, TCC_HITTEST nHit) const
 BOOL CTaskCalendarCtrl::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
 {
 	// this is only for when we are NOT yet dragging
-	ASSERT(!IsDragging());
+	ASSERT(!m_DragState.IsDragging());
 
 	if (!m_bReadOnly &&
 		!m_bSelectionStarted && 
@@ -2731,25 +2731,6 @@ BOOL CTaskCalendarCtrl::SetTaskCursor(DWORD dwTaskID, TCC_HITTEST nHit) const
 	return FALSE;
 }
 
-BOOL CTaskCalendarCtrl::IsDragging() const
-{
-	return (m_nDragging != TCCHT_NOWHERE);
-}
-
-BOOL CTaskCalendarCtrl::IsValidDrag(const CPoint& ptDrag) const
-{
-	if (!IsDragging())
-		return FALSE;
-
-	CSize size = (m_ptDragOrigin - ptDrag);
-
-	int nCxDrag = (GetSystemMetrics(SM_CXDRAG) / 2);
-	int nCyDrag = (GetSystemMetrics(SM_CYDRAG) / 2);
-
-	return ((abs(size.cx) > nCxDrag) || 
-			(abs(size.cy) > nCyDrag));
-}
-
 void CTaskCalendarCtrl::GetAllowableDragLimits(CRect& rLimits) const
 {
 	GetClientRect(rLimits);
@@ -2761,7 +2742,7 @@ void CTaskCalendarCtrl::GetAllowableDragLimits(CRect& rLimits) const
 
 BOOL CTaskCalendarCtrl::ValidateDragPoint(CPoint& ptDrag) const
 {
-	if (!IsDragging())
+	if (!m_DragState.IsDragging())
 		return FALSE;
 
 	CRect rLimits;
@@ -2785,7 +2766,7 @@ BOOL CTaskCalendarCtrl::ValidateDragPoint(CPoint& ptDrag) const
 void CTaskCalendarCtrl::OnCaptureChanged(CWnd *pWnd) 
 {
 	// if something grabs the capture we cancel any drag
-	if (IsDragging() && (pWnd != this))
+	if (m_DragState.IsDragging() && (pWnd != this))
 		CancelDrag(FALSE);
 	
 	CCalendarCtrlEx::OnCaptureChanged(pWnd);
@@ -2796,7 +2777,7 @@ void CTaskCalendarCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	switch (nChar)
 	{
 	case VK_ESCAPE:
-		if (IsDragging())
+		if (m_DragState.IsDragging())
 		{
 			CancelDrag(TRUE);
 			return;
@@ -2805,7 +2786,7 @@ void CTaskCalendarCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	case VK_CONTROL:
 	case VK_SHIFT:
-		if (IsDragging())
+		if (m_DragState.IsDragging())
 			NotifyParentDragChange();
 		break;
 
@@ -2839,7 +2820,7 @@ BOOL CTaskCalendarCtrl::IsCellScrollBarActive() const
 // external version
 BOOL CTaskCalendarCtrl::CancelDrag()
 {
-	if (IsDragging())
+	if (m_DragState.IsDragging())
 	{
 		CancelDrag(TRUE);
 		return TRUE;
@@ -2852,17 +2833,20 @@ BOOL CTaskCalendarCtrl::CancelDrag()
 // internal version
 void CTaskCalendarCtrl::CancelDrag(BOOL bReleaseCapture)
 {
-	ASSERT(IsDragging());
+	ASSERT(m_DragState.IsDragging());
 
 	// cancel drag, restoring original task dates
 	TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 	ASSERT(pTCI);
 	
-	*pTCI = m_tciPreDrag;
-	m_nDragging = TCCHT_NOWHERE;
+	*pTCI = m_DragState.tciOriginal;
+	m_DragState.Clear();
 	
 	if (bReleaseCapture)
 		ReleaseCapture();
+
+	pTCI->RecalcDates(m_dwOptions);
+	RebuildCellTasks();
 
 	Invalidate(FALSE);
 	UpdateWindow();
@@ -2979,7 +2963,7 @@ void CTaskCalendarCtrl::OnShowTooltip(NMHDR* pNMHDR, LRESULT* pResult)
 	if (pNMHDR->hwndFrom != m_tooltip)
 		return;
 
-	if (IsDragging())
+	if (m_DragState.IsDragging())
 		return;
 
 	DWORD dwTaskID = m_tooltip.GetLastHitToolInfo().uId;

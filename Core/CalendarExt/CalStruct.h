@@ -180,6 +180,45 @@ protected:
 
 /////////////////////////////////////////////////////////////////////////////
 
+struct TASKCALDRAGSTATE
+{
+	TASKCALDRAGSTATE()
+	{
+		Clear();
+	}
+
+	void Clear()
+	{ 
+		nWhat = TCCHT_NOWHERE;
+		tciOriginal = TASKCALITEM();
+		ptOrigin = CPoint(0, 0);
+		dtOrigin = COleDateTime();
+	}
+
+	BOOL IsDragging() const { return (nWhat != TCCHT_NOWHERE); }
+	
+	BOOL IsValidDrag(const CPoint& ptDrag) const
+	{
+		if (!IsDragging())
+			return FALSE;
+
+		CSize size = (ptOrigin - ptDrag);
+
+		int nCxDrag = (GetSystemMetrics(SM_CXDRAG) / 2);
+		int nCyDrag = (GetSystemMetrics(SM_CYDRAG) / 2);
+
+		return ((abs(size.cx) > nCxDrag) ||
+				(abs(size.cy) > nCyDrag));
+	}
+	
+	TCC_HITTEST nWhat;
+	TASKCALITEM tciOriginal;
+	COleDateTime dtOrigin;
+	CPoint ptOrigin;
+};
+
+/////////////////////////////////////////////////////////////////////////////
+
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
