@@ -2562,9 +2562,9 @@ BOOL CTaskCalendarCtrl::EndDragging(const CPoint& ptCursor)
 
 		BOOL bSuccess = FALSE;
 
-		if (rLimits.PtInRect(ptCursor) && m_DragState.IsValidDrag(ptCursor))
+		if (rLimits.PtInRect(ptCursor) && state.IsValidDrag(ptCursor))
 		{
-			TCC_HITTEST nDragWhat = m_DragState.nWhat;
+			TCC_HITTEST nDragWhat = state.nWhat;
 
 			if (nDragWhat == TCCHT_MIDDLE)
 			{

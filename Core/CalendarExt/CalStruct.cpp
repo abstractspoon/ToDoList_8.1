@@ -167,74 +167,133 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 
 	// Else calculate missing dates
 	const COleDateTime dtEnd = (bHasDoneDate ? dtDone : dtDue);
-	const COleDateTime dtNow = CDateHelper::GetDate(DHD_TODAY);
 
-	if (!bHasStartDate) // -----------------------------------------------------
+	if (nDragging == TCCHT_MIDDLE)
 	{
-		ASSERT(bHasEndDate);
-
-		if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASCREATION))
+		if (!bHasStartDate)
 		{
-			dtStartCalc = min(dtEnd, dtCreation);
+			ASSERT(bHasEndDate);
+
+			// Set duration to one day
+			if (CDateHelper::IsEndOfDay(dtEnd, TRUE))
+				dtStartCalc = CDateHelper::GetDateOnly(dtEnd);
+			else
+				dtStartCalc = (dtEnd.m_dt - 1.0);
 		}
-		else if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASDUE))
+		else if (!bHasEndDate)
 		{
-			dtStartCalc = dtEnd;
-		}
-		else // TCCO_CALCMISSINGSTARTASEARLIESTDUEANDTODAY
-		{
-			dtStartCalc = min(dtEnd, dtNow);
-		}
+			ASSERT(bHasStartDate);
 
-		dtStartCalc = CDateHelper::GetDateOnly(dtStartCalc);
-	}
-	else if (!bHasEndDate) // -------------------------------------------------------
-	{
-		ASSERT(bHasStartDate);
-
-		if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGDUEASSTART))
-		{
-			dtEndCalc = dtStart;
-		}
-		else // TCCO_CALCMISSINGDUEASLATESTSTARTANDTODAY
-		{
-			dtEndCalc = max(dtStart, dtNow);
-		}
-
-		dtEndCalc = CDateHelper::GetEndOfDay(dtEndCalc);
-	}
-	else if (nDragging == TCCHT_NOWHERE) // -------------------------------------------------------------------
-	{
-		ASSERT(bHasStartDate && bHasEndDate);
-
-		if (bHasDoneDate)
-		{
-			// adjust done date to point to end of day if it has no time component
-			if (!CDateHelper::DateHasTime(dtDone))
-				dtDone = CDateHelper::GetEndOfDay(dtDone);
-
-			// Ensure start date precedes end date
-			if (dtStart > dtDone)
-				dtStartCalc = CDateHelper::GetDateOnly(dtDone);
+			// Set duration to one day
+			if (CDateHelper::DateHasTime(dtStart))
+				dtEndCalc = (dtStart.m_dt - 1.0);
+			else
+				dtEndCalc = CDateHelper::GetEndOfDay(dtStart);
 		}
 		else
 		{
-			ASSERT(bHasDueDate);
+			ASSERT(bHasStartDate && bHasEndDate);
 
-			// Special case: treat overdue tasks as due today
-			if ((dtDue < dtNow) && Misc::HasFlag(dwCalcDates, TCCO_TREATOVERDUEASDUETODAY))
+			// Leave dates 'as-is'
+		}
+	}
+	else 
+	{
+		const COleDateTime dtToday = CDateHelper::GetDate(DHD_TODAY);
+
+		if (!bHasStartDate) // -----------------------------------------------------
+		{
+			if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASCREATION))
 			{
-				dtEndCalc = CDateHelper::GetEndOfDay(dtNow);
+				if (bHasEndDate)
+				{
+					dtStartCalc = min(dtEnd, dtCreation);
+				}
+				else
+				{
+					dtStartCalc = dtCreation;
+				}
+			}
+			else if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASDUE))
+			{
+				if (bHasEndDate)
+				{
+					dtStartCalc = dtEnd;
+				}
+			}
+			else // TCCO_CALCMISSINGSTARTASEARLIESTDUEANDTODAY
+			{
+				if (bHasEndDate)
+				{
+					dtStartCalc = min(dtEnd, dtToday);
+				}
+				else
+				{
+					dtStartCalc = dtToday;
+				}
+			}
+
+			dtStartCalc = CDateHelper::GetDateOnly(dtStartCalc);
+		}
+
+		if (!bHasEndDate) // -------------------------------------------------------
+		{
+			if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGDUEASSTART))
+			{
+				if (bHasStartDate)
+				{
+					dtEndCalc = dtStart;
+				}
+			}
+			else // TCCO_CALCMISSINGDUEASLATESTSTARTANDTODAY
+			{
+				if (bHasStartDate)
+				{
+					dtEndCalc = max(dtStart, dtToday);
+				}
+				else
+				{
+					dtEndCalc = dtToday;
+				}
+			}
+
+			dtEndCalc = CDateHelper::GetEndOfDay(dtEndCalc);
+		}
+		else if (bHasDoneDate) // ---------------------------------------------------
+		{
+			// adjust done date to point to end of day if it has no time component
+			if (!CDateHelper::DateHasTime(dtDone))
+			{
+				dtDone = CDateHelper::GetEndOfDay(dtDone);
+			}
+		}
+		else if (bHasDueDate) // ---------------------------------------------------
+		{
+			// Special case: treat overdue tasks as due today
+			if ((dtDue < dtToday) && Misc::HasFlag(dwCalcDates, TCCO_TREATOVERDUEASDUETODAY))
+			{
+				dtEndCalc = CDateHelper::GetEndOfDay(dtToday);
 				bTreatOverdueAsDueToday = TRUE;
 			}
 
 			// adjust due date to point to end of day if it has no time component
 			if (!CDateHelper::DateHasTime(dtDue))
+			{
 				dtDue = CDateHelper::GetEndOfDay(dtDue);
+			}
+		}
 
-			// Ensure start date precedes end date
-			if (dtStart > dtDue)
+		// Finally ensure start date precedes end date
+		if (bHasStartDate && bHasEndDate) // ----------------------------------------
+		{
+			if (bHasDoneDate && (dtStart > dtDone))
+			{
+				dtStartCalc = CDateHelper::GetDateOnly(dtDone);
+			}
+			else if (bHasDueDate && (dtStart > dtDue))
+			{
 				dtStartCalc = CDateHelper::GetDateOnly(dtDue);
+			}
 		}
 	}
 }
