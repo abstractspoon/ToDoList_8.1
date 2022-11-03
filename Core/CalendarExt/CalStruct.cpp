@@ -78,6 +78,8 @@ TASKCALITEM& TASKCALITEM::operator=(const TASKCALITEM& tci)
 	bIsParent = tci.bIsParent;
 	bRecurring = tci.bRecurring;
 	bTreatOverdueAsDueToday = tci.bTreatOverdueAsDueToday;
+
+	aTags.Copy(tci.aTags);
 	
 	return (*this);
 }
@@ -97,7 +99,8 @@ BOOL TASKCALITEM::operator==(const TASKCALITEM& tci)
 			(dtEndCalc == tci.dtEndCalc) &&
 			(bHasIcon == tci.bHasIcon) &&
 			(bIsParent == tci.bIsParent) &&
-			(bRecurring == tci.bRecurring));
+			(bRecurring == tci.bRecurring) &&
+			Misc::MatchAllT(aTags, tci.aTags, FALSE));
 }
 
 void TASKCALITEM::UpdateTaskDates(const ITASKLISTBASE* pTasks, HTASKITEM hTask, DWORD dwCalcDates)
@@ -286,6 +289,15 @@ BOOL TASKCALITEM::UpdateTask(const ITASKLISTBASE* pTasks, HTASKITEM hTask, DWORD
 
 	if (pTasks->IsAttributeAvailable(TDCA_RECURRENCE))
 		bRecurring = pTasks->IsTaskRecurring(hTask);
+
+	if (pTasks->IsAttributeAvailable(TDCA_TAGS))
+	{
+		aTags.RemoveAll();
+		int nTag = pTasks->GetTaskTagCount(hTask);
+
+		while (nTag--)
+			aTags.InsertAt(0, pTasks->GetTaskTag(hTask, nTag));
+	}
 
 	UpdateTaskDates(pTasks, hTask, dwCalcDates);
 
@@ -538,6 +550,11 @@ void TASKCALITEM::ReformatName()
 	{
 		sFormattedName.Empty();
 	}
+}
+
+BOOL TASKCALITEM::HasTag(LPCTSTR szTag) const
+{
+	return (Misc::Find(szTag, aTags, FALSE, TRUE) != -1);
 }
 
 /////////////////////////////////////////////////////////////////////////////

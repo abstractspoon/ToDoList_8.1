@@ -18,6 +18,8 @@ namespace DayViewUIExtension
 
 		private int m_UserMinSlotHeight = -1;
 
+        private string m_HideParentTasksTag;
+
         private bool m_HideParentTasks = true;
 		private bool m_DisplayTasksContinuous = true;
 		private bool m_HideTasksWithoutTimes = true;
@@ -207,17 +209,16 @@ namespace DayViewUIExtension
 			return false;
         }
 
-        public bool HideParentTasks
+        public void SetHideParentTasks(bool hide, string tag)
         {
-            get { return m_HideParentTasks; }
-            set
-            {
-                if (value != m_HideParentTasks)
-                {
-                    m_HideParentTasks = value;
-                    FixupSelection(false, true);
-                }
-            }
+			m_HideParentTasks = hide;
+
+			if (hide)
+				m_HideParentTasksTag = tag;
+			else
+				m_HideParentTasksTag = string.Empty;
+
+            FixupSelection(false, true);
         }
 
 		public bool ShowFutureOccurrences
@@ -590,8 +591,14 @@ namespace DayViewUIExtension
 			if (IsResizingAppointment() && (item == SelectedAppointment))
 				return true;
 
-			if (HideParentTasks && item.IsParent)
-				return false;
+			if (item.IsParent && m_HideParentTasks)
+			{
+				if (string.IsNullOrWhiteSpace(m_HideParentTasksTag))
+					return false;
+				
+				if (item.HasTag(m_HideParentTasksTag))
+					return false;
+			}
 
 			if (!item.HasValidDates())
 				return false;
