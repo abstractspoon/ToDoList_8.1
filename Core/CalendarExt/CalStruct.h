@@ -62,6 +62,7 @@ public:
 	BOOL HasColor() const;
 
 	CString GetName(BOOL bFormatted = TRUE) const;
+	BOOL HasTag(LPCTSTR szTag) const;
 
 	void MinMax(COleDateTime& dtMin, COleDateTime& dtMax) const;
 
@@ -74,6 +75,7 @@ protected:
 	COleDateTime dtCreation, dtStart, dtDue, dtDone;
 	COleDateTime dtStartCalc, dtEndCalc;
 	CString sName, sFormattedName;
+	CStringArray aTags;
 	DWORD dwTaskID;
 	BOOL bHasIcon, bIsParent;
 
