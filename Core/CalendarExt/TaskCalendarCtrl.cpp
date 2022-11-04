@@ -241,6 +241,7 @@ BOOL CTaskCalendarCtrl::WantEditUpdate(TDC_ATTRIBUTE nEditAttrib)
 	switch (nEditAttrib)
 	{
 	case TDCA_TASKNAME:
+	case TDCA_CREATIONDATE:
 	case TDCA_DONEDATE:
 	case TDCA_DUEDATE:
 	case TDCA_STARTDATE:
