@@ -1591,7 +1591,7 @@ void CTaskCalendarCtrl::AddTasksToCell(const CTaskCalItemMap& mapTasks, const CO
 		ASSERT(pTCI);
 
 		// Task Visibility
-		if (IsHiddenTask(pTCI, TRUE))
+		if (IsHiddenTask(pTCI))
 			continue;
 
 		if (HasOption(TCCO_DISPLAYCONTINUOUS))
@@ -2140,11 +2140,30 @@ BOOL CTaskCalendarCtrl::TaskHasDependencies(DWORD dwTaskID) const
 	return (pTCI && pTCI->bHasDepends);
 }
 
-BOOL CTaskCalendarCtrl::IsHiddenTask(const TASKCALITEM* pTCI, BOOL bCheckValid) const
+BOOL CTaskCalendarCtrl::IsHiddenTask(const TASKCALITEM* pTCI) const
 {
-	if (bCheckValid && !pTCI->IsValid())
+	// Does it have the necessary dates
+	if (!pTCI->HasValidDateRange())
 		return TRUE;
+/*
+	if (HasOption(TCCO_DISPLAYCONTINUOUS))
+	{
+		if (!pTCI->HasValidDateRange())
+			return TRUE;
+	}
+	else
+	{
+		BOOL bHasStart = (HasOption(TCCO_DISPLAYSTART) && pTCI->IsStartDateSet());
+		BOOL bHasCalcStart = (HasOption(TCCO_DISPLAYCALCSTART) && !pTCI->IsStartDateSet() && pTCI->HasAnyStartDate());
 
+		BOOL bHasEnd = (HasOption(TCCO_DISPLAYDUE) && pTCI->IsEndDateSet());
+		BOOL bHasCalcEnd = (HasOption(TCCO_DISPLAYCALCDUE) && !pTCI->IsEndDateSet() && pTCI->HasAnyEndDate());
+
+		if (!bHasStart && !bHasCalcStart && !bHasEnd && !bHasCalcEnd)
+			return TRUE;
+	}
+*/
+	
 	if (pTCI->IsParent() && (HasOption(TCCO_HIDEPARENTTASKS)))
 	{
 		if (m_sHideParentTag.IsEmpty() || pTCI->HasTag(m_sHideParentTag))
@@ -2167,7 +2186,7 @@ BOOL CTaskCalendarCtrl::HasTask(DWORD dwTaskID, BOOL bExcludeHidden) const
 	if (!m_mapData.Lookup(dwTaskID, pTCI))
 		return FALSE;
 
-	if (bExcludeHidden && IsHiddenTask(pTCI, TRUE))
+	if (bExcludeHidden && IsHiddenTask(pTCI))
 		return FALSE;
 
 	return TRUE;
@@ -2212,22 +2231,15 @@ DWORD CTaskCalendarCtrl::GetSelectedTaskID() const
 	// Check visibility
 	const TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 
-	if (!pTCI || IsHiddenTask(pTCI, FALSE))
-		return 0;
-
-	// Does it have the necessary dates
-	if (!HasOption(TCCO_DISPLAYCONTINUOUS))
+	if (!pTCI)
 	{
-		BOOL bHasStart = (HasOption(TCCO_DISPLAYSTART) && pTCI->IsStartDateSet());
-		BOOL bHasCalcStart = (HasOption(TCCO_DISPLAYCALCSTART) && !pTCI->IsStartDateSet() && pTCI->HasAnyStartDate());
-
-		BOOL bHasEnd = (HasOption(TCCO_DISPLAYDUE) && pTCI->IsEndDateSet());
-		BOOL bHasCalcEnd = (HasOption(TCCO_DISPLAYCALCDUE) && !pTCI->IsEndDateSet() && pTCI->HasAnyEndDate());
-
-		if (!bHasStart && !bHasCalcStart &&	!bHasEnd && !bHasCalcEnd)
-			return 0;
+		ASSERT(0);
+		return 0;
 	}
-	
+
+	if (IsHiddenTask(pTCI))
+		return 0;
+		
 	return m_dwSelectedTaskID;
 }
 

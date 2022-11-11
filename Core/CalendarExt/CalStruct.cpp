@@ -175,6 +175,7 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 	{
 		if (!bHasStartDate)
 		{
+			// Sanity check
 			ASSERT(bHasEndDate);
 
 			// Set duration to one day
@@ -185,6 +186,7 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 		}
 		else if (!bHasEndDate)
 		{
+			// Sanity check
 			ASSERT(bHasStartDate);
 
 			// Set duration to one day
@@ -195,6 +197,7 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 		}
 		else
 		{
+			// Sanity check
 			ASSERT(bHasStartDate && bHasEndDate);
 
 			// Leave dates 'as-is'
@@ -206,34 +209,20 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 
 		if (!bHasStartDate) // -----------------------------------------------------
 		{
+			// Sanity check
+			ASSERT(bHasEndDate);
+
 			if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASCREATION))
 			{
-				if (bHasEndDate)
-				{
-					dtStartCalc = min(dtEnd, dtCreation);
-				}
-				else
-				{
-					dtStartCalc = dtCreation;
-				}
+				dtStartCalc = min(dtEnd, dtCreation);
 			}
 			else if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGSTARTASDUE))
 			{
-				if (bHasEndDate)
-				{
-					dtStartCalc = dtEnd;
-				}
+				dtStartCalc = dtEnd;
 			}
 			else // TCCO_CALCMISSINGSTARTASEARLIESTDUEANDTODAY
 			{
-				if (bHasEndDate)
-				{
-					dtStartCalc = min(dtEnd, dtToday);
-				}
-				else
-				{
-					dtStartCalc = dtToday;
-				}
+				dtStartCalc = min(dtEnd, dtToday);
 			}
 
 			dtStartCalc = CDateHelper::GetDateOnly(dtStartCalc);
@@ -241,23 +230,16 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 
 		if (!bHasEndDate) // -------------------------------------------------------
 		{
+			// Sanity check
+			ASSERT(bHasStartDate);
+
 			if (Misc::HasFlag(dwCalcDates, TCCO_CALCMISSINGDUEASSTART))
 			{
-				if (bHasStartDate)
-				{
-					dtEndCalc = dtStart;
-				}
+				dtEndCalc = dtStart;
 			}
 			else // TCCO_CALCMISSINGDUEASLATESTSTARTANDTODAY
 			{
-				if (bHasStartDate)
-				{
-					dtEndCalc = max(dtStart, dtToday);
-				}
-				else
-				{
-					dtEndCalc = dtToday;
-				}
+				dtEndCalc = max(dtStart, dtToday);
 			}
 
 			dtEndCalc = CDateHelper::GetEndOfDay(dtEndCalc);
@@ -283,19 +265,6 @@ void TASKCALITEM::RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging)
 			if (!CDateHelper::DateHasTime(dtDue))
 			{
 				dtDue = CDateHelper::GetEndOfDay(dtDue);
-			}
-		}
-
-		// Finally ensure start date precedes end date
-		if (bHasStartDate && bHasEndDate) // ----------------------------------------
-		{
-			if (bHasDoneDate && (dtStart > dtDone))
-			{
-				dtStartCalc = CDateHelper::GetDateOnly(dtDone);
-			}
-			else if (bHasDueDate && (dtStart > dtDue))
-			{
-				dtStartCalc = CDateHelper::GetDateOnly(dtDue);
 			}
 		}
 	}
@@ -355,9 +324,9 @@ BOOL TASKCALITEM::UpdateTask(const ITASKLISTBASE* pTasks, HTASKITEM hTask, DWORD
 	return !(*this == tciOrg);
 }
 
-BOOL TASKCALITEM::IsValid() const
+BOOL TASKCALITEM::HasValidDateRange() const
 {
-	return (IsStartDateSet() || IsEndDateSet());
+	return (HasAnyStartDate() && HasAnyEndDate() && (GetAnyStartDate() <= GetAnyEndDate()));
 }
 
 BOOL TASKCALITEM::IsParent() const

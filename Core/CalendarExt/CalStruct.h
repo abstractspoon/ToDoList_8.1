@@ -36,7 +36,7 @@ public:
 	void RecalcDates(DWORD dwCalcDates, TCC_HITTEST nDragging = TCCHT_NOWHERE);
 	inline DWORD GetTaskID() const { return dwTaskID; }
 
-	BOOL IsValid() const;
+	BOOL HasValidDateRange() const;
 	BOOL IsDone(BOOL bIncGoodAs) const;
 	BOOL IsParent() const;
 	

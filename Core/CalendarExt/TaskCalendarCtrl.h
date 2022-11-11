@@ -176,7 +176,7 @@ protected:
 	BOOL SetTaskCursor(DWORD dwTaskID, TCC_HITTEST nHit) const;
 	BOOL EnableLabelTips(BOOL bEnable);
 	BOOL HasTask(DWORD dwTaskID, BOOL bExcludeHidden) const;
-	BOOL IsHiddenTask(const TASKCALITEM* pTCI, BOOL bCheckValid) const;
+	BOOL IsHiddenTask(const TASKCALITEM* pTCI) const;
 
 	TCC_SNAPMODE GetSnapMode() const;
 
