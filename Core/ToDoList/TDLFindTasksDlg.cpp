@@ -1384,7 +1384,8 @@ void CTDLFindTasksDlg::OnSaveSearch(BOOL bNotifyParent)
 	}
 		
 	// notify parent
-	GetParent()->SendMessage((bNewSearch ? WM_FTD_ADDSEARCH : WM_FTD_SAVESEARCH), 0, (LPARAM)(LPCTSTR)sSearch);
+	if (bNotifyParent)
+		GetParent()->SendMessage((bNewSearch ? WM_FTD_ADDSEARCH : WM_FTD_SAVESEARCH), 0, (LPARAM)(LPCTSTR)sSearch);
 }
 
 BOOL CTDLFindTasksDlg::LoadSearch(LPCTSTR szName)
@@ -1549,8 +1550,10 @@ int CTDLFindTasksDlg::SaveSearches()
 	// save last active named search
 	prefs.WriteProfileString(_T("FindTasks\\Searches"), _T("Current"), m_sActiveSearch);
 
-	// save _last_ search
-	SaveSearch(_T("_last_search_"));
+	if (!m_sActiveSearch.IsEmpty())
+		SaveSearch(m_sActiveSearch);
+	else
+		SaveSearch(_T("_last_search_"));
 
 	return m_cbSearches.GetCount();
 }
