@@ -1108,6 +1108,11 @@ BOOL CTDLFindTasksDlg::PreTranslateMessage(MSG* pMsg)
 					return TRUE;
 				}
 			}
+			else if (pMsg->hwnd == m_lcFindSetup)
+			{
+				OnFind();
+				return TRUE;
+			}
 			break;
 
 		case VK_TAB:
@@ -1661,7 +1666,8 @@ void CTDLFindTasksDlg::OnUpdateSaveSearch(CCmdUI* pCmdUI)
 
 void CTDLFindTasksDlg::OnOK() 
 { 
-	OnFind();
+	// Should never get here
+	ASSERT(0);
 }
 
 void CTDLFindTasksDlg::OnCancel() 
