@@ -2970,7 +2970,6 @@ BOOL CToDoCtrlData::UndoLastAction(BOOL bUndo, CArrayUndoElements& aElms)
 		{
 			TODOITEM* pTDI = NULL;
 			GET_TDI(elm.dwTaskID, pTDI, FALSE);
-			ASSERT(pTDI);
 			
 			// copy current task state so we can update redo info
 			TODOITEM tdiRedo = *pTDI;
@@ -3007,7 +3006,10 @@ BOOL CToDoCtrlData::UndoLastAction(BOOL bUndo, CArrayUndoElements& aElms)
 		}
 		else if (elm.nOp == TDCUEO_MOVE)
 		{
-			TDCUNDOELEMENT elmRet(TDCUEO_MOVE, elm.dwTaskID, elm.dwParentID, elm.dwPrevSiblingID);
+			TODOITEM* pTDI = NULL;
+			GET_TDI(elm.dwTaskID, pTDI, FALSE);
+
+			TDCUNDOELEMENT elmRet(TDCUEO_MOVE, elm.dwTaskID, elm.dwParentID, elm.dwPrevSiblingID, 0, pTDI);
 			aElms.Add(elmRet);
 			
 			MoveTask(elm.dwTaskID, elm.dwParentID, elm.dwPrevSiblingID);
@@ -3015,6 +3017,10 @@ BOOL CToDoCtrlData::UndoLastAction(BOOL bUndo, CArrayUndoElements& aElms)
 			// adjust undo element so these changes can be undone
 			elm.dwParentID = tdsCopy.GetParentTaskID(elm.dwTaskID);
 			elm.dwPrevSiblingID = tdsCopy.GetPreviousTaskID(elm.dwTaskID);
+
+			TODOITEM tdiRedo = *pTDI;
+			*pTDI = elm.tdi;
+			elm.tdi = tdiRedo;
 		}
 		else
 		{
