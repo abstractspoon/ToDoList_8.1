@@ -318,31 +318,25 @@ void CToDoCtrl::DoDataExchange(CDataExchange* pDX)
 	}
 }
 
-void CToDoCtrl::UpdateComments(BOOL bSaveAndValidate)
+void CToDoCtrl::UpdateComments(const CString& sTextComments, const CBinaryData& customComments)
 {
-	if (bSaveAndValidate)
+	int nSelCount = GetSelectedTaskCount();
+
+	if (sTextComments.IsEmpty() && (nSelCount > 1))
 	{
-		m_ctrlComments.GetContent(m_sTextComments, m_customComments);
+		m_ctrlComments.ClearContent();
 	}
 	else
 	{
-		int nSelCount = GetSelectedTaskCount();
-
-		if (m_sTextComments.IsEmpty() && (nSelCount > 1))
-		{
-			m_ctrlComments.ClearContent();
-		}
-		else
-		{
-			BOOL bCommentsFocused = m_ctrlComments.HasFocus();
-			m_ctrlComments.SetContent(m_sTextComments, m_customComments, !bCommentsFocused);
-		}
-
-		CEnString sComboPrompt((nSelCount > 1) ? IDS_TDC_EDITPROMPT_MULTIPLEFORMATS : IDS_TDC_EDITPROMPT_UNKNOWNFORMAT);
-		CEnString sCommentsPrompt((nSelCount > 1) ? IDS_TDC_EDITPROMPT_MULTIPLETASKS : IDS_TDC_EDITPROMPT_COMMENTS);
-
-		m_ctrlComments.SetWindowPrompts(sComboPrompt, sCommentsPrompt);
+		BOOL bCommentsFocused = m_ctrlComments.HasFocus();
+		
+		m_ctrlComments.SetContent(sTextComments, customComments, !bCommentsFocused);
 	}
+
+	CEnString sComboPrompt((nSelCount > 1) ? IDS_TDC_EDITPROMPT_MULTIPLEFORMATS : IDS_TDC_EDITPROMPT_UNKNOWNFORMAT);
+	CEnString sCommentsPrompt((nSelCount > 1) ? IDS_TDC_EDITPROMPT_MULTIPLETASKS : IDS_TDC_EDITPROMPT_COMMENTS);
+
+	m_ctrlComments.SetWindowPrompts(sComboPrompt, sCommentsPrompt);
 }
 
 BEGIN_MESSAGE_MAP(CToDoCtrl, CRuntimeDlg)
@@ -718,11 +712,15 @@ BOOL CToDoCtrl::SetCommentsFont(HFONT hFont)
 		ASSERT(nPointSize > 0);
 #endif
 
-		m_ctrlComments.SetContentFont(m_hFontComments);
-
 		// we've had some trouble with plugins using the richedit control 
 		// so after a font change we always resend the content
-		m_ctrlComments.SetContent(m_sTextComments, m_customComments, FALSE);
+		CString sTextComments;
+		CBinaryData customComments;
+		m_ctrlComments.GetContent(sTextComments, customComments);
+
+		m_ctrlComments.SetContentFont(m_hFontComments);
+
+		m_ctrlComments.SetContent(sTextComments, customComments, FALSE);
 
 		return TRUE;
 	}
@@ -738,7 +736,8 @@ void CToDoCtrl::ResizeAttributeColumnsToFit()
 
 void CToDoCtrl::SetMaximizeState(TDC_MAXSTATE nState)
 {
-	HandleUnsavedComments();
+	if (!HandleUnsavedComments())
+		return;
 
 	if (m_nMaxState != nState)
 	{
@@ -1757,8 +1756,7 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 	
 	BOOL bReadOnly = (IsReadOnly() || !m_taskTree.SelectionHasUnlocked());
 	int nSelCount = GetSelectedTaskCount();
-	CONTENTFORMAT cfComments;
-	
+
 	if (hti)
 	{
 		DWORD dwTaskID = GetTrueTaskID(hti); 
@@ -1780,12 +1778,6 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 
 		if (m_crColour == 0)
 			m_crColour = CLR_DEFAULT;
-
-		if (bIncComments)
-		{
-			m_sTextComments = GetSelectedTaskComments();
-			m_customComments = GetSelectedTaskCustomComments(cfComments);
-		}
 		
 		CStringArray aMatched, aMixed;
 		
@@ -1861,8 +1853,6 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 		m_tRecurrence = TDCRECURRENCE();
 		m_crColour = CLR_DEFAULT;
 
-		m_sTextComments.Empty();
-		m_customComments.Empty();
 		m_sAllocBy.Empty();
 		m_sStatus.Empty();
 		m_sExternalID.Empty();
@@ -1882,8 +1872,6 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 		m_mapCustomCtrlData.RemoveAll();
 
 		// Keep whatever the current comments contents type is
-		if (bIncComments)
-			m_ctrlComments.GetSelectedFormat(cfComments);
 	}
 
 	UpdateDateTimeControls(hti != NULL);
@@ -1895,6 +1883,19 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 	{
 		ASSERT(!m_ctrlComments.IsUpdatingFormat());
 
+		// We need to take care to avoid unnecessary copying 
+		// of a task's comments which can be huge
+		static CString sEmptyComments;
+		static CBinaryData emptyComments;
+
+		CONTENTFORMAT cfComments;
+		const CBinaryData& customComments = (hti ? m_taskTree.GetSelectedTaskCustomComments(cfComments) : emptyComments);
+		
+		if (!hti)
+			m_ctrlComments.GetSelectedFormat(cfComments);
+		
+		CString sTextComments = (hti ? m_taskTree.GetSelectedTaskComments() : sEmptyComments);
+		
 		// if more than one comments type is selected then sCommentsType
 		// will be empty which will put the comments type combo in an
 		// indeterminate state which is the desired effect since this requires
@@ -1913,7 +1914,7 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 			UpdateControls(TRUE);
 		}
 		
-		UpdateComments(FALSE);
+		UpdateComments(sTextComments, customComments);
 	}
 
 	// and task header
@@ -2607,7 +2608,7 @@ void CToDoCtrl::NewList()
 	m_sPassword.Empty();
 	
 	UpdateData(FALSE);
-	UpdateComments(FALSE);
+	UpdateComments(CString(), CBinaryData());
 }
 
 BOOL CToDoCtrl::SetSelectedTaskColor(COLORREF color)
@@ -2813,10 +2814,8 @@ BOOL CToDoCtrl::SetSelectedTaskComments(const CString& sComments, const CBinaryD
 		// note: we don't use SetTextChange because that doesn't handle custom comments
 		if (!bInternal && (TSH().GetCount() == 1))
 		{
-			m_sTextComments = GetSelectedTaskComments();
-			m_customComments = GetSelectedTaskCustomComments(m_cfComments);
-
-			UpdateComments(FALSE);
+			UpdateComments(GetSelectedTaskComments(), 
+						   GetSelectedTaskCustomComments(m_cfComments));
 		}
 
 		TSH().InvalidateAll();
@@ -3733,10 +3732,7 @@ void CToDoCtrl::InitialiseNewRecurringTask(DWORD dwPrevTaskID, DWORD dwNewTaskID
 
 	if (!m_data.GetTaskRecurrence(dwNewTaskID, tr) || !tr.bPreserveComments)
 	{
-		m_sTextComments.Empty();
-		m_customComments.Empty();
-
-		UpdateComments(FALSE);
+		UpdateComments(CString(), CBinaryData());
 	}
 }
 
@@ -6992,7 +6988,15 @@ LRESULT CToDoCtrl::OnCommentsGetAttributeList(WPARAM wParam, LPARAM lParam)
 
 LRESULT CToDoCtrl::OnCommentsKillFocus(WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
-	HandleUnsavedComments();
+	TDCSELECTIONCACHE cache;
+	CacheTreeSelection(cache, FALSE);
+
+	if (!HandleUnsavedComments())
+	{
+		m_ctrlComments.SetFocus();
+		RestoreTreeSelection(cache);
+	}
+
 	return 0L;
 }
 
@@ -8922,7 +8926,8 @@ void CToDoCtrl::SelectItem(HTREEITEM hti)
 
 void CToDoCtrl::SelectAll() 
 { 
-	HandleUnsavedComments();
+	if (!HandleUnsavedComments())
+		return;
 
 	if (m_taskTree.SelectAll())
 	{
@@ -9016,12 +9021,22 @@ int CToDoCtrl::GetAllTasks(CTaskFile& tasks) const
 	return m_exporter.ExportAllTasks(tasks);
 }
 
-void CToDoCtrl::HandleUnsavedComments()
+BOOL CToDoCtrl::HandleUnsavedComments()
 {
 	if (m_nCommentsState == CS_PENDING)
 	{
-		UpdateComments(TRUE); // no longer handled by UpdateData
-		SetSelectedTaskComments(m_sTextComments, m_customComments, TRUE); // TRUE == internal call
+		CString sTextComments;
+		CBinaryData customComments;
+		
+		if (m_ctrlComments.GetContent(sTextComments, customComments) == -1)
+		{
+			// Notify user
+			AfxMessageBox(IDS_COMMENTSMEMORYERROR, MB_ICONERROR | MB_OK);
+			return FALSE;
+		}
+
+		// else
+		SetSelectedTaskComments(sTextComments, customComments, TRUE); // TRUE == internal call
 
 		m_nCommentsState = CS_CHANGED;
 
@@ -9029,6 +9044,8 @@ void CToDoCtrl::HandleUnsavedComments()
 		if (m_visColEdit.IsColumnVisible(TDCC_COMMENTSSIZE) && IsSortingBy(TDCC_COMMENTSSIZE))
 			Resort();
 	}
+
+	return TRUE;
 }
 
 HTREEITEM CToDoCtrl::SetAllTasks(const CTaskFile& tasks)
@@ -10097,7 +10114,7 @@ void CToDoCtrl::EndLabelEdit(BOOL bCancel)
 	m_eTaskName.EndEdit(bCancel);
 }
 
-void CToDoCtrl::Flush() 
+BOOL CToDoCtrl::Flush() 
 {
 	CWnd* pFocus = GetFocus();
 
@@ -10135,7 +10152,7 @@ void CToDoCtrl::Flush()
 
 	m_treeDragDrop.CancelDrag();
 
-	HandleUnsavedComments();
+	return HandleUnsavedComments();
 }
 
 TDC_FILE CToDoCtrl::CheckIn()
@@ -10868,10 +10885,18 @@ BOOL CToDoCtrl::FindReplaceSelectedTaskAttribute()
 											m_findReplace.WantCaseSensitive(), 
 											m_findReplace.WantWholeWord()))
 			{
-				UpdateComments(TRUE);
-
-				if (SetSelectedTaskComments(m_sTextComments, m_customComments, TRUE))
+				CString sTextComments;
+				CBinaryData customComments;
+				
+				if (m_ctrlComments.GetContent(sTextComments, customComments) == -1)
+				{
+					// TODO
+					m_nCommentsState = CS_PENDING;
+				}
+				else if (SetSelectedTaskComments(sTextComments, customComments, TRUE))
+				{
 					return TRUE;
+				}
 			}
 			break;
 		}
@@ -11191,7 +11216,8 @@ BOOL CToDoCtrl::SelectTasksInHistory(BOOL bForward)
 	if (!CanSelectTasksInHistory(bForward))
 		return FALSE;
 
-	HandleUnsavedComments();
+	if (!HandleUnsavedComments())
+		return FALSE;
 
 	m_taskTree.SelectTasksInHistory(bForward);
 	UpdateControls();
@@ -11523,7 +11549,11 @@ BOOL CToDoCtrl::ShowTaskLink(const CString& sLink, BOOL bURL)
 
 void CToDoCtrl::OnSelChangeCommentsType()
 {
-	HandleUnsavedComments();
+	if (!HandleUnsavedComments())
+	{
+		m_ctrlComments.SetSelectedFormat(m_cfComments);
+		return;
+	}
 
 	BOOL bMixedSelection = (m_cfComments.IsEmpty());
 	m_ctrlComments.GetSelectedFormat(m_cfComments);
