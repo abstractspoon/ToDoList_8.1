@@ -1870,8 +1870,6 @@ void CToDoCtrl::UpdateControls(BOOL bIncComments, HTREEITEM hti)
 		m_eDependency.EnableButton(ID_DEPENDS_LINK, FALSE);
 
 		m_mapCustomCtrlData.RemoveAll();
-
-		// Keep whatever the current comments contents type is
 	}
 
 	UpdateDateTimeControls(hti != NULL);
