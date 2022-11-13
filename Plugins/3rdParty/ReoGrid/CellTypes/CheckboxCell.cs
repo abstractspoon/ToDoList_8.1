@@ -290,10 +290,13 @@ namespace unvell.ReoGrid.CellTypes
 
 					if (this.Cell != null && ((this.Cell.InnerData as bool?) ?? false) != value)
 					{
-						this.Cell.Data = value;
+						if (Cell.Worksheet != null)
+							Cell.Worksheet.SetSingleCellData(Cell, value);
+						else
+							Cell.Data = value;
 					}
 
-					CheckChanged?.Invoke(this, null);
+					RaiseCheckChangedEvent();
 				}
 			}
 		}

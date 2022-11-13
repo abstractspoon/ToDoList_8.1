@@ -1717,6 +1717,11 @@ BOOL CToDoListWnd::HandleEscapeTabReturn(MSG* pMsg)
 				{
 					 // fall thru to CFrameWnd::PreTranslateMessage(pMsg)
 				}
+				// and the Find Tasks dialog
+				else if (::IsChild(m_dlgFindTasks, pMsg->hwnd))
+				{
+					 // fall thru to CFrameWnd::PreTranslateMessage(pMsg)
+				}
 				else if (Prefs().GetFocusTreeOnEnter())
 				{
 					if (::IsChild(m_filterBar, pMsg->hwnd) && !CtrlWantsEnter(pMsg->hwnd))
@@ -10713,15 +10718,7 @@ LRESULT CToDoListWnd::OnFindDlgFind(WPARAM /*wp*/, LPARAM /*lp*/)
 
 				CHoldRedraw hr(hwndHold);
 
-				// use tasklist title from tabctrl
-				CString sTitle = m_mgrToDoCtrls.GetTabItemText(nCtrl);
-				
-				m_dlgFindTasks.AddHeaderRow(sTitle);
-				
-				for (int nResult = 0; nResult < aResults.GetSize(); nResult++)
-				{
-					m_dlgFindTasks.AddResult(aResults[nResult], &tdc, !bMultiAttribFind);
-				}
+				m_dlgFindTasks.AddResults(&tdc, aResults, !bMultiAttribFind, m_mgrToDoCtrls.GetTabItemText(nCtrl));
 			}
 		}
 	}	

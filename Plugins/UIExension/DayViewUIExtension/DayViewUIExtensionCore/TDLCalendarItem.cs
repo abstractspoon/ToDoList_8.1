@@ -18,6 +18,7 @@ namespace DayViewUIExtension
 		private DateTime m_PrevDueDate = NullDate;
 
 		private Color m_TaskTextColor = Color.Empty;
+		private List<string> m_Tags = null;
 
 		// --------------------
 
@@ -36,6 +37,8 @@ namespace DayViewUIExtension
 			TimeEstimate = item.TimeEstimate;
 			TimeEstUnits = item.TimeEstUnits;
 			IsRecurring = item.IsRecurring;
+
+			m_Tags = item.m_Tags;
 
             UpdateOriginalDates();
 		}
@@ -95,6 +98,15 @@ namespace DayViewUIExtension
 		public Boolean IsRecurring { get; set; }
 		public double TimeEstimate { get; set; }
         public Task.TimeUnits TimeEstUnits { get; set; }
+
+		public bool HasTag(string tag)
+		{
+			if ((m_Tags == null) || string.IsNullOrWhiteSpace(tag))
+				return false;
+
+			// case-insensitive search
+			return (m_Tags.FindIndex(item => string.Equals(item, tag, StringComparison.InvariantCultureIgnoreCase)) != -1);
+		}
 
         // This is a hack because the underlying DayView does
         // not allow overriding the AppointmentView class
@@ -217,6 +229,8 @@ namespace DayViewUIExtension
 				HasDependencies = (task.GetDependency().Count > 0);
 				IsRecurring = task.IsRecurring();
 
+				m_Tags = task.GetTag();
+
 				Task.TimeUnits units = Task.TimeUnits.Unknown;
 				TimeEstimate = task.GetTimeEstimate(ref units, false);
 				TimeEstUnits = units;
@@ -245,6 +259,9 @@ namespace DayViewUIExtension
 
 				if (task.IsAttributeAvailable(Task.Attribute.Icon))
 					HasIcon = task.HasIcon();
+
+				if (task.IsAttributeAvailable(Task.Attribute.Tags))
+					m_Tags = task.GetTag();
 
 				if (task.IsAttributeAvailable(Task.Attribute.Recurrence))
 					IsRecurring = task.IsRecurring();

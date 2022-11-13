@@ -98,6 +98,7 @@ namespace DayViewUIExtension
                 case Task.Attribute.TimeEstimate:
 				case Task.Attribute.Dependency:
 				case Task.Attribute.Recurrence:
+				case Task.Attribute.Tags:
 					return true;
 			}
 
@@ -518,7 +519,9 @@ namespace DayViewUIExtension
 
 		private void UpdateDayViewPreferences()
 		{
-            m_DayView.HideParentTasks = m_PrefsDlg.HideParentTasks;
+			string tag;
+            m_DayView.SetHideParentTasks(m_PrefsDlg.GetHideParentTasks(out tag), tag);
+
 			m_DayView.DisplayTasksContinuous = m_PrefsDlg.DisplayTasksContinuous;
 			m_DayView.HideTasksWithoutTimes = m_PrefsDlg.HideTasksWithoutTimes;
             m_DayView.HideTasksSpanningWeekends = m_PrefsDlg.HideTasksSpanningWeekends;
