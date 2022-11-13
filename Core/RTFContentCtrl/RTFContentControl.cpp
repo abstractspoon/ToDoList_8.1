@@ -226,14 +226,21 @@ int CRTFContentControl::GetContent(unsigned char* pContent) const
 			unsigned char* pCompressed = NULL;
 			int nLenCompressed = 0;
 
-			if (Compression::Compress(pContent, nLen, pCompressed, nLenCompressed) && nLenCompressed)
+			try
 			{
-				CopyMemory(pContent, pCompressed, nLenCompressed);
-				nLen = nLenCompressed;
+				if (Compression::Compress(pContent, nLen, pCompressed, nLenCompressed) && nLenCompressed)
+				{
+					CopyMemory(pContent, pCompressed, nLenCompressed);
+					nLen = nLenCompressed;
+				}
+				else
+				{
+					nLen = 0;
+				}
 			}
-			else
+			catch (...)
 			{
-				nLen = 0;
+				nLen = -1; // Indicates memory error
 			}
 
 			delete[] pCompressed;
@@ -250,13 +257,20 @@ bool CRTFContentControl::SetContent(const unsigned char* pContent, int nLength, 
 	unsigned char* pDecompressed = NULL;
 
 	// content may need decompressing 
-	// always work in bytes
 	if (nLength && !m_rtf.IsRTF((const char*)pContent))
 	{
 		int nLenDecompressed = 0;
 
-		if (!Compression::Decompress(pContent, nLength, pDecompressed, nLenDecompressed))
+		try
+		{
+			if (!Compression::Decompress(pContent, nLength, pDecompressed, nLenDecompressed))
+				return false;
+		}
+		catch (...)
+		{
+			delete[] pDecompressed;
 			return false;
+		}
 
 		// else
 		pContent = pDecompressed;
