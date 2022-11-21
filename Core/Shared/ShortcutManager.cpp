@@ -236,7 +236,6 @@ UINT CShortcutManager::ProcessMessage(const MSG* pMsg, DWORD* pShortcut) const
 
 			if (bEdit && Misc::IsKeyPressed(VK_RMENU))
 				return FALSE;
-
 			
 			// get DWORD shortcut
 			BOOL bExtKey = (pMsg->lParam & 0x01000000);
