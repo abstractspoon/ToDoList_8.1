@@ -81,6 +81,7 @@
 			this.m_DisplayContinuous.Text = "&Display tasks as continuous between their \'Start\' and \'Due\' (or \'Completion\') da" +
     "tes";
 			this.m_DisplayContinuous.UseVisualStyleBackColor = true;
+			this.m_DisplayContinuous.Visible = false;
 			// 
 			// groupBox1
 			// 
