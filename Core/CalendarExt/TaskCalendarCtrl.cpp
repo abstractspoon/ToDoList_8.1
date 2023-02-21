@@ -1419,7 +1419,7 @@ CTaskCalItemArray* CTaskCalendarCtrl::GetCellTasks(int nRow, int nCol)
 
 int CTaskCalendarCtrl::RebuildCellTasks(BOOL bIncFutureItems)
 {
-	CScopedTraceTimer timing(_T("CTaskCalendarCtrl::RebuildCellTasks()"));
+//	CScopedTraceTimer timing(_T("CTaskCalendarCtrl::RebuildCellTasks()"));
 
 	// Rebuild future occurrences first because these are
 	// needed for building the cell tasks
@@ -2525,11 +2525,16 @@ BOOL CTaskCalendarCtrl::UpdateDragging(const CPoint& ptCursor)
 
 			// Select the cell under the mouse because we know it must contain the dragged task
 			int nRow, nCol;
-			
+
+			// HACK - Preserve current date else vertical scrolling is subsequently messed up
+			COleDateTime dtCurDate = m_DateCurrent;
+				
 			if (HitTestGridCell(ptCursor, nRow, nCol))
 				SelectGridCell(nRow, nCol);
-
+	
 			EnsureSelectionVisible();
+	
+			m_DateCurrent = dtCurDate; // HACK
 		}
 		else
 		{
