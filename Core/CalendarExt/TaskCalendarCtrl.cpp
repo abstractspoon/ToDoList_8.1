@@ -2215,7 +2215,7 @@ DWORD CTaskCalendarCtrl::GetSelectedTaskID() const
 	// Check visibility
 	const TASKCALITEM* pTCI = GetTaskCalItem(m_dwSelectedTaskID);
 
-	if (!pTCI || IsHiddenTask(pTCI, FALSE))
+	if (!pTCI || IsHiddenTask(pTCI, TRUE)) // Exclude hidden tasks
 		return 0;
 
 	// Does it have the necessary dates
