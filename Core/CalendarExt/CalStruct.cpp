@@ -663,6 +663,13 @@ BOOL CTaskCalItemMap::HasTask(DWORD dwTaskID) const
 	return (GetTaskItem(dwTaskID) != NULL);
 }
 
+BOOL CTaskCalItemMap::IsParentTask(DWORD dwTaskID) const
+{
+	const TASKCALITEM* pTCI = GetTaskItem(dwTaskID);
+
+	return (pTCI ? pTCI->IsParent() : FALSE);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 DWORD CTaskCalFutureItemMap::GetRealTaskID(DWORD dwTaskID) const
