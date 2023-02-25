@@ -215,6 +215,7 @@ void CTaskCalendarCtrl::SetHideParentTasks(BOOL bHide, const CString& sTag)
 
 	RecalcTaskDates();
 	RebuildCellTasks();
+	FixupSelection(FALSE);
 }
 
 void CTaskCalendarCtrl::RecalcTaskDates()
