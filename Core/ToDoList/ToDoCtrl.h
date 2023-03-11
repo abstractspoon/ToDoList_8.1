@@ -738,7 +738,7 @@ protected:
 	virtual DWORD GetNextNonSelectedTaskID() const;
 	virtual int GetAllTaskIDs(CDWordArray& aTaskIDs, BOOL bIncParents, BOOL bInCollapsedChildren) const;
 
-	enum
+	enum // returned from SetStyle
 	{
 		TDCSS_WANTRESIZE = 0x01,
 	};
