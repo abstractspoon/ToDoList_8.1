@@ -514,7 +514,6 @@ BOOL CTabbedToDoCtrl::LoadTasks(const CTaskFile& tasks)
 
 	switch (nView)
 	{
-
 	case FTCV_UNSET:
 		LoadState(); // reload last view
 		break;
